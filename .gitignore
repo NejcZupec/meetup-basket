@@ -1,4 +1,8 @@
+# folders
+python-api-client/
+.idea/
+
+# files
 db.sqlite3
 .DS_Store
-.idea/
 *.pyc

@@ -85,3 +85,12 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+
+# Meetup API
+# http://www.meetup.com/meetup_api/docs/
+
+MEETUP_API_URL = "https://api.meetup.com/"
+
+MEETUP_API_KEY = os.environ["MEETUP_API_KEY"]
+
