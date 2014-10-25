@@ -42,6 +42,9 @@ class Event(models.Model):
     group = models.ForeignKey(Group)
     status = models.CharField(max_length=255)
 
+    def get_members_with_rsvp(self, rsvp="yes"):
+        return [a.member for a in Attendance.objects.filter(event=self, rsvp=rsvp)]
+
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
 

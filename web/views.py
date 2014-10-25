@@ -1,4 +1,4 @@
-import operator
+import random
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -38,6 +38,54 @@ class MeetupsView(TemplateView):
                 "teams": Team.objects.filter(event=event)
             })
 
-        print payload
+        return render(request, self.template_name, payload)
+
+
+class TeamGeneratorView(TemplateView):
+    template_name = "team_generator.html"
+
+    def get(self, request):
+        payload = {}
+
+        # generate teams
+        event = Event.objects.get(name="Basketball match #6")
+
+        members = event.get_members_with_rsvp()
+
+        coefficinents = []
+        teams_generated = []
+
+        def team_coef(members):
+            coefs = [member.win_lose_coefficient() for member in members]
+            return float(sum(coefs))/len(coefs)
+
+        # divide into two groups
+        for i in range(100):
+            random.shuffle(members)
+
+            team_a = members[len(members)/2:]
+            team_b = members[:len(members)/2]
+
+            team_a_coef = team_coef(team_a)
+            team_b_coef = team_coef(team_b)
+
+            coef = abs(team_a_coef - team_b_coef)
+
+            teams_generated.append((team_a, team_b))
+            coefficinents.append(coef)
+
+        index = coefficinents.index(min(coefficinents))
+
+        team_a, team_b = teams_generated[index]
+
+        payload["team_a_c"] = team_coef(team_a)
+        payload["team_b_c"] = team_coef(team_b)
+
+        payload["teams"] = {
+            "A": team_a,
+            "B": team_b,
+        }
+
+        payload["members"] = members
 
         return render(request, self.template_name, payload)

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  Team a: {{ team_a_c }} <br>
+  Team b: {{ team_b_c }} <br>
+
+  {% for team, members in teams.items %}
+    <h4>{{ team }}</h4>
+    <ul>
+      {% for member in members %}
+        <li>{{ member.name }} ({{ member.win_lose_coefficient }})</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock content %}
