@@ -510,8 +510,8 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     /* Safari and Chrome */
     .dropdown-menu.extended  {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.176) !important;
-    };
     }
+}
 
 .dropdown-menu.extended li p {
     background-color: #F1F2F7;
@@ -817,7 +817,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 	font-size: 11px;
 }
 
-.ds p > muted {
+.ds p > .muted {
 	font-size: 9px;
 	text-transform: uppercase;
 	font-style: italic;
@@ -1319,7 +1319,7 @@ PANELS CONFIGURATIONS
 #spotify {
 	background: url(../img/lorde.jpg) no-repeat center top;
 	margin-top: -15px;
-	background-attachment: relative;
+	background-attachment: inherit;
 	background-position: center center;
 	min-height: 220px;
 	width: 100%;
@@ -1363,7 +1363,7 @@ PANELS CONFIGURATIONS
 #blog-bg {
 	background: url(../img/blog-bg.jpg) no-repeat center top;
 	margin-top: -15px;
-	background-attachment: relative;
+	background-attachment: inherit;
 	background-position: center center;
 	min-height: 150px;
 	width: 100%;
@@ -1488,7 +1488,7 @@ PANELS CONFIGURATIONS
 #profile-01 {
 	background: url(../img/profile-01.jpg) no-repeat center top;
 	margin-top: -15px;
-	background-attachment: relative;
+	background-attachment: inherit;
 	background-position: center center;
 	min-height: 150px;
 	width: 100%;
@@ -1536,7 +1536,7 @@ PANELS CONFIGURATIONS
 #profile-02 {
 	background: url(../img/profile-02.jpg) no-repeat center top;
 	margin-top: -15px;
-	background-attachment: relative;
+	background-attachment: inherit;
 	background-position: center center;
 	min-height: 200px;
 	width: 100%;
@@ -2101,8 +2101,8 @@ label {
     /* Safari and Chrome */
     .panel-footer.revenue-foot {
         margin-bottom: -4px;
-    };
     }
+}
 
 
 .panel-footer.revenue-foot ul  {
