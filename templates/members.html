@@ -5,7 +5,7 @@
 
   {% if members %}
     {% for member in members %}
-      {{ member.name }} <br>
+      {{ member.name }} (wins: {{ member.count_wins }}, loses: {{ member.count_loses }}, c: {{ member.win_lose_coefficient }}) <br>
     {% endfor %}
   {% endif %}
 {% endblock content %}

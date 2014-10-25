@@ -6,6 +6,7 @@
       margin: 0 !important;
     }
 
+
     hr {
       margin-top: 5px;
     }
@@ -15,8 +16,18 @@
 {% block content %}
   {% if events %}
     {% for event in events %}
-      <h4>{{ event.name }}</h4>
+      <h4>{{ event.event.name }}</h4>
       <hr>
+
+      {% for team in event.teams %}
+        <h5>Team {{ team.name }} (wins: {{ team.match_win }}, loses: {{ team.match_lose }})</h5>
+
+        <ol>
+        {% for member in team.members.all %}
+          <li>{{ member.name }}</li>
+        {% endfor %}
+        </ol>
+      {% endfor %}
     {% endfor %}
   {% endif %}
 

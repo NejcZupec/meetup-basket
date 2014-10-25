@@ -19,6 +19,18 @@ class Member(models.Model):
     status = models.CharField(max_length=255)
     group = models.ForeignKey(Group)
 
+    def count_wins(self):
+        return sum([team.match_win for team in Team.objects.filter(members__id__exact=self.id)])
+
+    def count_loses(self):
+        return sum([team.match_lose for team in Team.objects.filter(members__id__exact=self.id)])
+
+    def games_played(self):
+        return self.count_wins() + self.count_loses()
+
+    def win_lose_coefficient(self):
+        return float(self.count_wins())/self.games_played()
+
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
 
@@ -54,6 +66,9 @@ class Team(models.Model):
     members = models.ManyToManyField(Member)
     match_win = models.IntegerField(default=0)
     match_lose = models.IntegerField(default=0)
+
+    def get_members(self):
+        return self.members.all()
 
     def __unicode__(self):
         return "Team <%s> (event=%s, match_win=%d, match_lose=%d)" % (self.name,
