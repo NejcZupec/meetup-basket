@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+  <style>
+    h4 {
+      margin: 0 !important;
+    }
+
+    hr {
+      margin-top: 5px;
+    }
+  </style>
+{% endblock additional_css %}
+
+{% block content %}
+  {% if events %}
+    {% for event in events %}
+      <h4>{{ event.name }}</h4>
+      <hr>
+    {% endfor %}
+  {% endif %}
+
+{% endblock content %}

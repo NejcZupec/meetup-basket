@@ -14,7 +14,7 @@ class Command(BaseCommand):
         try:
             group_urlname = args[0]
 
-            group_json = MeetupAPI("2/groups", group_urlname=group_urlname).get()[0]
+            group_json = MeetupAPI("2/groups", group_urlname=group_urlname).get()["results"][0]
 
             print json.dumps(group_json, indent=4)
 

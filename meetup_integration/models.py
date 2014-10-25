@@ -27,18 +27,22 @@ class Event(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
     event_url = models.CharField(max_length=255)
-    group_id = models.ForeignKey(Group)
+    group = models.ForeignKey(Group)
     status = models.CharField(max_length=255)
 
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
 
 
-class RSVP(models.Model):
+class Attendance(models.Model):
     id = models.IntegerField(primary_key=True)
-    response = models.CharField(max_length=255)
-    event_id = models.ForeignKey(Event)
-    member_id = models.ForeignKey(Member)
+    attendance = models.BooleanField(default=True)
+    rsvp = models.CharField(max_length=255)
+    event = models.ForeignKey(Event)
+    member = models.ForeignKey(Member)
 
     def __unicode__(self):
-        return "RSVP <%s> (event=%d, member=%d)" % (self.response, self.event_id, self.member_id)
+        return "Attendance for %s (attendance=%s, rsvp=%s, event=%s)" % (self.member.name,
+                                                                         self.attendance,
+                                                                         self.rsvp,
+                                                                         self.event.name,)

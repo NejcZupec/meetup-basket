@@ -22,6 +22,8 @@
     <link href="{% static "css/style.css" %}" rel="stylesheet">
     <link href="{% static "css/style-responsive.css" %}" rel="stylesheet">
 
+    {% block additional_css %}{% endblock additional_css %}
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -69,6 +71,13 @@
                           <i class="fa fa-dashboard"></i>
                           <span>Dashboard</span>
                       </a>
+                  </li>
+
+                  <li class="sub-menu dcjq-parent-li">
+                      <a class="{% add_active request 'meetups' %}" href="{% url 'meetups' %}" class="dcjq-parent">
+                          <i class="fa fa-magic"></i>
+                          <span>Meetups</span>
+                      <span class="dcjq-icon"></span></a>
                   </li>
 
                   <li class="sub-menu dcjq-parent-li">
