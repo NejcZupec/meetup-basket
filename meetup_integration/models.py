@@ -46,3 +46,18 @@ class Attendance(models.Model):
                                                                          self.attendance,
                                                                          self.rsvp,
                                                                          self.event.name,)
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+    event = models.ForeignKey(Event)
+    members = models.ManyToManyField(Member)
+    match_win = models.IntegerField(default=0)
+    match_lose = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return "Team <%s> (event=%s, match_win=%d, match_lose=%d)" % (self.name,
+                                                                      self.event.name,
+                                                                      self.match_win,
+                                                                      self.match_lose,)
+
