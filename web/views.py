@@ -48,9 +48,13 @@ class TeamGeneratorView(TemplateView):
         payload = {}
 
         # generate teams
-        event = Event.objects.get(name="Basketball match #6")
+        event = Event.objects.latest("name")
+
+        payload["event"] = event
 
         members = event.get_members_with_rsvp()
+
+        print len(members)
 
         coefficinents = []
         teams_generated = []
@@ -60,7 +64,7 @@ class TeamGeneratorView(TemplateView):
             return float(sum(coefs))/len(coefs)
 
         # divide into two groups
-        for i in range(100):
+        for i in range(50):
             random.shuffle(members)
 
             team_a = members[len(members)/2:]
