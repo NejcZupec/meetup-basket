@@ -7,14 +7,14 @@ from meetup_integration.utils import MeetupAPI
 
 
 class Command(BaseCommand):
-    args = ""
-    help = "Get group (first argument is group_id)."
+    args = "group_urlname"
+    help = "Get group by urlname."
 
     def handle(self, *args, **options):
         try:
-            group_id = args[0]
+            group_urlname = args[0]
 
-            group_json = MeetupAPI("2/groups", group_id=group_id).get()["results"][0]
+            group_json = MeetupAPI("2/groups", group_urlname=group_urlname).get()[0]
 
             print json.dumps(group_json, indent=4)
 
@@ -27,5 +27,5 @@ class Command(BaseCommand):
             )
 
         except IndexError:
-            print self.help
+            print self.help, "Args:", self.args
 
