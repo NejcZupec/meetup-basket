@@ -14,20 +14,32 @@
 {% endblock additional_css %}
 
 {% block content %}
+  <h2>Past meetups</h2>
+
   {% if events %}
     {% for event in events %}
-      <h4>{{ event.event.name }}</h4>
-      <hr>
+      <div class="content-panel">
+        <div class="panel-heading">
+          <h3>{{ event.event.name }}</h3>
+        </div>
+        <div class="panel-body">
+          {% if event.teams %}
+            {% for team in event.teams %}
+              <h5>Team {{ team.name }} (wins: {{ team.match_win }}, loses: {{ team.match_lose }})</h5>
 
-      {% for team in event.teams %}
-        <h5>Team {{ team.name }} (wins: {{ team.match_win }}, loses: {{ team.match_lose }})</h5>
+              <ol>
+              {% for member in team.members.all %}
+                <li>{{ member.name }}</li>
+              {% endfor %}
+              </ol>
+            {% endfor %}
+          {% else %}
+            <p>No data for this meetup.</p>
+          {% endif %}
+        </div>
+      </div>
 
-        <ol>
-        {% for member in team.members.all %}
-          <li>{{ member.name }}</li>
-        {% endfor %}
-        </ol>
-      {% endfor %}
+      <br>
     {% endfor %}
   {% endif %}
 
