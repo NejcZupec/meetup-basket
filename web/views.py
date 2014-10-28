@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team
+from web.utils import team_coef, generate_teams
 
 
 class DashboardView(TemplateView):
@@ -45,56 +46,27 @@ class TeamGeneratorView(TemplateView):
     template_name = "team_generator.html"
 
     def get(self, request):
-        payload = {}
-
-        # generate teams
+        # get the latest event
         event = Event.objects.latest("name")
 
-        payload["event"] = event
-
+        # members
         members = event.get_members_with_rsvp()
+        team_a, team_b = generate_teams(members)
 
-        print len(members)
-
-        coefficinents = []
-        teams_generated = []
-
-        def team_coef(members):
-            coefs = [member.win_lose_coefficient() for member in members]
-
-            if len(coefs) > 0:
-                return float(sum(coefs))/len(coefs)
-            else:
-                return 0.0
-
-        # divide into two groups
-        for i in range(50):
-            random.shuffle(members)
-
-            team_a = members[len(members)/2:]
-            team_b = members[:len(members)/2]
-
-            team_a_coef = team_coef(team_a)
-            team_b_coef = team_coef(team_b)
-
-            coef = abs(team_a_coef - team_b_coef)
-
-            teams_generated.append((team_a, team_b))
-            coefficinents.append(coef)
-
-        index = coefficinents.index(min(coefficinents))
-
-        team_a, team_b = teams_generated[index]
-
-        payload["team_a_c"] = team_coef(team_a)
-        payload["team_b_c"] = team_coef(team_b)
-
-        payload["teams"] = {
-            "A": team_a,
-            "B": team_b,
+        payload = {
+            "event": event,
+            "members": members,
+            "teams": {
+                "Team A": {
+                    "members": team_a,
+                    "coef": team_coef(team_a),
+                },
+                "Team B": {
+                    "members": team_b,
+                    "coef": team_coef(team_b)
+                }
+            }
         }
-
-        payload["members"] = members
 
         return render(request, self.template_name, payload)
 
