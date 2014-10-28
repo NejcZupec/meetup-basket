@@ -19,6 +19,9 @@ class Member(models.Model):
     status = models.CharField(max_length=255)
     group = models.ForeignKey(Group)
 
+    def meetups_attended(self):
+        return Attendance.objects.filter(member=self, attendance=True).count()
+
     def count_wins(self):
         return sum([team.match_win for team in Team.objects.filter(members__id__exact=self.id)])
 
