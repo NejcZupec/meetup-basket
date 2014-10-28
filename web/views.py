@@ -17,10 +17,9 @@ class MembersView(TemplateView):
     def get(self, request):
         members = Member.objects.all()
 
-        payload = {'members': members}
+        members = sorted(members, key=lambda member: member.win_lose_coefficient(), reverse=True)
 
-        for member in members:
-            print member.name, member.count_wins()
+        payload = {'members': members}
 
         return render(request, self.template_name, payload)
 
