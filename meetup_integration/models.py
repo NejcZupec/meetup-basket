@@ -29,7 +29,10 @@ class Member(models.Model):
         return self.count_wins() + self.count_loses()
 
     def win_lose_coefficient(self):
-        return float(self.count_wins())/self.games_played()
+        if self.games_played() > 0:
+            return float(self.count_wins())/self.games_played()
+        else:
+            return None
 
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)

@@ -61,7 +61,11 @@ class TeamGeneratorView(TemplateView):
 
         def team_coef(members):
             coefs = [member.win_lose_coefficient() for member in members]
-            return float(sum(coefs))/len(coefs)
+
+            if len(coefs) > 0:
+                return float(sum(coefs))/len(coefs)
+            else:
+                return 0.0
 
         # divide into two groups
         for i in range(50):
