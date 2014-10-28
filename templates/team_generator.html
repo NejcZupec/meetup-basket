@@ -1,31 +1,5 @@
 {% extends 'base.html' %}
 
-{% block additional_css %}
-  <style>
-    section.wrapper div.mt {
-      padding-top: 0;
-      margin-top: 0;
-    }
-
-    div.content-panel {
-      padding-top: 0;
-    }
-
-    div.panel-heading {
-      padding-top: 5px;
-      padding-bottom: 0;
-    }
-
-    div.panel-body {
-      padding-top: 0;
-    }
-
-    table.table {
-      margin-bottom: 0;
-    }
-  </style>
-{% endblock additional_css %}
-
 {% block content %}
   <h2>Teams generated for <strong>{{ event.name }}</strong></h2>
 

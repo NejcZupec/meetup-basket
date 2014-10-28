@@ -1,0 +1,21 @@
+section.wrapper div.mt {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+div.content-panel {
+  padding-top: 0;
+}
+
+div.panel-heading {
+  padding-top: 5px;
+  padding-bottom: 0;
+}
+
+div.panel-body {
+  padding-top: 0;
+}
+
+table.table {
+  margin-bottom: 0;
+}
