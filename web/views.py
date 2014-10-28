@@ -97,3 +97,7 @@ class TeamGeneratorView(TemplateView):
         payload["members"] = members
 
         return render(request, self.template_name, payload)
+
+
+class PaymentsView(TemplateView):
+    template_name = "payments.html"
