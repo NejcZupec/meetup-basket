@@ -1,5 +1,10 @@
+import json
 
+from django.shortcuts import render
+from django.views.generic import TemplateView
 
+from meetup_integration.models import Member, Event, Team
+from web.utils import team_coef, generate_teams, generate_payments_table
 
 
 class DashboardView(TemplateView):
