@@ -14,8 +14,8 @@ body {
     color: #797979;
 	background: #f2f2f2;
     font-family: 'Ruda', sans-serif;
-    padding: 0px !important;
-    margin: 0px !important;
+    padding: 0 !important;
+    margin: 0 !important;
     font-size:13px;
 }
 
@@ -60,7 +60,7 @@ a, a:hover, a:focus {
 	display: block;
 	cursor: pointer;
 	border-top: 1px solid #F5F5F5;
-	padding: 5px 0px;
+	padding: 5px 0;
 	line-height: 28.75px;
 	text-transform: uppercase;
 	color: #1a1a1a;
@@ -423,7 +423,7 @@ ul.sidebar-menu li a.active i {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;
-    padding-top: 0px;
+    padding-top: 0;
     width: 100%;
 }
 
@@ -518,8 +518,8 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     color: #666666;
     margin: 0;
     padding: 10px;
-    border-radius: 4px 4px 0px 0px;
-    -webkit-border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
 }
 
 .dropdown-menu.extended li p.green {
@@ -754,7 +754,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .sidebar-closed #main-content {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .sidebar-closed #sidebar {
@@ -903,7 +903,7 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
     height: 100%;
     position: relative;
     width: 6%;
-    margin: 0px 4%;
+    margin: 0 4%;
     float: left;
     text-align: center;
     z-index: 10;
@@ -1154,7 +1154,7 @@ PANELS CONFIGURATIONS
 /*Content Panel*/
 .content-panel {
 	background: #ffffff;
-	box-shadow: 0px 3px 2px #aab2bd;
+	box-shadow: 0 3px 2px #aab2bd;
 	padding-top: 15px;
 	padding-bottom: 5px;
 }
@@ -1207,7 +1207,7 @@ PANELS CONFIGURATIONS
 	color: #272b34;
 }
 .weather-2 .data h5 {
-	margin-top: 0px;
+	margin-top: 0;
 	font-weight: lighter;
 }
 .weather-2 .data h1{
@@ -1235,12 +1235,12 @@ PANELS CONFIGURATIONS
 .weather-3 .info i {
 	font-size: 15px;
 	color: #c2c2c2;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	margin-top: 10px;
 }
 .weather-3 .info h3 {
 	font-weight: 900;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 .weather-3 .info p {
 	margin-left: 10px;
@@ -1411,7 +1411,7 @@ PANELS CONFIGURATIONS
 /* Calendar Configuration */
 #calendar {
 	color: white;
-	padding: 0px !important;
+	padding: 0 !important;
 }
 .calendar-month-header {
 	background: #43b1a9;
@@ -1427,7 +1427,7 @@ PANELS CONFIGURATIONS
 .steps input[type=submit]{
   background: #f1783c;
   border: none;
-  padding: 0px;
+  padding: 0;
   margin: 0 auto;
   width: 100%;
   height: 55px;
@@ -1457,7 +1457,7 @@ PANELS CONFIGURATIONS
   text-indent: 52px;
   cursor: pointer;
   transition: all 0.7s ease;
-  margin: 0px;
+  margin: 0;
 }
 .steps label:before{
   content:"";
@@ -1465,7 +1465,7 @@ PANELS CONFIGURATIONS
   height: 12px;
   display: block;
   position: absolute;
-  margin: 26px 0px 0px 18px;
+  margin: 26px 0 0 18px;
   border-radius: 100%;
   transition: border 0.7s ease
 }
@@ -1504,13 +1504,13 @@ PANELS CONFIGURATIONS
 #profile-01 h3 {
 	color: white;
 	padding-top: 50px;
-	margin: 0px;
+	margin: 0;
 	text-align: center;
 }
 #profile-01 h6 {
 	color: white;
 	text-align: center;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	font-weight: 900;
 }
 .profile-01 {
@@ -1590,8 +1590,8 @@ PANELS CONFIGURATIONS
     font-weight:normal;
     background: #99c262;
     width: 100%;
-    -webkit-border-radius: 0px 0px 4px 4px;
-    border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
 }
 #barchart {
     margin-bottom: -15px;
@@ -1628,8 +1628,8 @@ PANELS CONFIGURATIONS
     font-weight:normal;
     background: #39b7ac;
     width: 100%;
-    -webkit-border-radius: 0px 0px 4px 4px;
-    border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
 }
 .inline-block {
     display: inline-block;
@@ -1640,7 +1640,7 @@ PANELS CONFIGURATIONS
 	background: #ffffff;
 	padding: 15px;
 	margin-bottom: 15px;
-	box-shadow: 0px 3px 2px #aab2bd;
+	box-shadow: 0 3px 2px #aab2bd;
 }
 
 
@@ -1738,7 +1738,7 @@ background: #fffbcc !important;
 	background: #ffffff;
 	margin: 10px;
 	padding: 10px;
-	box-shadow: 0px 3px 2px #aab2bd;
+	box-shadow: 0 3px 2px #aab2bd;
 	text-align: left;
 }
 
@@ -2089,8 +2089,8 @@ label {
 
 .panel-footer.revenue-foot {
     background-color: #e6e7ec;
-    -webkit-border-radius: 0px 0px 4px 4px;
-    border-radius: 0px 0px 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
     border: none;
     padding: 0;
     width: 100%;
@@ -2118,13 +2118,13 @@ label {
 }
 
 .panel-footer.revenue-foot ul li.first a:hover, .panel-footer.revenue-foot ul li.first a {
-    -webkit-border-radius: 0px 0px 0px 4px;
-    border-radius: 0px 0px 0px 4px;
+    -webkit-border-radius: 0 0 0 4px;
+    border-radius: 0 0 0 4px;
 }
 
 .panel-footer.revenue-foot ul li.last a:hover, .panel-footer.revenue-foot ul li.last a {
-    -webkit-border-radius: 0px 0px 4px 0px;
-    border-radius: 0px 0px 4px 0px;
+    -webkit-border-radius: 0 0 4px 0;
+    border-radius: 0 0 4px 0;
     border-right: none;
 
 }

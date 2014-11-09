@@ -13,22 +13,22 @@ div.zabuto_calendar {
 div.zabuto_calendar .table {
     width: 100%;
     margin: 0;
-    padding: 0px;
+    padding: 0;
 }
 
 div.zabuto_calendar .table th,
 div.zabuto_calendar .table td {
-    padding: 11.9px 0px;
+    padding: 11.9px 0;
     text-align: center;
 }
 
 div.zabuto_calendar .table tr th,
 div.zabuto_calendar .table tr td {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr.calendar-month-header th {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr.calendar-month-header th span {
@@ -39,11 +39,11 @@ div.zabuto_calendar .table tr.calendar-month-header th span {
 }
 
 div.zabuto_calendar .table tr.calendar-dow-header th {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr:last-child {
-    border-bottom: 0px solid #dddddd;
+    border-bottom: 0 solid #dddddd;
 }
 
 div.zabuto_calendar .table tr.calendar-month-header th {
@@ -57,7 +57,7 @@ div.zabuto_calendar .table-bordered tr.calendar-month-header th {
 }
 
 div.zabuto_calendar .table-bordered tr.calendar-month-header th:first-child {
-    border-left: 0px solid #dddddd;
+    border-left: 0 solid #dddddd;
 }
 
 div.zabuto_calendar div.calendar-month-navigation {
@@ -73,15 +73,15 @@ div.zabuto_calendar tr.calendar-dow td {
 }
 
 div.zabuto_calendar .table tr td div.day {
-    margin: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* actions and events */
 div.zabuto_calendar .table tr td.event div.day,
 div.zabuto_calendar ul.legend li.event {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr td.dow-clickable,
@@ -92,14 +92,14 @@ div.zabuto_calendar .table tr td.event-clickable {
 /* badge */
 div.zabuto_calendar .badge-today,
 div.zabuto_calendar div.legend span.badge-today {
-    background-color:;
+    background-color: #fff;
     color: #ffffff;
     text-shadow: none;
 }
 
 div.zabuto_calendar .badge-event,
 div.zabuto_calendar div.legend span.badge-event {
-    background-color:;
+    background-color: #fff;
     color: #ffffff;
     text-shadow: none;
 }
