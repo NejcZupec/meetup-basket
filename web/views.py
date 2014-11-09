@@ -71,6 +71,10 @@ class TeamGeneratorView(TemplateView):
 
 
 class PaymentsView(TemplateView):
+
+
+
+
     template_name = "payments.html"
 
     def get(self, request):
