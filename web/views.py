@@ -1,10 +1,10 @@
-import random
+import json, random
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team
-from web.utils import team_coef, generate_teams
+from web.utils import team_coef, generate_teams, generate_payments_table
 
 
 class DashboardView(TemplateView):
@@ -72,3 +72,17 @@ class TeamGeneratorView(TemplateView):
 
 class PaymentsView(TemplateView):
     template_name = "payments.html"
+
+    def get(self, request):
+        members = Member.objects.all()
+        events = Event.objects.all()
+
+        payload = {
+            "members": members,
+            "events": events,
+            "payments_table": generate_payments_table(members, events),
+        }
+
+        print json.dumps(generate_payments_table(members, events), indent=4)
+
+        return render(request, self.template_name, payload)

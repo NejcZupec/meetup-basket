@@ -51,6 +51,21 @@ class Event(models.Model):
     def get_members_with_rsvp(self, rsvp="yes"):
         return [a.member for a in Attendance.objects.filter(event=self, rsvp=rsvp)]
 
+    def member_attended(self, member):
+        try:
+            return Attendance.objects.get(event=self, member=member).attendance
+        except Attendance.DoesNotExist:
+            return False
+
+    def get_member_rsvp(self, member):
+        try:
+            return Attendance.objects.get(event=self, member=member).rsvp
+        except Attendance.DoesNotExist:
+            return None
+
+    def sequence_number(self):
+        return self.name[-3:]
+
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
 

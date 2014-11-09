@@ -5,6 +5,38 @@
 {% endblock additional_css %}
 
 {% block content %}
+  <h2>Payments</h2>
 
+  <br>
+
+  <div class="content-panel">
+    <div class="panel-heading">
+
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Member</th>
+            {% for event in events %}
+              <th>{{ event.sequence_number }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+            <tr>
+              <td>{{ member.name }}</td>
+              {% for event in events %}
+                <td>1</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {{ payments_table }}
+  </div>
 
 {% endblock content %}

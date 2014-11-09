@@ -42,3 +42,33 @@ def generate_teams(members, no_of_iterations=30):
     print team_a
 
     return team_a, team_b
+
+
+def calculate_weight(attended, rsvp):
+    return 1.0
+
+
+def calculate_price():
+    return 0.0
+
+
+def generate_payments_table(members, events):
+    table_rows = []
+
+    for member in members:
+        row = []
+        for event in events:
+            attended = event.member_attended(member)
+            rsvp = event.get_member_rsvp(member)
+            weight = calculate_weight(attended, rsvp)
+
+            row.append({
+                "attended": attended,
+                "RSVP": rsvp,
+                "weight": weight,
+                "price": calculate_price(),
+            })
+
+        table_rows.append(row)
+
+    return table_rows
