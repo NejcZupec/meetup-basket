@@ -1,11 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h4>List of members</h4>
+  <h2>List of members</h2>
+
+  <br>
 
   {% if members %}
-    {% for member in members %}
-      {{ member.name }} (wins: {{ member.count_wins }}, loses: {{ member.count_loses }}, c: {{ member.win_lose_coefficient }}) <br>
-    {% endfor %}
+    <div class="content-panel">
+      <div class="panel-heading"></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Meetups attended</th>
+              <th>Games played</th>
+              <th>Wins</th>
+              <th>Loses</th>
+              <th>Coefficient</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for member in members %}
+              <tr>
+                <td>{{ member.name }}</td>
+                <td>{{ member.meetups_attended }}</td>
+                <td>{{ member.games_played }}</td>
+                <td>{{ member.count_wins }}</td>
+                <td>{{ member.count_loses }}</td>
+                <td>{{ member.win_lose_coefficient }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div><!-- ./content-panel -->
   {% endif %}
 {% endblock content %}

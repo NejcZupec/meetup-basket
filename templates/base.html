@@ -22,6 +22,9 @@
     <link href="{% static "css/style.css" %}" rel="stylesheet">
     <link href="{% static "css/style-responsive.css" %}" rel="stylesheet">
 
+    <!-- Global styles -->
+    <link href="{% static "css/global_style.css" %}" rel="stylesheet">
+
     {% block additional_css %}{% endblock additional_css %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -75,7 +78,7 @@
 
                   <li class="sub-menu dcjq-parent-li">
                       <a class="{% add_active request 'meetups' %}" href="{% url 'meetups' %}" class="dcjq-parent">
-                          <i class="fa fa-magic"></i>
+                          <i class="fa fa-calendar"></i>
                           <span>Meetups</span>
                       <span class="dcjq-icon"></span></a>
                   </li>
@@ -95,9 +98,9 @@
                   </li>
 
                   <li class="sub-menu dcjq-parent-li">
-                      <a href="javascript:;" class="dcjq-parent">
-                          <i class="fa fa-bar-chart-o"></i>
-                          <span>Statistics</span>
+                      <a class="{% add_active request 'payments' %}" href="{% url 'payments' %}" class="dcjq-parent">
+                          <i class="fa fa-credit-card"></i>
+                          <span>Payments</span>
                       <span class="dcjq-icon"></span></a>
                   </li>
               </ul>

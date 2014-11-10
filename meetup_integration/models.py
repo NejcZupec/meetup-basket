@@ -19,6 +19,9 @@ class Member(models.Model):
     status = models.CharField(max_length=255)
     group = models.ForeignKey(Group)
 
+    def meetups_attended(self):
+        return Attendance.objects.filter(member=self, attendance=True).count()
+
     def count_wins(self):
         return sum([team.match_win for team in Team.objects.filter(members__id__exact=self.id)])
 
@@ -29,7 +32,10 @@ class Member(models.Model):
         return self.count_wins() + self.count_loses()
 
     def win_lose_coefficient(self):
-        return float(self.count_wins())/self.games_played()
+        if self.games_played() > 0:
+            return float(self.count_wins())/self.games_played()
+        else:
+            return None
 
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
@@ -44,6 +50,21 @@ class Event(models.Model):
 
     def get_members_with_rsvp(self, rsvp="yes"):
         return [a.member for a in Attendance.objects.filter(event=self, rsvp=rsvp)]
+
+    def member_attended(self, member):
+        try:
+            return Attendance.objects.get(event=self, member=member).attendance
+        except Attendance.DoesNotExist:
+            return False
+
+    def get_member_rsvp(self, member):
+        try:
+            return Attendance.objects.get(event=self, member=member).rsvp
+        except Attendance.DoesNotExist:
+            return None
+
+    def sequence_number(self):
+        return self.name[-3:]
 
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
