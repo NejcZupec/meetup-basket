@@ -99,12 +99,11 @@
 @media only screen and (max-width: 320px) {
 
     .tasks-widget .task-config-btn {
-		float:inherit;
-		display:block;
-	}
-	
-	.tasks-widget .task-list-projects li > .label {
-		margin-bottom:5px;
-	}
+        float:inherit;
+        display:block;
+    }
 
+    .tasks-widget .task-list-projects li > .label {
+        margin-bottom:5px;
+    }
 }

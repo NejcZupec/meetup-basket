@@ -6,7 +6,7 @@ from django.conf import settings
 from meetup_integration.models import Member, Group, Event, Attendance
 
 
-class MeetupAPI():
+class MeetupAPI(object):
     def __init__(self, func, **kwargs):
         self.func = func
         self.kwargs = kwargs
