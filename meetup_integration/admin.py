@@ -31,4 +31,3 @@ admin.site.register(Member, MemberAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
 admin.site.register(Team, TeamAdmin)
-
