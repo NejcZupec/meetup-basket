@@ -6,3 +6,4 @@ python-api-client/
 db.sqlite3
 .DS_Store
 *.pyc
+.coverage
