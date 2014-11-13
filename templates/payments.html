@@ -28,7 +28,7 @@
             <tr>
               <td>{{ row.member }}</td>
               {% for column in row.data %}
-                <td>{{ column.price }}</td>
+                <td data-toggle="tooltip" data-placement="top" title="RSVP: {{ column.rsvp }}, Attendance: {{ column.attended }}, Weight: {{ column.weight }}">{{ column.price }}</td>
               {% endfor %}
             </tr>
           {% endfor %}
@@ -36,4 +36,14 @@
       </table>
     </div>
   </div>
+
+
 {% endblock content %}
+
+{% block additional-scripts %}
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+{% endblock additional-scripts %}

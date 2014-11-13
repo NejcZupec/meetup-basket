@@ -79,7 +79,7 @@ def generate_payments_table(members, events):
         for event in events:
             row.append({
                 "attended": event.member_attended(member),
-                "RSVP": event.get_member_rsvp(member),
+                "rsvp": event.get_member_rsvp(member),
                 "weight": member.weight(event),
                 "price": calculate_price(member, event),
             })

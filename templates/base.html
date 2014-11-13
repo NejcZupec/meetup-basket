@@ -153,15 +153,7 @@
   <!--common script for all pages-->
   <script src="{% static "js/common-scripts.js" %}"></script>
 
-  <!--script for this page-->
-  <script>
-      //custom select box
-
-      $(function(){
-          $('select.styled').customSelect();
-      });
-
-  </script>
-
+  <!-- additional scripts -->
+  {% block additional-scripts %}{% endblock additional-scripts %}
   </body>
 </html>
