@@ -2,6 +2,7 @@ from django.test import TestCase
 
 
 class WebViewsTestCase(TestCase):
+    fixtures = ['meetup_integration_test_data.json']
 
     def test_meetups_view(self):
         """
