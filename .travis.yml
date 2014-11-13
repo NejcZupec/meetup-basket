@@ -1,9 +1,7 @@
 language: python
 python:
   - 2.7
-env:
-  - SECRET_KEY='n02$1$4!cfkx#v_eto4#smtunlt+amqb)si7dh83c#-o7cl0^k'
-  - MEETUP_API_KEY='secret'
+env: SECRET_KEY='n02$1$4!cfkx#v_eto4#smtunlt+amqb)si7dh83c#-o7cl0^k' MEETUP_API_KEY='secret'
 install:
   - pip install -r requirements.txt
   - pip install coveralls
