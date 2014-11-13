@@ -67,8 +67,8 @@ def calculate_weight(attended, rsvp):
         print "ERROR: this option is not implemented:", attended, rsvp
 
 
-def calculate_price(penalty_weight, event):
-    return 0.0
+def calculate_price(member, event):
+    return round(member.weight(event)/event.weight() * settings.MEETUP_PRICE, 2)
 
 
 def generate_payments_table(members, events):
@@ -77,17 +77,13 @@ def generate_payments_table(members, events):
     for member in members:
         row = []
         for event in events:
-            attended = event.member_attended(member)
-            rsvp = event.get_member_rsvp(member)
-            weight = calculate_weight(attended, rsvp)
-
             row.append({
-                "attended": attended,
-                "RSVP": rsvp,
-                "weight": weight,
-                "price": calculate_price(calculate_weight, event),
+                "attended": event.member_attended(member),
+                "RSVP": event.get_member_rsvp(member),
+                "weight": member.weight(event),
+                "price": calculate_price(member, event),
             })
 
-        table_rows.append(row)
+        table_rows.append({"member": member.name, "data": row})
 
     return table_rows

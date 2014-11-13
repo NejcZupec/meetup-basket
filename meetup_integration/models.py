@@ -37,6 +37,14 @@ class Member(models.Model):
         else:
             return None
 
+    def weight(self, event):
+        from web.utils import calculate_weight
+
+        attended = event.member_attended(self)
+        rsvp = event.get_member_rsvp(self)
+
+        return float(calculate_weight(attended, rsvp))
+
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
 
@@ -56,6 +64,9 @@ class Event(models.Model):
             return Attendance.objects.get(event=self, member=member).attendance
         except Attendance.DoesNotExist:
             return False
+
+    def weight(self):
+        return sum([member.weight(self) for member in Member.objects.all()])
 
     def get_member_rsvp(self, member):
         try:

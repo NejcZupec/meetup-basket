@@ -24,19 +24,16 @@
           </tr>
         </thead>
         <tbody>
-          {% for member in members %}
+          {% for row in payments_table %}
             <tr>
-              <td>{{ member.name }}</td>
-              {% for event in events %}
-                <td>1</td>
+              <td>{{ row.member }}</td>
+              {% for column in row.data %}
+                <td>{{ column.price }}</td>
               {% endfor %}
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-
-    {{ payments_table }}
   </div>
-
 {% endblock content %}

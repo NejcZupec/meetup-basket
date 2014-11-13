@@ -104,3 +104,8 @@ MEETUP_API_URL = "https://api.meetup.com/"
 
 MEETUP_API_KEY = os.environ["MEETUP_API_KEY"]
 
+
+# Global parameters
+
+MEETUP_PRICE = 1.5*17
+PENALTY_WEIGHT = 0.1
