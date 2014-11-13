@@ -1,5 +1,7 @@
 import random
 
+from django.conf import settings
+
 
 def team_coef(members):
     coefs = [member.win_lose_coefficient() for member in members]
@@ -11,8 +13,6 @@ def team_coef(members):
 
 
 def generate_teams(members, no_of_iterations=30):
-    print len(members)
-
     coefficinents = []
     teams_generated = []
 
@@ -39,16 +39,35 @@ def generate_teams(members, no_of_iterations=30):
     team_a.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
     team_b.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
 
-    print team_a
-
     return team_a, team_b
 
 
 def calculate_weight(attended, rsvp):
-    return 1.0
+    """
+    Calculate a penalty weight for the attendee.
+
+    :param attended: True or False
+    :param rsvp: 'no' or 'yes'
+    :return: A penalty weight.
+    """
+
+    if attended and rsvp == "yes":
+        return 1 + 0.0
+    elif attended and rsvp == "No RSVP":
+        return 1 + settings.PENALTY_WEIGHT
+    elif attended and rsvp == "no":
+        return 1 + 2*settings.PENALTY_WEIGHT
+    elif not attended and rsvp == "no":
+        return 0.0
+    elif not attended and not rsvp:
+        return settings.PENALTY_WEIGHT
+    elif not attended and rsvp == "yes":
+        return 2*settings.PENALTY_WEIGHT
+    else:
+        print "ERROR: this option is not implemented:", attended, rsvp
 
 
-def calculate_price():
+def calculate_price(penalty_weight, event):
     return 0.0
 
 
@@ -66,7 +85,7 @@ def generate_payments_table(members, events):
                 "attended": attended,
                 "RSVP": rsvp,
                 "weight": weight,
-                "price": calculate_price(),
+                "price": calculate_price(calculate_weight, event),
             })
 
         table_rows.append(row)
