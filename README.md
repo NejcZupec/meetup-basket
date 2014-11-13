@@ -1,7 +1,7 @@
 meetup-basket
 =============
 
-[![Codacy Badge](https://www.codacy.com/project/badge/a8bc6b6e62a44884a7fa49bd05a309c7)](https://www.codacy.com)
+[![Codacy Badge](https://www.codacy.com/project/badge/ef556d72271749bb830f90991ef861ad)](https://www.codacy.com/public/zupecnejc_3396/meetup-basket)
 
 Setup
 -----
