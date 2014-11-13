@@ -83,6 +83,4 @@ class PaymentsView(TemplateView):
             "payments_table": generate_payments_table(members, events),
         }
 
-        print json.dumps(generate_payments_table(members, events), indent=4)
-
         return render(request, self.template_name, payload)
