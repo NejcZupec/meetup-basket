@@ -11,6 +11,18 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 
 from django.conf import global_settings
+from django.core.exceptions import ImproperlyConfigured
+
+
+def get_env_variable(var_name):
+    """
+    Get the environment variable or return exception.
+    """
+    try:
+        os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,7 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = get_env_variable("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -102,7 +114,7 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 
 MEETUP_API_URL = "https://api.meetup.com/"
 
-MEETUP_API_KEY = os.environ["MEETUP_API_KEY"]
+MEETUP_API_KEY = get_env_variable("MEETUP_API_KEY")
 
 
 # Global parameters
