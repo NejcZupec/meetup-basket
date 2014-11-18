@@ -94,7 +94,7 @@ def sync_attendance(modeladmin, request, queryset):
 
 def sync_rsvp(modeladmin, request, queryset):
     for event in queryset:
-        rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()
+        rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()["results"]
         count = 0
 
         for rsvp in rsvps:
@@ -103,8 +103,8 @@ def sync_rsvp(modeladmin, request, queryset):
             obj, created = RSVP.objects.get_or_create(
                 id=rsvp["rsvp_id"],
                 response=rsvp["response"],
-                event_id=Event.objects.get(id=rsvp["event"]["id"]),
-                member_id=Member.objects.get(id=rsvp["member"]["member_id"]),
+                event=Event.objects.get(id=rsvp["event"]["id"]),
+                member=Member.objects.get(id=rsvp["member"]["member_id"]),
             )
 
             if created:
