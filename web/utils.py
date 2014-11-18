@@ -53,7 +53,7 @@ def calculate_weight(attended, rsvp):
 
     if attended and rsvp == "yes":
         return 1 + 0.0
-    elif attended and rsvp == "No RSVP":
+    elif attended and not rsvp:
         return 1 + settings.PENALTY_WEIGHT
     elif attended and rsvp == "no":
         return 1 + 2*settings.PENALTY_WEIGHT

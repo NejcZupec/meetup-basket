@@ -98,8 +98,6 @@ def sync_rsvp(modeladmin, request, queryset):
         count = 0
 
         for rsvp in rsvps:
-            print json.dumps(rsvp, indent=4)
-
             obj, created = RSVP.objects.get_or_create(
                 id=rsvp["rsvp_id"],
                 response=rsvp["response"],

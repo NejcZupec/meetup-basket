@@ -70,8 +70,8 @@ class Event(models.Model):
 
     def get_member_rsvp(self, member):
         try:
-            return Attendance.objects.get(event=self, member=member).rsvp
-        except Attendance.DoesNotExist:
+            return RSVP.objects.get(event=self, member=member).response
+        except RSVP.DoesNotExist:
             return None
 
     def sequence_number(self):
