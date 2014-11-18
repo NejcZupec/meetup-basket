@@ -3,7 +3,7 @@ import requests
 
 from django.conf import settings
 
-from meetup_integration.models import Member, Group, Event, Attendance
+from meetup_integration.models import Member, Group, Event, Attendance, RSVP
 
 
 class MeetupAPI(object):
@@ -91,3 +91,24 @@ def sync_attendance(modeladmin, request, queryset):
         modeladmin.message_user(request, "For event %s, received %d attendances. Saved %d attendances." %
                                 (event.name, len(attendances), count))
 
+
+def sync_rsvp(modeladmin, request, queryset):
+    for event in queryset:
+        rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()
+        count = 0
+
+        for rsvp in rsvps:
+            print json.dumps(rsvp, indent=4)
+
+            obj, created = RSVP.objects.get_or_create(
+                id=rsvp["rsvp_id"],
+                response=rsvp["response"],
+                event_id=Event.objects.get(id=rsvp["event"]["id"]),
+                member_id=Member.objects.get(id=rsvp["member"]["member_id"]),
+            )
+
+            if created:
+                count += 1
+
+        modeladmin.message_user(request, "For event %s, received %d rsvps. Saved %d rsvps." %
+                                (event.name, len(rsvps), count))

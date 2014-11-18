@@ -111,3 +111,12 @@ class Team(models.Model):
                                                                       self.match_win,
                                                                       self.match_lose,)
 
+
+class RSVP(models.Model):
+    id = models.IntegerField(primary_key=True)
+    response = models.CharField(max_length=255)
+    event = models.ForeignKey(Event)
+    member = models.ForeignKey(Member)
+
+    def __unicode__(self):
+        return "RSVP <%s> (event=%d, member=%d)" % (self.response, self.event_id, self.member_id)
