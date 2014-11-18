@@ -84,6 +84,15 @@ def generate_payments_table(members, events):
                 "price": calculate_price(member, event),
             })
 
+        row.append({
+            "attended": None,
+            "rsvp": None,
+            "weight": None,
+            "price": sum([r["price"] for r in row])
+        })
+
         table_rows.append({"member": member.name, "data": row})
+
+
 
     return table_rows
