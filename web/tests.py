@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 
@@ -8,26 +9,26 @@ class WebViewsTestCase(TestCase):
         """
         Test meetups view.
         """
-        response = self.client.get("/meetups/").status_code
+        response = self.client.get(reverse("meetups")).status_code
         self.assertEqual(response, 200)
 
     def test_members_view(self):
         """
         Test members view.
         """
-        response = self.client.get("/members/").status_code
+        response = self.client.get(reverse("members")).status_code
         self.assertEqual(response, 200)
 
     def test_team_generator_view(self):
         """
         Test team generator view.
         """
-        response = self.client.get("/team-generator/").status_code
+        response = self.client.get(reverse("team_generator")).status_code
         self.assertEqual(response, 200)
 
     def test_payments_view(self):
         """
         Test payments view.
         """
-        response = self.client.get("/payments/").status_code
+        response = self.client.get(reverse("payments")).status_code
         self.assertEqual(response, 200)
