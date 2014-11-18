@@ -55,7 +55,11 @@
       $("#payments-table").DataTable({
         "paging": false,
         "info": false,
-        "filter": false
+        "filter": false,
+        "columnDefs": [
+            { "type": "numeric-comma", targets: 1}
+        ],
+        "order": [[ {{ events|length }} + 1, "desc" ]]
       });
     });
   </script>
