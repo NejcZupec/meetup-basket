@@ -30,7 +30,7 @@ class MeetupsView(TemplateView):
     def get(self, request):
         payload = {"events": []}
 
-        event_objects = Event.objects.all().order_by("-name")
+        event_objects = Event.objects.all().order_by("-id")
 
         for event in event_objects:
             payload["events"].append({
@@ -46,7 +46,7 @@ class TeamGeneratorView(TemplateView):
 
     def get(self, request):
         # get the latest event
-        event = Event.objects.latest("name")
+        event = Event.objects.latest("id")
 
         # members
         members = event.get_members_with_rsvp()
