@@ -78,11 +78,13 @@ def sync_attendance(modeladmin, request, queryset):
 
             # ignore deleted users
             if attendance["member"]["id"] != 0:
+                print attendance["member"]["id"]
+
                 obj, created = Attendance.objects.get_or_create(
                     attendance=True if str(attendance["status"]) == "attended" else False,
                     rsvp=rsvp,
                     event=event,
-                    member=Member.objects.get(id=attendance["member"]["id"]),
+                    member=Member.objects.get(id=int(attendance["member"]["id"])),
                 )
 
                 if created:
