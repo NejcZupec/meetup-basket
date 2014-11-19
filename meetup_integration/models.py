@@ -82,7 +82,6 @@ class Event(models.Model):
 
 
 class Attendance(models.Model):
-    id = models.IntegerField(primary_key=True)
     attendance = models.BooleanField(default=True)
     rsvp = models.CharField(max_length=255)
     event = models.ForeignKey(Event)
