@@ -75,7 +75,7 @@ class PaymentsView(TemplateView):
 
     def get(self, request):
         members = Member.objects.all()
-        events = Event.objects.all()
+        events = Event.objects.filter(status="past")
 
         payload = {
             "members": members,

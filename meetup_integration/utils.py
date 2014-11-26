@@ -45,7 +45,7 @@ def sync_members(modeladmin, request, queryset):
 
 def sync_events(modeladmin, request, queryset):
     for group in queryset:
-        events = MeetupAPI("2/events", group_id=group.id, status="past").get()["results"]
+        events = MeetupAPI("2/events", group_id=group.id).get()["results"]
 
         for event in events:
             print json.dumps(event, indent=4)
