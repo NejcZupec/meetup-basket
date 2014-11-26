@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team
 from meetup_integration.utils import team_coef
+from web.utils import generate_payments_table
 
 
 class DashboardView(TemplateView):
