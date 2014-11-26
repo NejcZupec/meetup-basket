@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from meetup_integration.models import Group, Event, Member, Attendance, Team, RSVP
-from meetup_integration.utils import sync_events, sync_members, sync_attendance, sync_rsvp
+from meetup_integration.utils import sync_events, sync_members, sync_attendance, sync_rsvp, generate_teams_admin
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -15,7 +15,7 @@ class MemberAdmin(admin.ModelAdmin):
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "event_url", "group", "status"]
-    actions = [sync_attendance, sync_rsvp]
+    actions = [sync_attendance, sync_rsvp, generate_teams_admin]
 
 
 class AttendanceAdmin(admin.ModelAdmin):

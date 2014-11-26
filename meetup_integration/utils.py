@@ -1,9 +1,10 @@
 import json
+import random
 import requests
 
 from django.conf import settings
 
-from meetup_integration.models import Member, Group, Event, Attendance, RSVP
+from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team
 
 
 class MeetupAPI(object):
@@ -112,3 +113,67 @@ def sync_rsvp(modeladmin, request, queryset):
 
         modeladmin.message_user(request, "For event %s, received %d rsvps. Saved %d rsvps." %
                                 (event.name, len(rsvps), count))
+
+
+def team_coef(members):
+    coefs = [member.win_lose_coefficient() for member in members]
+
+    if len(coefs) > 0:
+        return float(sum(coefs))/len(coefs)
+    else:
+        return 0.0
+
+
+def generate_teams(event, no_of_iterations=30):
+    coefficients = []
+    teams_generated = []
+    members = event.get_members_with_rsvp()
+
+    # divide into two groups
+    for i in range(no_of_iterations):
+        random.shuffle(members)
+
+        team_a = members[len(members)/2:]
+        team_b = members[:len(members)/2]
+
+        team_a_coef = team_coef(team_a)
+        team_b_coef = team_coef(team_b)
+
+        coef = abs(team_a_coef - team_b_coef)
+
+        teams_generated.append((team_a, team_b))
+        coefficients.append(coef)
+
+    index = coefficients.index(min(coefficients))
+
+    team_a, team_b = teams_generated[index]
+
+    # sort by coefficient
+    team_a.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
+    team_b.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
+
+    return team_a, team_b
+
+
+def generate_teams_admin(modeladmin, request, queryset):
+    for event in queryset:
+        team_a, team_b = generate_teams(event, 100)
+
+        # delete old teams for current event
+        Team.objects.filter(event=event).delete()
+
+        # team A
+        a = Team.objects.create(name="A", event=event)
+
+        for member in team_a:
+            a.members.add(member)
+        a.save()
+
+        # team B
+        b = Team.objects.create(name="B", event=event)
+
+        for member in team_b:
+            b.members.add(member)
+        b.save()
+
+        modeladmin.message_user(request, "Team A: %s, Team B: %s" % (team_a, team_b))

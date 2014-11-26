@@ -1,10 +1,8 @@
-import json
-
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team
-from web.utils import team_coef, generate_teams, generate_payments_table
+from meetup_integration.utils import team_coef
 
 
 class DashboardView(TemplateView):
@@ -48,13 +46,13 @@ class TeamGeneratorView(TemplateView):
         # get the latest event
         event = Event.objects.latest("id")
 
-        # members
-        members = event.get_members_with_rsvp()
-        team_a, team_b = generate_teams(members)
+        team_a = Team.objects.get(name="A", event=event).members.all()
+        team_b = Team.objects.get(name="B", event=event).members.all()
+
 
         payload = {
             "event": event,
-            "members": members,
+            "members": [],
             "teams": {
                 "Team A": {
                     "members": team_a,
@@ -62,7 +60,7 @@ class TeamGeneratorView(TemplateView):
                 },
                 "Team B": {
                     "members": team_b,
-                    "coef": team_coef(team_b)
+                    "coef": team_coef(team_b),
                 }
             }
         }
