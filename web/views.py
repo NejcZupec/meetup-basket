@@ -1,3 +1,5 @@
+from django.core.cache import cache
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -83,3 +85,8 @@ class PaymentsView(TemplateView):
         }
 
         return render(request, self.template_name, payload)
+
+
+def clear_cache(request):
+    cache.clear()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

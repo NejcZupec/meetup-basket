@@ -50,9 +50,9 @@
             <!--logo end-->
 
             <div class="top-menu">
-            	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="#">Logout</a></li>
-            	</ul>
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="{% url 'clear_cache' %}"><i class="fa fa-refresh"></i>  &nbsp;Refresh</a></li>
+                </ul>
             </div>
         </header>
       <!--header end-->
@@ -67,7 +67,7 @@
               <ul class="sidebar-menu" id="nav-accordion">
               
                   <p class="centered"><a href="#"><img src="{% static "img/ui-sam.jpg" %}" class="img-circle" width="60"></a></p>
-                  <h5 class="centered">Nejc Zupec</h5>
+                  <h5 class="centered">Ig Basketball Meetup</h5>
 
                   <!--<li class="mt">
                       <a class="{% add_active request 'dashboard' %}" href="{% url 'dashboard' %}">
