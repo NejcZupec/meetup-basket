@@ -45,6 +45,21 @@ class Member(models.Model):
 
         return float(calculate_weight(attended, rsvp))
 
+    def coefficient_for_events(self, events):
+        wins = 0.0
+        loses = 0.0
+
+        for event in events:
+            for team in event.get_teams():
+                if self in team.get_members():
+                    wins += team.match_win
+                    loses += team.match_lose
+
+        if wins + loses > 0:
+            return float(wins/(wins+loses))
+        else:
+            return 0.5
+
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
 
@@ -76,6 +91,9 @@ class Event(models.Model):
 
     def sequence_number(self):
         return self.name[-3:]
+
+    def get_teams(self):
+        return Team.objects.filter(event=self)
 
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)

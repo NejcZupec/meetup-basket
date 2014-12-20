@@ -45,10 +45,11 @@
       </div>
     </div><!-- ./content-panel -->
 
+    <br>
+    <br>
+
     <div class="content-panel">
-      <div class="panel-heading">
-        Coefficients over meetups
-      </div>
+      <div class="panel-heading"></div>
       <div class="panel-body">
         <div id="coefficients-graph-container"></div>
       </div>
@@ -57,7 +58,11 @@
 {% endblock content %}
 
 {% block additional-scripts %}
-  <script src="{% static "data-tables/js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+  <!-- Data tables -->
+  <script src="{% static 'data-tables/js/jquery.dataTables.min.js' %}" type="text/javascript"></script>
+
+  <!-- Highcharts -->
+  <script src="{% static 'highcharts-release/highcharts.js' %}"></script>
 
   <script>
     // enable dataTable
@@ -74,6 +79,49 @@
             cell.innerHTML = i+1;
         } );
     } ).draw();
+    });
+  </script>
+
+  <script>
+    // coefficients graph
+    $(document).ready(function () {
+      $.ajax({
+        type: "GET",
+        url: "{% url 'coefficients_over_meetups_graph' %}",
+        success: function(data) {
+          $('#coefficients-graph-container').highcharts({
+            title: {
+              text: 'Coefficients over time',
+              x: -20 //center
+            },
+            xAxis: {
+              categories: data.categories
+            },
+            yAxis: {
+              title: {
+                text: 'Coefficient'
+              },
+              plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+              }]
+            },
+            legend: {
+              borderWidth: 0
+            },
+            plotOptions: {
+              line: {
+                lineWidth: 3,
+                marker: {
+                  enabled: false
+                }
+              }
+            },
+            series: data.series
+          });
+        }
+      });
     });
   </script>
 {% endblock additional-scripts %}

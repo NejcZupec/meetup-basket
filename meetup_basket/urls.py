@@ -1,12 +1,14 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
-admin.autodiscover()
 
 from django.views.decorators.cache import cache_page
 
-from web.views import DashboardView, MembersView, MeetupsView, TeamGeneratorView, PaymentsView, clear_cache
+from web.views import DashboardView, MembersView, MeetupsView, TeamGeneratorView, PaymentsView, clear_cache,\
+    coefficients_over_meetups_graph
 
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^dashboard/$', cache_page(7*24*60*60)(DashboardView.as_view()), name='dashboard'),
@@ -18,4 +20,8 @@ urlpatterns = patterns('',
     url(r'clear-cache/$', clear_cache, name='clear_cache'),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    # AJAX
+    url(r'coefficients_over_meetups_graph/$', cache_page(7*24*60*60)(coefficients_over_meetups_graph),
+        name='coefficients_over_meetups_graph'),
 )

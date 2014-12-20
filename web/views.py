@@ -1,5 +1,7 @@
+import json
+
 from django.core.cache import cache
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -85,6 +87,28 @@ class PaymentsView(TemplateView):
         }
 
         return render(request, self.template_name, payload)
+
+
+def coefficients_over_meetups_graph(request):
+    events = Event.objects.all()[4:]
+
+    categories = [event.sequence_number() for event in events]
+    series = []
+
+    for member in Member.objects.all():
+        data = [member.coefficient_for_events(events[:i]) for i in range(len(events))]
+
+        series.append({
+            'name': member.name,
+            'data': data,
+        })
+
+    payload = {
+        "categories": categories,
+        "series": series,
+    }
+
+    return HttpResponse(json.dumps(payload), content_type="application/json")
 
 
 def clear_cache(request):
