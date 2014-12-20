@@ -29,7 +29,6 @@ def get_env_variable(var_name):
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -45,7 +44,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,6 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'web',
     'meetup_integration',
+    'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -73,7 +72,6 @@ WSGI_APPLICATION = 'meetup_basket.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -83,7 +81,6 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -94,12 +91,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATIC_URL = '/static/'
-
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, 'templates'),
@@ -109,25 +103,19 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
 )
 
-# Cache settings
-# https://docs.djangoproject.com/en/1.7/topics/cache/
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cache_table',
-    }
-}
-
 # Meetup API
 # http://www.meetup.com/meetup_api/docs/
-
 MEETUP_API_URL = "https://api.meetup.com/"
-
 MEETUP_API_KEY = get_env_variable("MEETUP_API_KEY")
 
-
 # Global parameters
-
 MEETUP_PRICE = 1.5*17
 PENALTY_WEIGHT = 0.1
+
+# Bower settings
+# https://github.com/nvbn/django-bower
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_DIR, 'components/')
+
+BOWER_INSTALLED_APPS = (
+    'highcharts-release',
+)

@@ -1,6 +1,7 @@
 # folders
 python-api-client/
 .idea/
+components/
 
 # files
 db.sqlite3

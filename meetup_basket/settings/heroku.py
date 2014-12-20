@@ -21,5 +21,15 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
+    'djangobower.finders.BowerFinder',
     os.path.join(PROJECT_DIR, 'static'),
 )
+
+# Cache settings
+# https://docs.djangoproject.com/en/1.7/topics/cache/
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+    }
+}
