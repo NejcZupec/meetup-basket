@@ -11,4 +11,4 @@ Meetup Basket
 
 Setup
 -----
-You have to set two environment variables: SECRET_KEY and MEETUP_API_KEY.
+You have to set two environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
