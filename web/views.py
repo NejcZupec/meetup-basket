@@ -90,13 +90,13 @@ class PaymentsView(TemplateView):
 
 
 def coefficients_over_meetups_graph(request):
-    events = Event.objects.all()[4:]
+    events = Event.objects.filter(status="past")[4:]
 
     categories = [event.sequence_number() for event in events]
     series = []
 
     for member in Member.objects.all():
-        data = [member.coefficient_for_events(events[:i]) for i in range(len(events))]
+        data = [member.coefficient_for_events(events[:i+1]) for i in range(len(events))]
 
         series.append({
             'name': member.name,
