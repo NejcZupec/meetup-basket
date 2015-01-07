@@ -37,7 +37,7 @@
                 <td>{{ member.games_played }}</td>
                 <td>{{ member.count_wins }}</td>
                 <td>{{ member.count_loses }}</td>
-                <td>{{ member.win_lose_coefficient }}</td>
+                <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
               </tr>
             {% endfor %}
           </tbody>

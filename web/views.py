@@ -18,13 +18,9 @@ class MembersView(TemplateView):
     template_name = "members.html"
 
     def get(self, request):
-        members = Member.objects.all()
+        members = sorted(Member.objects.all(), key=lambda member: member.win_lose_coefficient(), reverse=True)
 
-        members = sorted(members, key=lambda member: member.win_lose_coefficient(), reverse=True)
-
-        payload = {'members': members}
-
-        return render(request, self.template_name, payload)
+        return render(request, self.template_name, {'members': members})
 
 
 class MeetupsView(TemplateView):
