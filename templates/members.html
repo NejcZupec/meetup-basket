@@ -90,6 +90,9 @@
         url: "{% url 'coefficients_over_meetups_graph' %}",
         success: function(data) {
           $('#coefficients-graph-container').highcharts({
+            chart: {
+              zoomType: "x"
+            },
             title: {
               text: 'Coefficients over time',
               x: -20 //center
