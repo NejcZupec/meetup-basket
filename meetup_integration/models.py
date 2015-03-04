@@ -35,7 +35,7 @@ class Member(models.Model):
         if self.games_played() > 0:
             return float(self.count_wins())/self.games_played()
         else:
-            return None
+            return 0.5
 
     def weight(self, event):
         from web.utils import calculate_weight
