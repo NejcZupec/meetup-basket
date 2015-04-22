@@ -10,6 +10,9 @@ def calculate_weight(attended, rsvp):
     :return: A penalty weight.
     """
 
+    if rsvp == "waitlist":
+        rsvp = "no"
+
     if attended and rsvp == "yes":
         return 1 + 0.0
     elif attended and not rsvp:
