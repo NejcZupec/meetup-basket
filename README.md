@@ -2,7 +2,7 @@ Meetup Basket
 =============
 
 [![Build Status](https://travis-ci.org/NejcZupec/meetup-basket.svg?branch=master)](https://travis-ci.org/NejcZupec/meetup-basket)
-[![Coverage Status](https://img.shields.io/coveralls/NejcZupec/meetup-basket.svg)](https://coveralls.io/r/NejcZupec/meetup-basket)
+[![Coverage Status](https://coveralls.io/repos/NejcZupec/meetup-basket/badge.svg?branch=master&service=github)](https://coveralls.io/github/NejcZupec/meetup-basket?branch=master)
 [![Codacy Badge](https://www.codacy.com/project/badge/f2a0eb5c905a416da4e137ca2bfbed2e)](https://www.codacy.com/public/zupecnejc_3396/meetup-basket_2)
 
 
