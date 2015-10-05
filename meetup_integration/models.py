@@ -137,3 +137,18 @@ class RSVP(models.Model):
 
     def __unicode__(self):
         return "RSVP <%s> (event=%d, member=%d)" % (self.response, self.event_id, self.member_id)
+
+
+class Coefficient(models.Model):
+    """
+    Coefficient for each member after specific meetup (event).
+    """
+    member = models.ForeignKey(Member)
+    event = models.ForeignKey(Event)
+    coefficient = models.FloatField()
+
+    def __unicode__(self):
+        return "Coefficient (member=%s, event=%s, coef=%f)" % (self.member, self.event, self.coefficient)
+
+    class Meta:
+        unique_together = ("member", "event")
