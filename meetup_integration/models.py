@@ -60,6 +60,12 @@ class Member(models.Model):
         else:
             return 0.5
 
+    def coefficient_after_event(self, event):
+        try:
+            return Coefficient.objects.get(event=event, member=self).coefficient
+        except:
+            return 0.0
+
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
 
@@ -145,7 +151,7 @@ class Coefficient(models.Model):
     """
     member = models.ForeignKey(Member)
     event = models.ForeignKey(Event)
-    coefficient = models.FloatField()
+    coefficient = models.FloatField(default=0.5)
 
     def __unicode__(self):
         return "Coefficient (member=%s, event=%s, coef=%f)" % (self.member, self.event, self.coefficient)

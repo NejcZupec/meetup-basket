@@ -12,12 +12,13 @@ class Command(BaseCommand):
 
         for member in Member.objects.all():
             for i in range(len(events)):
+                print events[:i+1]
                 c = member.coefficient_for_events(events[:i+1])
-                print str(member), c
+                print str(member), events[i], c
 
                 obj, created = Coefficient.objects.update_or_create(
                     member=member,
-                    event=events.last(),
+                    event=events[i],
                 )
 
                 obj.coefficient = c

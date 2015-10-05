@@ -92,7 +92,7 @@ def coefficients_over_meetups_graph(request):
     series = []
 
     for member in Member.objects.all():
-        data = [member.coefficient_for_events(events[:i+1]) for i in range(len(events))]
+        data = [member.coefficient_after_event(events[i]) for i in range(len(events))]
 
         series.append({
             'name': member.name,
