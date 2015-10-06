@@ -71,7 +71,7 @@ class Member(models.Model):
 
 
 class Event(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(primary_key=True, max_length=255)
     name = models.CharField(max_length=255)
     event_url = models.CharField(max_length=255)
     group = models.ForeignKey(Group)
