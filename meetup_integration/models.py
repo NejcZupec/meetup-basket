@@ -96,7 +96,13 @@ class Event(models.Model):
             return None
 
     def sequence_number(self):
-        return self.name[-3:]
+        try:
+            prefix = self.name.split(" ")[2]
+            sn = prefix.split("#")[1]
+        except Exception:
+            print Exception
+            sn = ""
+        return sn
 
     def get_teams(self):
         return Team.objects.filter(event=self)
