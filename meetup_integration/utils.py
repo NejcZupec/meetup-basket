@@ -59,13 +59,16 @@ def sync_events(group):
     for event in events:
         print json.dumps(event, indent=4)
 
-        Event.objects.get_or_create(
-            id=event["id"],
-            name=event["name"],
-            event_url=event["event_url"],
-            group=group,
-            status=event["status"],
-        )
+        # ignore all events, except if event's name stars with 'Basketball match'
+        event_type = event["name"][:16]
+        if event_type == "Basketball match":
+            Event.objects.get_or_create(
+                id=event["id"],
+                name=event["name"],
+                event_url=event["event_url"],
+                group=group,
+                status=event["status"],
+            )
 
     return "For group %s, received %d events." % (group.name, len(events))
 
