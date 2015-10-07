@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from meetup_integration.models import Member, Event, Team
+from meetup_integration.models import Member, Event, Team, Season
 from meetup_integration.utils import team_coef
 from web.utils import generate_payments_table
 
@@ -18,9 +18,16 @@ class MembersView(TemplateView):
     template_name = "members.html"
 
     def get(self, request):
+        season_id = request.GET.get("season")
+
+        if season_id:
+            season = Season.objects.get(pk=season_id)
+        else:
+            season = Season.objects.get(slug="all")
+
         members = sorted(Member.objects.all(), key=lambda member: member.win_lose_coefficient(), reverse=True)
 
-        return render(request, self.template_name, {'members': members})
+        return render(request, self.template_name, {'members': members, 'season': season})
 
 
 class MeetupsView(TemplateView):
@@ -86,13 +93,27 @@ class PaymentsView(TemplateView):
 
 
 def coefficients_over_meetups_graph(request):
-    events = Event.objects.filter(status="past")[4:]
+    """
+    GET parameters:
+    - season_id
+    """
+    season_id = request.GET.get("season_id")
+
+    if season_id:
+        season = Season.objects.get(pk=season_id)
+    else:
+        season = Season.objects.get(slug="all")
+
+    if season.slug == "all":
+        events = Event.objects.filter(status="past")
+    else:
+        events = Event.objects.filter(status="past", season=season)
 
     categories = [event.sequence_number() for event in events]
     series = []
 
     for member in Member.objects.all():
-        data = [member.coefficient_after_event(events[i]) for i in range(len(events))]
+        data = [member.coefficient_after_event(events[i], season) for i in range(len(events))]
 
         series.append({
             'name': member.name,

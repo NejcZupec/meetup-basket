@@ -60,9 +60,9 @@ class Member(models.Model):
         else:
             return 0.5
 
-    def coefficient_after_event(self, event):
+    def coefficient_after_event(self, event, season):
         try:
-            return Coefficient.objects.get(event=event, member=self).coefficient
+            return Coefficient.objects.get(event=event, member=self, season=season).coefficient
         except:
             return 0.0
 

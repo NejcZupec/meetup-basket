@@ -88,6 +88,9 @@
       $.ajax({
         type: "GET",
         url: "{% url 'coefficients_over_meetups_graph' %}",
+        data: {
+          season_id: "{{ request.GET.season_id }}"
+        },
         success: function(data) {
           $('#coefficients-graph-container').highcharts({
             chart: {

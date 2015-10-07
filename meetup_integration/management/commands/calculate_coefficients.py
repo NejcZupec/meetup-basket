@@ -14,6 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         for season in Season.objects.all():
+            logger.info("Calculating for season: %s" % season)
 
             if season.slug == "all":
                 events = Event.objects.filter(status="past")
@@ -37,4 +38,4 @@ class Command(BaseCommand):
                     if created:
                         logger.info("Object has been added.")
                     else:
-                        logger.info("Object already exist. Values have been updated.")
+                        logger.info("Object already exists. Values have been updated.")
