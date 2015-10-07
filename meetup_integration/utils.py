@@ -1,10 +1,13 @@
 import json
+import logging
 import random
 import requests
 
 from django.conf import settings
 
 from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team
+
+logger = logging.getLogger("meetup_basket")
 
 
 class MeetupAPI(object):
@@ -21,7 +24,7 @@ class MeetupAPI(object):
     def get(self):
         try:
             url = self.generate_url()
-            print url
+            logger.info("API request: %s" % url)
             r = requests.get(url)
             return r.json()
         except requests.exceptions.RequestException as e:
@@ -56,13 +59,15 @@ def sync_events(group):
     """
     events = MeetupAPI("2/events", group_id=group.id, status="past").get()["results"]
 
+    count_updated = 0
+
     for event in events:
-        print json.dumps(event, indent=4)
+        logger.debug(json.dumps(event, indent=4))
 
         # ignore all events, except if event's name stars with 'Basketball match'
         event_type = event["name"][:16]
         if event_type == "Basketball match":
-            Event.objects.get_or_create(
+            event, created = Event.objects.get_or_create(
                 id=event["id"],
                 name=event["name"],
                 event_url=event["event_url"],
@@ -70,7 +75,10 @@ def sync_events(group):
                 status=event["status"],
             )
 
-    return "For group %s, received %d events." % (group.name, len(events))
+            if created:
+                count_updated
+
+    return "For group %s, received %d events. Updated %d events." % (group.name, len(events), int(count_updated))
 
 
 def sync_attendance(modeladmin, request, queryset):

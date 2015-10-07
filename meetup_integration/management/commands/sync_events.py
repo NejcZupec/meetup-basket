@@ -1,7 +1,11 @@
+import logging
+
 from django.core.management.base import BaseCommand
 
 from meetup_integration.models import Group
 from meetup_integration.utils import sync_events
+
+logger = logging.getLogger("meetup_basket")
 
 
 class Command(BaseCommand):
@@ -12,4 +16,4 @@ class Command(BaseCommand):
 
         for group in Group.objects.all():
             message = sync_events(group)
-            print message
+            logger.info(message)
