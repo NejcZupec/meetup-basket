@@ -785,5 +785,21 @@
     },
     "model": "meetup_integration.team",
     "pk": 4
+},
+{
+    "fields": {
+        "name": "2014/2015",
+        "slug": ""
+    },
+    "model": "meetup_integration.season",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "2015/2016",
+        "slug": "15/16"
+    },
+    "model": "meetup_integration.season",
+    "pk": 2
 }
 ]
