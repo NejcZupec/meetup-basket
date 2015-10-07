@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
     url(r'clear-cache/$', clear_cache, name='clear_cache'),
 
+    url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     # AJAX
