@@ -129,24 +129,28 @@ def sync_attendance(event):
     return "For event %s, received %d attendances. Saved %d attendances." % (event.name, len(attendances), count)
 
 
-def sync_rsvp(modeladmin, request, queryset):
+def sync_rsvp_queryset(modeladmin, request, queryset):
     for event in queryset:
-        rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()["results"]
-        count = 0
+        message = sync_rsvp(event)
+        modeladmin.message_user(request, message)
 
-        for rsvp in rsvps:
-            obj, created = RSVP.objects.get_or_create(
-                id=rsvp["rsvp_id"],
-                response=rsvp["response"],
-                event=Event.objects.get(id=rsvp["event"]["id"]),
-                member=Member.objects.get(id=rsvp["member"]["member_id"]),
-            )
 
-            if created:
-                count += 1
+def sync_rsvp(event):
+    rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()["results"]
+    count = 0
 
-        modeladmin.message_user(request, "For event %s, received %d rsvps. Saved %d rsvps." %
-                                (event.name, len(rsvps), count))
+    for rsvp in rsvps:
+        obj, created = RSVP.objects.get_or_create(
+            id=rsvp["rsvp_id"],
+            response=rsvp["response"],
+            event=Event.objects.get(id=rsvp["event"]["id"]),
+            member=Member.objects.get(id=rsvp["member"]["member_id"]),
+        )
+
+        if created:
+            count += 1
+
+    return "For event %s, received %d rsvps. Saved %d rsvps." % (event.name, len(rsvps), count)
 
 
 def team_coef(members):
