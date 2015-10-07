@@ -2,6 +2,7 @@ import logging
 
 from optparse import make_option
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from meetup_integration.models import Group, Event, Season
@@ -26,8 +27,10 @@ class Command(BaseCommand):
             logger.warning("Error with specified steps, will calculate all: %s" % str(e))
             steps = None
 
+        current_season = Season.objects.get(name=settings.CURRENT_SEASON)
+
         # STEP 1: sync events
-        if 1 in steps or steps is None:
+        if steps is None or 1 in steps:
             logger.info("SYNC EVENTS")
 
             for group in Group.objects.all():
@@ -36,23 +39,19 @@ class Command(BaseCommand):
                 logger.info(message)
 
         # STEP 2: sync RSVPS
-        if 2 in steps or steps is None:
+        if steps is None or 2 in steps:
             logger.info("SYNC RSVPS")
 
-            s = Season.objects.get(name="2015/2016")
-
-            for event in Event.objects.filter(season=s):
+            for event in Event.objects.filter(season=current_season):
                 logger.info("Syncing RSVPs for event: %s" % event.name)
                 message = sync_rsvp(event)
                 logger.info(message)
 
         # STEP 3: sync attendance
-        if 3 in steps or steps is None:
+        if steps is None or 3 in steps:
             logger.info("SYNC ATTENDANCE")
 
-            s = Season.objects.get(name="2015/2016")
-
-            for event in Event.objects.filter(season=s):
+            for event in Event.objects.filter(season=current_season):
                 logger.info("Syncing attendance for event: %s" % event.name)
                 message = sync_attendance(event)
                 logger.info(message)
