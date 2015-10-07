@@ -13,11 +13,11 @@ from web.views import DashboardView, MembersView, MeetupsView, TeamGeneratorView
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^dashboard/$', cache_page(7*24*60*60)(DashboardView.as_view()), name='dashboard'),
-    url(r'^$', cache_page(7*24*60*60)(MembersView.as_view()), name='members'),
-    url(r'^meetups/$', cache_page(7*24*60*60)(MeetupsView.as_view()), name='meetups'),
+    url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
+    url(r'^$', MembersView.as_view(), name='members'),
+    url(r'^meetups/$', MeetupsView.as_view(), name='meetups'),
     url(r'^payments/$', cache_page(7*24*60*60)(PaymentsView.as_view()), name='payments'),
-    url(r'^team-generator/$', cache_page(7*24*60*60)(TeamGeneratorView.as_view()), name='team_generator'),
+    url(r'^team-generator/$', TeamGeneratorView.as_view(), name='team_generator'),
 
     url(r'clear-cache/$', clear_cache, name='clear_cache'),
 
