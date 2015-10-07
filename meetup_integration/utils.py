@@ -126,7 +126,7 @@ def sync_attendance(event):
             if created:
                 count += 1
 
-        return "For event %s, received %d attendances. Saved %d attendances." % (event.name, len(attendances), count)
+    return "For event %s, received %d attendances. Saved %d attendances." % (event.name, len(attendances), count)
 
 
 def sync_rsvp(modeladmin, request, queryset):

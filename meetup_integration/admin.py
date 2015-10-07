@@ -21,6 +21,7 @@ class EventAdmin(admin.ModelAdmin):
 
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = ["id", "attendance", "rsvp", "event", "member"]
+    list_filter = ["event"]
 
 
 class TeamAdmin(admin.ModelAdmin):

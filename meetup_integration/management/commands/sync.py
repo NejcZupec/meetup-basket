@@ -4,7 +4,7 @@ from optparse import make_option
 
 from django.core.management.base import BaseCommand
 
-from meetup_integration.models import Group, Event
+from meetup_integration.models import Group, Event, Season
 from meetup_integration.utils import sync_events, sync_attendance
 
 logger = logging.getLogger("meetup_basket")
@@ -38,8 +38,11 @@ class Command(BaseCommand):
         if 2 in steps or steps is None:
             logger.info("SYNC ATTENDANCE")
 
-            for event in Event.objects.all():
+            s = Season.objects.get(name="2015/2016")
+
+            for event in Event.objects.filter(season=s):
                 logger.info("Syncing attendance for event: %s" % event.name)
-                sync_attendance(event)
+                message = sync_attendance(event)
+                logger.info(message)
 
 
