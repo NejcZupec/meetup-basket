@@ -15,7 +15,7 @@ class MemberAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "event_url", "group", "status"]
+    list_display = ["id", "name", "event_url", "group", "status", "season"]
     actions = [sync_attendance, sync_rsvp, generate_teams_admin]
 
 

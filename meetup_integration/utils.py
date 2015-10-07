@@ -5,7 +5,7 @@ import requests
 
 from django.conf import settings
 
-from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team
+from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team, Season
 
 logger = logging.getLogger("meetup_basket")
 
@@ -60,6 +60,7 @@ def sync_events(group):
     events = MeetupAPI("2/events", group_id=group.id, status="past").get()["results"]
 
     count_updated = 0
+    count_basket = 0
 
     for event in events:
         logger.debug(json.dumps(event, indent=4))
@@ -67,18 +68,25 @@ def sync_events(group):
         # ignore all events, except if event's name stars with 'Basketball match'
         event_type = event["name"][:16]
         if event_type == "Basketball match":
+            count_basket += 1
+
+            # find out season
+            prefix = event["name"].split(" ")[2]
+            season = Season.objects.get(slug=prefix.split("#")[0])
+
             event, created = Event.objects.get_or_create(
                 id=event["id"],
                 name=event["name"],
                 event_url=event["event_url"],
                 group=group,
                 status=event["status"],
+                season=season,
             )
 
             if created:
-                count_updated
+                count_updated += 1
 
-    return "For group %s, received %d events. Updated %d events." % (group.name, len(events), int(count_updated))
+    return "For group %s, received %d events (%d basketball matches). Updated %d events." % (group.name, len(events), count_basket, int(count_updated))
 
 
 def sync_attendance_queryset(modeladmin, request, queryset):

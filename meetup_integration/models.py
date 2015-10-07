@@ -76,6 +76,7 @@ class Event(models.Model):
     event_url = models.CharField(max_length=255)
     group = models.ForeignKey(Group)
     status = models.CharField(max_length=255)
+    season = models.ForeignKey("meetup_integration.Season")
 
     def get_members_with_rsvp(self, response="yes"):
         return [rsvp.member for rsvp in RSVP.objects.filter(event=self, response=response)]
