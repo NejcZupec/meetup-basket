@@ -8,3 +8,4 @@ db.sqlite3
 .DS_Store
 *.pyc
 .coverage
+meetup_basket.log

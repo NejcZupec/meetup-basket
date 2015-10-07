@@ -164,3 +164,14 @@ class Coefficient(models.Model):
 
     class Meta:
         unique_together = ("member", "event")
+
+
+class Season(models.Model):
+    """
+    Each row represents a season.
+    """
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, blank=True, null=True)
+
+    def __unicode__(self):
+        return "Season (name=%s, slug=%s)" % (self.name, self.slug)
