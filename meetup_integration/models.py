@@ -159,12 +159,13 @@ class Coefficient(models.Model):
     member = models.ForeignKey(Member)
     event = models.ForeignKey(Event)
     coefficient = models.FloatField(default=0.5)
+    season = models.ForeignKey("meetup_integration.Season")
 
     def __unicode__(self):
         return "Coefficient (member=%s, event=%s, coef=%f)" % (self.member, self.event, self.coefficient)
 
     class Meta:
-        unique_together = ("member", "event")
+        unique_together = ("member", "event", "season")
 
 
 class Season(models.Model):

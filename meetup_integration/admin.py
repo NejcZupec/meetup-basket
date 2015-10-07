@@ -34,8 +34,8 @@ class RSVPAdmin(admin.ModelAdmin):
 
 
 class CoefficientAdmin(admin.ModelAdmin):
-    list_display = ["id", "member", "event", "coefficient"]
-    list_filter = ["member", "event"]
+    list_display = ["id", "member", "event", "coefficient", "season"]
+    list_filter = ["member", "event", "season"]
 
 
 class SeasonAdmin(admin.ModelAdmin):
