@@ -7,5 +7,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'meetupbasket',
         'USER': 'meetupbasket',
+        'HOST': '',
+        'DB': 'meetupbasket',
     }
 }

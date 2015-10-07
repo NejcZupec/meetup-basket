@@ -78,6 +78,7 @@ DATABASES = {
         'NAME': 'meetupbasket',
         'USER': 'meetupbasket',
         'HOST': '',
+        'DB': 'meetupbasket',
     }
 }
 
