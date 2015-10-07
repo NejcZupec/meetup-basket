@@ -81,37 +81,44 @@ def sync_events(group):
     return "For group %s, received %d events. Updated %d events." % (group.name, len(events), int(count_updated))
 
 
-def sync_attendance(modeladmin, request, queryset):
+def sync_attendance_queryset(modeladmin, request, queryset):
     for event in queryset:
-        url = str(event.group.url_name) + "/events/" + str(event.id) + "/attendance/"
-        print url
-        attendances = MeetupAPI(url).get()
-        count = 0
+        message = sync_attendance(event)
+        modeladmin.message_user(request, message)
 
-        for attendance in attendances:
-            print json.dumps(attendance, indent=4)
 
-            try:
-                rsvp = attendance["rsvp"]["response"]
-            except Exception as e:
-                rsvp = "No RSVP"
+def sync_attendance(event):
+    """
+    Sync attendance for an event.
+    """
 
-            # ignore deleted users
-            if attendance["member"]["id"] != 0:
-                print attendance["member"]["id"]
+    url = str(event.group.url_name) + "/events/" + str(event.id) + "/attendance/"
+    attendances = MeetupAPI(url).get()
+    count = 0
 
-                obj, created = Attendance.objects.get_or_create(
-                    attendance=True if str(attendance["status"]) == "attended" else False,
-                    rsvp=rsvp,
-                    event=event,
-                    member=Member.objects.get(id=int(attendance["member"]["id"])),
-                )
+    for attendance in attendances:
+        logger.debug(json.dumps(attendance, indent=4))
 
-                if created:
-                    count += 1
+        try:
+            rsvp = attendance["rsvp"]["response"]
+        except Exception as e:
+            rsvp = "No RSVP"
 
-        modeladmin.message_user(request, "For event %s, received %d attendances. Saved %d attendances." %
-                                (event.name, len(attendances), count))
+        # ignore deleted users
+        if attendance["member"]["id"] != 0:
+            logger.debug(attendance["member"]["id"])
+
+            obj, created = Attendance.objects.get_or_create(
+                attendance=True if str(attendance["status"]) == "attended" else False,
+                rsvp=rsvp,
+                event=event,
+                member=Member.objects.get(id=int(attendance["member"]["id"])),
+            )
+
+            if created:
+                count += 1
+
+        return "For event %s, received %d attendances. Saved %d attendances." % (event.name, len(attendances), count)
 
 
 def sync_rsvp(modeladmin, request, queryset):
