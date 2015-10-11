@@ -1,6 +1,17 @@
 from django.db import models
 
 
+class Season(models.Model):
+    """
+    Each row represents a season.
+    """
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, blank=True, null=True)
+
+    def __unicode__(self):
+        return "Season (name=%s, slug=%s)" % (self.name, self.slug)
+
+
 class Group(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -17,23 +28,33 @@ class Member(models.Model):
     name = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey("meetup_integration.Group")
 
-    def meetups_attended(self):
-        return Attendance.objects.filter(member=self, attendance=True).count()
+    def meetups_attended(self, season):
+        attendances = Attendance.objects.filter(
+            member=self,
+            attendance=True,
+        )
 
-    def count_wins(self):
-        return sum([team.match_win for team in Team.objects.filter(members__id__exact=self.id)])
+        if season.slug == "all":
+            return attendances.count()
+        else:
+            return len([a for a in attendances if a.event.season == season])
 
-    def count_loses(self):
-        return sum([team.match_lose for team in Team.objects.filter(members__id__exact=self.id)])
+    def count_wins(self, season):
+        events = Event.objects.all() if season.slug == "all" else Event.objects.filter(season=season)
+        return sum([team.match_win for team in Team.objects.filter(members__id__exact=self.id, event__in=events)])
 
-    def games_played(self):
-        return self.count_wins() + self.count_loses()
+    def count_loses(self, season):
+        events = Event.objects.all() if season.slug == "all" else Event.objects.filter(season=season)
+        return sum([team.match_lose for team in Team.objects.filter(members__id__exact=self.id, event__in=events)])
 
-    def win_lose_coefficient(self):
-        if self.games_played() > 0:
-            return float(self.count_wins())/self.games_played()
+    def games_played(self, season):
+        return self.count_wins(season) + self.count_loses(season)
+
+    def win_lose_coefficient(self, season):
+        if self.games_played(season) > 0:
+            return float(self.count_wins(season))/self.games_played(season)
         else:
             return 0.5
 
@@ -115,8 +136,8 @@ class Event(models.Model):
 class Attendance(models.Model):
     attendance = models.BooleanField(default=True)
     rsvp = models.CharField(max_length=255)
-    event = models.ForeignKey(Event)
-    member = models.ForeignKey(Member)
+    event = models.ForeignKey("meetup_integration.Event")
+    member = models.ForeignKey("meetup_integration.Member")
 
     def __unicode__(self):
         return "Attendance for %s (attendance=%s, rsvp=%s, event=%s)" % (self.member.name,
@@ -127,7 +148,7 @@ class Attendance(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=255)
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey("meetup_integration.Event")
     members = models.ManyToManyField(Member)
     match_win = models.IntegerField(default=0)
     match_lose = models.IntegerField(default=0)
@@ -145,8 +166,8 @@ class Team(models.Model):
 class RSVP(models.Model):
     id = models.IntegerField(primary_key=True)
     response = models.CharField(max_length=255)
-    event = models.ForeignKey(Event)
-    member = models.ForeignKey(Member)
+    event = models.ForeignKey("meetup_integration.Event")
+    member = models.ForeignKey("meetup_integration.Member")
 
     def __unicode__(self):
         return "RSVP <%s> (event=%d, member=%d)" % (self.response, self.event_id, self.member_id)
@@ -156,8 +177,8 @@ class Coefficient(models.Model):
     """
     Coefficient for each member after specific meetup (event).
     """
-    member = models.ForeignKey(Member)
-    event = models.ForeignKey(Event)
+    member = models.ForeignKey("meetup_integration.Member")
+    event = models.ForeignKey("meetup_integration.Event")
     coefficient = models.FloatField(default=0.5)
     season = models.ForeignKey("meetup_integration.Season")
 
@@ -166,14 +187,3 @@ class Coefficient(models.Model):
 
     class Meta:
         unique_together = ("member", "event", "season")
-
-
-class Season(models.Model):
-    """
-    Each row represents a season.
-    """
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.CharField(max_length=255, unique=True, blank=True, null=True)
-
-    def __unicode__(self):
-        return "Season (name=%s, slug=%s)" % (self.name, self.slug)

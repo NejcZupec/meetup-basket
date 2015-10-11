@@ -10,7 +10,15 @@
 {% block content %}
   <h2>List of members</h2>
 
-  <br>
+  <div class="btn-group">
+    {% for s in seasons %}
+      <a href="{% url 'members' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
+        {{ s.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <br><br>
 
   {% if members %}
     <div class="content-panel">

@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -18,16 +19,25 @@ class MembersView(TemplateView):
     template_name = "members.html"
 
     def get(self, request):
-        season_id = request.GET.get("season")
+        season_id = request.GET.get("season_id")
+        members = []
+        season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
 
-        if season_id:
-            season = Season.objects.get(pk=season_id)
-        else:
-            season = Season.objects.get(slug="all")
+        for m in Member.objects.all():
+            members.append({
+                "name": m.name,
+                "meetups_attended": m.meetups_attended(season),
+                "games_played": m.games_played(season),
+                "count_wins": m.count_wins(season),
+                "count_loses": m.count_loses(season),
+                "win_lose_coefficient": m.win_lose_coefficient(season),
+            })
 
-        members = sorted(Member.objects.all(), key=lambda member: member.win_lose_coefficient(), reverse=True)
-
-        return render(request, self.template_name, {'members': members, 'season': season})
+        return render(request, self.template_name, {
+            'members': members,
+            'season': season,
+            'seasons': Season.objects.all()
+        })
 
 
 class MeetupsView(TemplateView):
