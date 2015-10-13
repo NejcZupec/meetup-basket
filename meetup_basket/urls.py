@@ -25,8 +25,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # AJAX
-    url(r'coefficients_over_meetups_graph/$', cache_page(7*24*60*60)(coefficients_over_meetups_graph),
-        name='coefficients_over_meetups_graph'),
+    url(r'coefficients_over_meetups_graph/$', coefficients_over_meetups_graph, name='coefficients_over_meetups_graph'),
 )
 
 
