@@ -8,7 +8,7 @@ DATABASES = {
         'NAME': 'meetupbasket',
         'USER': 'meetupbasket',
         'PASSWORD': get_env_variable('DB_PASSWORD'),
-        'HOST': '',
+        'HOST': 'localhost',
         'DB': 'meetupbasket',
     }
 }
