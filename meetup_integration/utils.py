@@ -153,8 +153,8 @@ def sync_rsvp(event):
     return "For event %s, received %d rsvps. Saved %d rsvps." % (event.name, len(rsvps), count)
 
 
-def team_coef(members):
-    coefs = [member.win_lose_coefficient() for member in members]
+def team_coef(members, season):
+    coefs = [member.win_lose_coefficient(season) for member in members]
 
     if len(coefs) > 0:
         return float(sum(coefs))/len(coefs)
@@ -162,7 +162,7 @@ def team_coef(members):
         return 0.0
 
 
-def generate_teams(event, no_of_iterations=30):
+def generate_teams(event, season, no_of_iterations=30):
     coefficients = []
     teams_generated = []
     members = event.get_members_with_rsvp()
@@ -174,8 +174,8 @@ def generate_teams(event, no_of_iterations=30):
         team_a = members[len(members)/2:]
         team_b = members[:len(members)/2]
 
-        team_a_coef = team_coef(team_a)
-        team_b_coef = team_coef(team_b)
+        team_a_coef = team_coef(team_a, season)
+        team_b_coef = team_coef(team_b, season)
 
         coef = abs(team_a_coef - team_b_coef)
 
@@ -195,7 +195,8 @@ def generate_teams(event, no_of_iterations=30):
 
 def generate_teams_admin(modeladmin, request, queryset):
     for event in queryset:
-        team_a, team_b = generate_teams(event, 100)
+        season = Season.objects.get(name=settings.CURRENT_SEASON)
+        team_a, team_b = generate_teams(event, season, 100)
 
         # delete old teams for current event
         Team.objects.filter(event=event).delete()

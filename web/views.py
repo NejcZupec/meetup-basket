@@ -67,6 +67,7 @@ class TeamGeneratorView(TemplateView):
         team_a = Team.objects.get(name="A", event=event).members.all()
         team_b = Team.objects.get(name="B", event=event).members.all()
 
+        season = Season.objects.get(name=settings.CURRENT_SEASON)
 
         payload = {
             "event": event,
@@ -74,11 +75,11 @@ class TeamGeneratorView(TemplateView):
             "teams": {
                 "Team A": {
                     "members": team_a,
-                    "coef": team_coef(team_a),
+                    "coef": team_coef(team_a, season),
                 },
                 "Team B": {
                     "members": team_b,
-                    "coef": team_coef(team_b),
+                    "coef": team_coef(team_b, season),
                 }
             }
         }
