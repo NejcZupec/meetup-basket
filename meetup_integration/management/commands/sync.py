@@ -17,6 +17,8 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option("-s", "--steps", action="store", type="str", dest="steps",
                     help="List space delimited steps to be calculated."),
+        make_option("-f", "--force", action="store_true", dest="force",
+                    help="Flag for forcing the overwriting of existing entities. USE WITH CAUTION"),
     )
 
     def handle(self, *args, **options):
@@ -35,7 +37,7 @@ class Command(BaseCommand):
 
             for group in Group.objects.all():
                 logger.info("Syncing events for group: %s" % group.name)
-                message = sync_events(group)
+                message = sync_events(group, force_update=options["force"])
                 logger.info(message)
 
         # STEP 2: sync RSVPS

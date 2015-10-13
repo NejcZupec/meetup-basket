@@ -3,6 +3,9 @@ import logging
 import random
 import requests
 
+from datetime import datetime
+from itertools import chain
+
 from django.conf import settings
 
 from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team, Season
@@ -53,40 +56,60 @@ def sync_events_queryset(modeladmin, request, queryset):
         modeladmin.message_user(request, message)
 
 
-def sync_events(group):
+def sync_events(group, force_update=False):
     """
     Sync events for a group.
     """
     events = MeetupAPI("2/events", group_id=group.id, status="past").get()["results"]
+    events2 = MeetupAPI("2/events", group_id=group.id, status="upcoming").get()["results"]
+
+    events = list(chain(events, events2))
 
     count_updated = 0
+    count_new = 0
     count_basket = 0
 
-    for event in events:
-        logger.debug(json.dumps(event, indent=4))
+    for e in events:
+        logger.debug(json.dumps(e, indent=4))
 
         # ignore all events, except if event's name stars with 'Basketball match'
-        event_type = event["name"][:16]
+        event_type = e["name"][:16]
         if event_type == "Basketball match":
             count_basket += 1
 
             # find out season
-            prefix = event["name"].split(" ")[2]
+            prefix = e["name"].split(" ")[2]
             season = Season.objects.get(slug=prefix.split("#")[0])
 
-            event, created = Event.objects.get_or_create(
-                id=event["id"],
-                name=event["name"],
-                event_url=event["event_url"],
-                group=group,
-                status=event["status"],
-                season=season,
-            )
+            try:
+                event = Event.objects.get(id=e["id"])
 
-            if created:
-                count_updated += 1
+                if force_update:
+                    count_updated += 1
 
-    return "For group %s, received %d events (%d basketball matches). Updated %d events." % (group.name, len(events), count_basket, int(count_updated))
+                    event.name = e["name"]
+                    event.event_url = e["event_url"]
+                    event.group = group
+                    event.status = e["status"]
+                    event.season = season
+                    event.start_date = datetime.utcfromtimestamp(float(e["time"])/1000)
+                    event.save()
+
+            except Event.DoesNotExist:
+                count_new += 1
+
+                event = Event.objects.create(
+                    id=e["id"],
+                    name=e["name"],
+                    event_url=e["event_url"],
+                    group=group,
+                    status=e["status"],
+                    season=season,
+                    start_date=datetime.utcfromtimestamp(float(e["time"])/1000),
+                )
+
+    return "For group %s, received %d events (%d basketball matches). Updated %d events. New %d events." % \
+           (group.name, len(events), count_basket, int(count_updated), int(count_new))
 
 
 def sync_attendance_queryset(modeladmin, request, queryset):

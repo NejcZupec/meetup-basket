@@ -98,6 +98,7 @@ class Event(models.Model):
     group = models.ForeignKey(Group)
     status = models.CharField(max_length=255)
     season = models.ForeignKey("meetup_integration.Season")
+    start_date = models.DateTimeField()
 
     def get_members_with_rsvp(self, response="yes"):
         return [rsvp.member for rsvp in RSVP.objects.filter(event=self, response=response)]
