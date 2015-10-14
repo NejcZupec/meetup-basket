@@ -29,7 +29,8 @@ class MeetupAPI(object):
             url = self.generate_url()
             logger.info("API request: %s" % url)
             r = requests.get(url)
-            return r.json()
+            j = r.json()
+            return j
         except requests.exceptions.RequestException as e:
             print e
 

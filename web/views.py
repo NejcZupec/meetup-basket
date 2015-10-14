@@ -1,5 +1,7 @@
 import json
 
+from datetime import datetime
+
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect
@@ -46,7 +48,7 @@ class MeetupsView(TemplateView):
     def get(self, request):
         payload = {"events": []}
 
-        event_objects = Event.objects.all().order_by("-id")
+        event_objects = Event.objects.filter(start_date__lte=datetime.utcnow()).order_by("-start_date")
 
         for event in event_objects:
             payload["events"].append({
@@ -113,7 +115,7 @@ def coefficients_over_meetups_graph(request):
     if season_id:
         season = Season.objects.get(pk=season_id)
     else:
-        season = Season.objects.get(slug="all")
+        season = Season.objects.get(name=settings.CURRENT_SEASON)
 
     if season.slug == "all":
         events = Event.objects.filter(status="past")
