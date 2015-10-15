@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 
 from django.conf import settings
-from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -139,8 +138,3 @@ def coefficients_over_meetups_graph(request):
     }
 
     return HttpResponse(json.dumps(payload), content_type="application/json")
-
-
-def clear_cache(request):
-    cache.clear()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
