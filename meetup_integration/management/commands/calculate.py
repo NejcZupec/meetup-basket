@@ -6,7 +6,8 @@ from optparse import make_option
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from meetup_integration.models import Event, Member, Coefficient, Season
+from meetup_integration.models import Event, Member, Coefficient, Season, Payment
+from web.utils import calculate_price
 
 logger = logging.getLogger("meetup_basket")
 
@@ -67,3 +68,29 @@ class Command(BaseCommand):
                         else:
                             logger.info("Object (name=%s, event=%s) already exists. Values have been updated." %
                                         (obj.member.name, obj.event.name))
+
+        # STEP 2: calculate payments
+        if steps is None or 2 in steps:
+            count = 0
+            new_count = 0
+
+            for season in seasons:
+
+                events = Event.objects.filter(status="past", season=season).order_by("-start_date")
+
+                for event in events:
+
+                    for member in Member.objects.all():
+                        logger.info("Member %s, event %s -> price %f" % (member.name, event.name, calculate_price(member, event)))
+
+                        payment, created = Payment.objects.get_or_create(
+                            member=member,
+                            event=event,
+                            price=calculate_price(member, event)
+                        )
+
+                        count += 1
+                        new_count = new_count + 1 if created else new_count
+
+            logger.info("Created %d. All objects %d." % (new_count, count))
+
