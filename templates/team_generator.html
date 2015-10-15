@@ -5,40 +5,45 @@
 
   <br>
 
-  {% for team, team_data in teams.items %}
-    <div class="content-panel">
-      <div class="panel-heading">
-        <h3>{{ team }} <small>{{ team_data.coef|floatformat:3 }}</small></h3>
-      </div>
+  {% if calculated %}
+    {% for team, team_data in teams.items %}
+      <div class="content-panel">
+        <div class="panel-heading">
+          <h3>{{ team }} <small>{{ team_data.coef|floatformat:3 }}</small></h3>
+        </div>
 
-      <div class="panel-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Games played</th>
-              <th>Wins</th>
-              <th>Loses</th>
-              <th>Coefficient</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for member in team_data.members %}
+        <div class="panel-body">
+          <table class="table">
+            <thead>
               <tr>
-                <td>{{ member.name }}</td>
-                <td>{{ member.games_played }}</td>
-                <td>{{ member.count_wins }}</td>
-                <td>{{ member.count_loses }}</td>
-                <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
+                <th>Player</th>
+                <th>Games played</th>
+                <th>Wins</th>
+                <th>Loses</th>
+                <th>Coefficient</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for member in team_data.members %}
+                <tr>
+                  <td>{{ member.name }}</td>
+                  <td>{{ member.games_played }}</td>
+                  <td>{{ member.count_wins }}</td>
+                  <td>{{ member.count_loses }}</td>
+                  <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <br>
-  {% endfor %}
+      <br>
+    {% endfor %}
+
+  {% else %}
+    <div class="alert alert-info">Teams haven't been calculated yet.</div>
+  {% endif %}
 
 
 {% endblock content %}

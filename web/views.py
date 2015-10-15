@@ -1,4 +1,5 @@
 import json
+import logging
 
 from datetime import datetime
 
@@ -11,6 +12,8 @@ from django.views.generic import TemplateView
 from meetup_integration.models import Member, Event, Team, Season
 from meetup_integration.utils import team_coef
 from web.utils import generate_payments_table
+
+logger = logging.getLogger("meetup_basket")
 
 
 class DashboardView(TemplateView):
@@ -63,28 +66,37 @@ class TeamGeneratorView(TemplateView):
     template_name = "team_generator.html"
 
     def get(self, request):
-        # get the latest event
-        event = Event.objects.latest("id")
 
-        team_a = Team.objects.get(name="A", event=event).members.all()
-        team_b = Team.objects.get(name="B", event=event).members.all()
+        try:
+            # get the latest event
+            event = Event.objects.filter(start_date__gte=datetime.now()).first()
 
-        season = Season.objects.get(name=settings.CURRENT_SEASON)
+            team_a = Team.objects.get(name="A", event=event).members.all()
+            team_b = Team.objects.get(name="B", event=event).members.all()
 
-        payload = {
-            "event": event,
-            "members": [],
-            "teams": {
-                "Team A": {
-                    "members": team_a,
-                    "coef": team_coef(team_a, season),
+            season = Season.objects.get(name=settings.CURRENT_SEASON)
+
+            payload = {
+                "event": event,
+                "members": [],
+                "teams": {
+                    "Team A": {
+                        "members": team_a,
+                        "coef": team_coef(team_a, season),
+                    },
+                    "Team B": {
+                        "members": team_b,
+                        "coef": team_coef(team_b, season),
+                    }
                 },
-                "Team B": {
-                    "members": team_b,
-                    "coef": team_coef(team_b, season),
-                }
+                "calculated": True,
             }
-        }
+        except Exception, e:
+            logger.warning("%s, %s" % (DeprecationWarning, e))
+
+            payload = {
+                "calculated": False
+            }
 
         return render(request, self.template_name, payload)
 
