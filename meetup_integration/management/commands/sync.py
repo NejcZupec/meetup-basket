@@ -12,7 +12,7 @@ logger = logging.getLogger("meetup_basket")
 
 
 class Command(BaseCommand):
-    help = "Sync members with meetup."
+    help = "Sync members with meetup. Steps: 1 - events, 2 - rsvps, 3 - attendance"
 
     option_list = BaseCommand.option_list + (
         make_option("-s", "--steps", action="store", type="str", dest="steps",

@@ -188,3 +188,13 @@ class Coefficient(models.Model):
 
     class Meta:
         unique_together = ("member", "event", "season")
+
+
+class Payment(models.Model):
+    member = models.ForeignKey("meetup_integration.Member")
+    event = models.ForeignKey("meetup_integration.Event")
+    price = models.FloatField(default=0.0)
+
+    def __unicode___(self):
+        return "Payment (member=%s, event=%s, price=%f.2)" % (self.member.name, self.event.name, self.price)
+
