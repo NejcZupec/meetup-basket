@@ -198,3 +198,5 @@ class Payment(models.Model):
     def __unicode___(self):
         return "Payment (member=%s, event=%s, price=%f.2)" % (self.member.name, self.event.name, self.price)
 
+    class Meta:
+        unique_together = ("member", "event")
