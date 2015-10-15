@@ -10,7 +10,15 @@
 {% block content %}
   <h2>Payments</h2>
 
-  <br>
+  <div class="btn-group">
+    {% for s in seasons %}
+      <a href="{% url 'payments' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
+        {{ s.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <br><br>
 
   <div class="content-panel">
     <div class="panel-heading">
@@ -32,7 +40,7 @@
             <tr>
               <td>{{ row.member }}</td>
               {% for column in row.data %}
-                <td data-toggle="tooltip" data-placement="top" title="RSVP: {{ column.rsvp }}, Attendance: {{ column.attended }}, Weight: {{ column.weight }}">{{ column.price }}</td>
+                <td>{{ column.price }}</td>
               {% endfor %}
             </tr>
           {% endfor %}

@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 
 from django.conf import settings
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -92,13 +93,17 @@ class PaymentsView(TemplateView):
     template_name = "payments.html"
 
     def get(self, request):
+        season_id = request.GET.get("season_id")
         members = Member.objects.all()
-        events = Event.objects.filter(status="past")
+        season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+        events = Event.objects.filter(status="past", season=season).order_by("start_date")
 
         payload = {
             "members": members,
             "events": events,
             "payments_table": generate_payments_table(members, events),
+            "seasons": Season.objects.filter(~Q(slug="all")),
+            "season": season,
         }
 
         return render(request, self.template_name, payload)

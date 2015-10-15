@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from meetup_integration.models import Payment
+
 
 def calculate_weight(attended, rsvp):
     """
@@ -30,7 +32,10 @@ def calculate_weight(attended, rsvp):
 
 
 def calculate_price(member, event):
-    return round(member.weight(event)/event.weight() * settings.MEETUP_PRICE, 2)
+    try:
+        return Payment.objects.get(member=member, event=event).price
+    except Payment.DoesNotExist:
+        return round(member.weight(event)/event.weight() * settings.MEETUP_PRICE, 2)
 
 
 def generate_payments_table(members, events):
@@ -40,16 +45,10 @@ def generate_payments_table(members, events):
         row = []
         for event in events:
             row.append({
-                "attended": event.member_attended(member),
-                "rsvp": event.get_member_rsvp(member),
-                "weight": member.weight(event),
                 "price": calculate_price(member, event),
             })
 
         row.append({
-            "attended": None,
-            "rsvp": None,
-            "weight": None,
             "price": sum([r["price"] for r in row])
         })
 
