@@ -15,3 +15,6 @@ DATABASES = {
         'DB': 'meetupbasket',
     }
 }
+
+# Local static files
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'staticfiles')
