@@ -8,6 +8,8 @@ from itertools import chain
 
 from django.conf import settings
 
+from pytz import utc
+
 from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team, Season
 
 logger = logging.getLogger("meetup_basket")
@@ -123,6 +125,9 @@ def sync_attendance(event):
     """
     Sync attendance for an event.
     """
+
+    if event.start_date > datetime.utcnow().replace(tzinfo=utc):
+        return "Event %s hasn't started yet." % event.name
 
     url = str(event.group.url_name) + "/events/" + str(event.id) + "/attendance/"
     attendances = MeetupAPI(url).get()
