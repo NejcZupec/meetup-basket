@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -134,11 +134,11 @@ def coefficients_over_meetups_graph(request):
         season = Season.objects.get(name=settings.CURRENT_SEASON)
 
     if season.slug == "all":
-        events = Event.objects.filter(status="past")
+        events = Event.objects.filter(status="past").order_by("-start_date")
     else:
-        events = Event.objects.filter(status="past", season=season)
+        events = Event.objects.filter(status="past", season=season).order_by("-start_date")
 
-    categories = [event.sequence_number() for event in events]
+    categories = [event.sequence_number() for event in events.reverse()]
     series = []
 
     for member in Member.objects.all():

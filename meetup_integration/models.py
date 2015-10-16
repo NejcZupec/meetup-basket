@@ -195,7 +195,7 @@ class Payment(models.Model):
     event = models.ForeignKey("meetup_integration.Event")
     price = models.FloatField(default=0.0)
 
-    def __unicode___(self):
+    def __unicode__(self):
         return "Payment (member=%s, event=%s, price=%f.2)" % (self.member.name, self.event.name, self.price)
 
     class Meta:
