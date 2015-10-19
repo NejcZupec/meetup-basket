@@ -1,4 +1,8 @@
+import logging
+
 from django.db import models
+
+logger = logging.getLogger("meetup_basket")
 
 
 class Season(models.Model):
@@ -81,26 +85,30 @@ class Member(models.Model):
         else:
             return 0.5
 
-    def basket_diff(self, season):
-        events = Event.objects.filter(status="past") if season.slug == "all" else Event.objects.filter(season=season, status="past")
-        diff = 0
-        for event in events:
-            for match in event.get_matches():
-                diff += match.diff_for_member(self)
-        return diff
-
-    def basket_diff_for_events(self, events):
-        # TODO: implement!
-        return 0.0
-
-    def basket_diff_after_event(self, event, season):
-        # TODO: implement!
-        return 0.0
-
     def coefficient_after_event(self, event, season):
         try:
             return Coefficient.objects.get(event=event, member=self, season=season).coefficient
         except:
+            return 0.0
+
+    def basket_diff(self, season):
+        event = Event.objects.filter(status="past").latest("start_date") if season.slug == "all" else Event.objects.filter(
+            season=season,
+            status="past",
+        ).latest("start_date")
+        return self.basket_diff_after_event(event, season)
+
+    def basket_diff_for_events(self, events):
+        diff = 0
+        for event in events:
+            diff += event.get_diff_for_member(self)
+        return diff
+
+    def basket_diff_after_event(self, event, season):
+        try:
+            return Coefficient.objects.get(event=event, member=self, season=season).basket_diff
+        except:
+            logger.error("Coefficient doesn't exist.")
             return 0.0
 
     def __unicode__(self):
@@ -148,6 +156,12 @@ class Event(models.Model):
 
     def get_matches(self):
         return Match.objects.filter(team_a__event=self, team_b__event=self)
+
+    def get_diff_for_member(self, member):
+        diff = 0
+        for match in self.get_matches():
+            diff += match.diff_for_member(member)
+        return diff
 
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)

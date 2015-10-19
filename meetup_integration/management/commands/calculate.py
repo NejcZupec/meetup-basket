@@ -13,7 +13,7 @@ logger = logging.getLogger("meetup_basket")
 
 
 class Command(BaseCommand):
-    help = "Calculate coefficients for each member. Steps: 1 - coefficients, 2 - payments."
+    help = "Calculate coefficients for each member. Steps:\n 1 - coefficients and basket diffs,\n 2 - payments."
 
     option_list = BaseCommand.option_list + (
         make_option("-s", "--steps", action="store", type="str", dest="steps",
@@ -37,9 +37,9 @@ class Command(BaseCommand):
         else:
             seasons = [Season.objects.get(name=settings.CURRENT_SEASON)]
 
-        # STEP 1: calculate coefficients
+        # STEP 1: calculate coefficients and basket diffs
         if steps is None or 1 in steps:
-            logger.info("STEP 1: CALCULATING COEFFICIENTS")
+            logger.info("STEP 1: CALCULATING COEFFICIENTS AND BASKET DIFFS")
 
             for season in seasons:
                 logger.info("Calculating for season: %s" % season)
@@ -58,11 +58,13 @@ class Command(BaseCommand):
                     for i in range(len(events)):
                         logger.debug(events[:i+1])
                         c = member.coefficient_for_events(events[:i+1])
+                        diff = member.basket_diff_for_events(events[:i+1])
 
                         obj, created = Coefficient.objects.update_or_create(
                             member=member,
                             event=events[i],
                             season=season,
+                            basket_diff=diff,
                         )
 
                         obj.coefficient = c
