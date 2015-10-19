@@ -44,10 +44,15 @@ class Command(BaseCommand):
             for season in seasons:
                 logger.info("Calculating for season: %s" % season)
 
+                # if force, delete old coefficients
+                if options["force"]:
+                    Coefficient.objects.filter(season=season).delete()
+                    logger.info("Coefficients for season %s have been deleted." % season.name)
+
                 if season.slug == "all":
-                    events = Event.objects.filter(status="past").order_by("-start_date")
+                    events = Event.objects.filter(status="past").order_by("start_date")
                 else:
-                    events = Event.objects.filter(status="past", season=season).order_by("-start_date")
+                    events = Event.objects.filter(status="past", season=season).order_by("start_date")
 
                 for member in Member.objects.all():
                     for i in range(len(events)):

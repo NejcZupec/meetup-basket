@@ -134,11 +134,11 @@ def coefficients_over_meetups_graph(request):
         season = Season.objects.get(name=settings.CURRENT_SEASON)
 
     if season.slug == "all":
-        events = Event.objects.filter(status="past").order_by("-start_date")
+        events = Event.objects.filter(status="past").order_by("start_date")
     else:
-        events = Event.objects.filter(status="past", season=season).order_by("-start_date")
+        events = Event.objects.filter(status="past", season=season).order_by("start_date")
 
-    categories = [event.sequence_number() for event in events.reverse()]
+    categories = [event.sequence_number() for event in events]
     series = []
 
     for member in Member.objects.all():
