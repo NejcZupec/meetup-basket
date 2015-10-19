@@ -200,3 +200,16 @@ class Payment(models.Model):
 
     class Meta:
         unique_together = ("member", "event")
+
+
+class Match(models.Model):
+    team_a = models.ForeignKey("meetup_integration.Team", related_name="team_a")
+    team_b = models.ForeignKey("meetup_integration.Team", related_name="team_b")
+    points_a = models.PositiveIntegerField(default=0.0)
+    points_b = models.PositiveIntegerField(default=0.0)
+
+    def __unicode__(self):
+        return "Match (%s [%d : %d] %s)" % (self.team_a, self.points_a, self.points_b, self.team_b)
+
+    class Meta:
+        verbose_name_plural = "matches"
