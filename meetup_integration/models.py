@@ -81,6 +81,22 @@ class Member(models.Model):
         else:
             return 0.5
 
+    def basket_diff(self, season):
+        events = Event.objects.filter(status="past") if season.slug == "all" else Event.objects.filter(season=season, status="past")
+        diff = 0
+        for event in events:
+            for match in event.get_matches():
+                diff += match.diff_for_member(self)
+        return diff
+
+    def basket_diff_for_events(self, events):
+        # TODO: implement!
+        return 0.0
+
+    def basket_diff_after_event(self, event, season):
+        # TODO: implement!
+        return 0.0
+
     def coefficient_after_event(self, event, season):
         try:
             return Coefficient.objects.get(event=event, member=self, season=season).coefficient
@@ -212,8 +228,15 @@ class Payment(models.Model):
 class Match(models.Model):
     team_a = models.ForeignKey("meetup_integration.Team", related_name="team_a")
     team_b = models.ForeignKey("meetup_integration.Team", related_name="team_b")
-    points_a = models.PositiveIntegerField(default=0.0)
-    points_b = models.PositiveIntegerField(default=0.0)
+    points_a = models.PositiveIntegerField(default=0)
+    points_b = models.PositiveIntegerField(default=0)
+
+    def diff_for_member(self, member):
+        if member in self.team_a.members.all():
+            return self.points_a - self.points_b
+        if member in self.team_b.members.all():
+            return self.points_b - self.points_a
+        return 0
 
     def __unicode__(self):
         return "Match (%s [%d : %d] %s)" % (self.team_a, self.points_a, self.points_b, self.team_b)
