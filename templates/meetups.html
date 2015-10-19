@@ -23,19 +23,42 @@
           <h3>{{ event.event.name }}</h3>
         </div>
         <div class="panel-body">
-          {% if event.teams %}
-            {% for team in event.teams %}
-              <h5>Team {{ team.name }} (wins: {{ team.match_win }}, loses: {{ team.match_lose }})</h5>
+          <div class="row">
+            <div class="col-lg-4">
+              {% if event.teams %}
+                {% for team in event.teams %}
+                  <h4>Team {{ team.name }} (wins: {{ team.match_win }}, loses: {{ team.match_lose }})</h4>
 
-              <ol>
-              {% for member in team.members.all %}
-                <li>{{ member.name }}</li>
-              {% endfor %}
-              </ol>
-            {% endfor %}
-          {% else %}
-            <p>No data for this meetup.</p>
-          {% endif %}
+                  <ol>
+                  {% for member in team.members.all %}
+                    <li>{{ member.name }}</li>
+                  {% endfor %}
+                  </ol>
+                {% endfor %}
+              {% else %}
+                <p>No data for this meetup.</p>
+              {% endif %}
+            </div>
+            {% if event.event.get_matches %}
+              <div class="col-lg-4">
+                <h4>Matches</h4><br>
+
+                <table class="table table-condensed">
+                  <tbody>
+                    {% for match in event.event.get_matches %}
+                      <tr>
+                        <td>Team {{ match.team_a.name }}</td>
+                        <td>{{ match.points_a }}</td>
+                        <td>:</td>
+                        <td>{{ match.points_b }}</td>
+                        <td>Team {{ match.team_b.name }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
 

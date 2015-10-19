@@ -44,7 +44,7 @@ class SeasonAdmin(admin.ModelAdmin):
 
 
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ["team_a", "team_b", "points_a", "points_b"]
+    list_display = ["id", "team_a", "team_b", "points_a", "points_b"]
 
 
 admin.site.register(Group, GroupAdmin)

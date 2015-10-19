@@ -130,6 +130,9 @@ class Event(models.Model):
     def get_teams(self):
         return Team.objects.filter(event=self)
 
+    def get_matches(self):
+        return Match.objects.filter(team_a__event=self, team_b__event=self)
+
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
 
