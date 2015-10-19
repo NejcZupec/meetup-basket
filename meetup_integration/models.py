@@ -136,6 +136,9 @@ class Event(models.Model):
     def __unicode__(self):
         return "Event <%s> (status=%s)" % (self.name, self.status)
 
+    class Meta:
+        ordering = ["-start_date"]
+
 
 class Attendance(models.Model):
     attendance = models.BooleanField(default=True)
@@ -184,6 +187,7 @@ class Coefficient(models.Model):
     member = models.ForeignKey("meetup_integration.Member")
     event = models.ForeignKey("meetup_integration.Event")
     coefficient = models.FloatField(default=0.5)
+    basket_diff = models.FloatField(default=0.0)
     season = models.ForeignKey("meetup_integration.Season")
 
     def __unicode__(self):
