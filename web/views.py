@@ -36,7 +36,7 @@ class MembersView(TemplateView):
                 "count_wins": m.count_wins(season),
                 "count_loses": m.count_loses(season),
                 "win_lose_coefficient": m.win_lose_coefficient(season),
-                "basket_diff": m.basket_diff(season),
+                "basket_diff": int(m.basket_diff(season)),
             })
 
         return render(request, self.template_name, {
