@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Teams generated for <strong>{{ event.name }}</strong></h2>
+  <h2>Team generator</h2>
+  <h4>Next event: {{ next_event.name }}</h4>
 
   <br>
 
@@ -9,7 +10,7 @@
     {% for team, team_data in teams.items %}
       <div class="content-panel">
         <div class="panel-heading">
-          <h3>{{ team }} <small>{{ team_data.coef|floatformat:3 }}</small></h3>
+          <h3>{{ team }} <small>{{ team_data.coef|floatformat:3 }}, {{ team_data.diff }}</small></h3>
         </div>
 
         <div class="panel-body">
@@ -21,6 +22,7 @@
                 <th>Wins</th>
                 <th>Loses</th>
                 <th>Coefficient</th>
+                <th>+/-</th>
               </tr>
             </thead>
             <tbody>
@@ -31,6 +33,7 @@
                   <td>{{ member.count_wins }}</td>
                   <td>{{ member.count_loses }}</td>
                   <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
+                  <td>{{ member.basket_diff }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -44,6 +47,4 @@
   {% else %}
     <div class="alert alert-info">Teams haven't been calculated yet.</div>
   {% endif %}
-
-
 {% endblock content %}

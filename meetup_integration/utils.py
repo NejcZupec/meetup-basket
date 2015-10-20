@@ -10,7 +10,7 @@ from django.conf import settings
 
 from pytz import utc
 
-from meetup_integration.models import Member, Group, Event, Attendance, RSVP, Team, Season
+from meetup_integration.models import Member, Event, Attendance, RSVP, Team, Season
 
 logger = logging.getLogger("meetup_basket")
 
@@ -216,32 +216,40 @@ def generate_teams(event, season, no_of_iterations=30):
     team_a, team_b = teams_generated[index]
 
     # sort by coefficient
-    team_a.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
-    team_b.sort(key=lambda member: member.win_lose_coefficient(), reverse=True)
+    team_a.sort(key=lambda member: member.win_lose_coefficient(season), reverse=True)
+    team_b.sort(key=lambda member: member.win_lose_coefficient(season), reverse=True)
 
     return team_a, team_b
 
 
 def generate_teams_admin(modeladmin, request, queryset):
     for event in queryset:
-        season = Season.objects.get(name=settings.CURRENT_SEASON)
-        team_a, team_b = generate_teams(event, season, 100)
+        message = generate_teams_for_event(event)
+        modeladmin.message_user(request, message)
 
-        # delete old teams for current event
-        Team.objects.filter(event=event).delete()
 
-        # team A
-        a = Team.objects.create(name="A", event=event)
+def generate_teams_for_event(event):
+    season = Season.objects.get(name=settings.CURRENT_SEASON)
+    team_a, team_b = generate_teams(event, season, 100)
 
-        for member in team_a:
-            a.members.add(member)
-        a.save()
+    # delete old teams for current event
+    Team.objects.filter(event=event).delete()
 
-        # team B
-        b = Team.objects.create(name="B", event=event)
+    # team A
+    a = Team.objects.create(name="A", event=event)
 
-        for member in team_b:
-            b.members.add(member)
-        b.save()
+    for member in team_a:
+        a.members.add(member)
+    a.save()
 
-        modeladmin.message_user(request, "Team A: %s, Team B: %s" % (team_a, team_b))
+    # team B
+    b = Team.objects.create(name="B", event=event)
+
+    for member in team_b:
+        b.members.add(member)
+    b.save()
+
+    team_a_names = [m.name for m in team_a]
+    team_b_names = [m.name for m in team_b]
+
+    return "Team A: %s, Team B: %s" % (team_a_names, team_b_names)
