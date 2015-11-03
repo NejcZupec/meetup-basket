@@ -1,0 +1,48 @@
+---
+- hosts: production
+  remote_user: ubuntu
+  vars_files:
+    - vars/base.yml
+    - vars/vault.yml
+
+  tasks:
+  - name: Pull sources from the repository.
+    git: >
+      repo={{ project_repo }}
+      dest={{ project_root }}
+      version={{ branch }}
+      force=yes
+
+  - name: Install packages required by the Django app inside virtualenv.
+    pip: >
+      virtualenv={{ virtualenv_dir }}
+      requirements={{ project_root }}/requirements.txt
+
+  - name: Run Django database migrations.
+    django_manage: >
+      command=migrate
+      app_path={{ project_root }}
+      virtualenv={{ virtualenv_dir }}
+    environment: django_environment
+
+  - name: Run bower update.
+    django_manage: >
+      command='bower update'
+      app_path={{ project_root }}
+      virtualenv={{ virtualenv_dir }}
+    environment: django_environment
+
+  - name: Run Django collectstatic.
+    django_manage: >
+      command=collectstatic
+      app_path={{ project_root }}
+      virtualenv={{ virtualenv_dir }}
+    environment: django_environment
+
+  - name: Restart web frontend (gunicorn).
+    service: name=gunicorn state=restarted
+    sudo_user: root
+
+  - name: Restart NGINX.
+    service: name=nginx state=restarted
+    sudo_user: root
