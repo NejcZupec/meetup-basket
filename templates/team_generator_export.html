@@ -1,0 +1,14 @@
+Živjo fantje!
+
+Pošiljam ekipe za {{ event.name }}.
+
+{% for team, team_data in teams.items %}
+{{ team }}  {{ team_data.coef|floatformat:3 }}  {{ team_data.diff }}  {{ team_data.color }}
+
+{% for member in team_data.members %}
+{{ member.name }}
+{% endfor %}
+
+{% endfor %}
+Lp,
+Nejc

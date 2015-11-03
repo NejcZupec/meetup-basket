@@ -10,8 +10,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team, Season
-from meetup_integration.utils import team_coef
-from web.utils import generate_payments_table
+from web.utils import generate_payments_table, prepare_payload_for_team_generator
 
 logger = logging.getLogger("meetup_basket")
 
@@ -67,72 +66,16 @@ class TeamGeneratorView(TemplateView):
     template_name = "team_generator.html"
 
     def get(self, request):
-        try:
-            next_event = Event.objects.filter(status="upcoming").earliest("start_date")
-        except Event.DoesNotExist:
-            logger.error("Upcoming events don't exist. Sync them with meetup.")
-            next_event = ""
-
-        try:
-            # get the latest event
-            event = next_event
-
-            team_a = Team.objects.get(name="A", event=event).members.all()
-            team_b = Team.objects.get(name="B", event=event).members.all()
-
-            season = Season.objects.get(name=settings.CURRENT_SEASON)
-
-            team_a_members = []
-            team_b_members = []
-
-            for member in team_a:
-                team_a_members.append({
-                    "name": member.name,
-                    "games_played": member.games_played(season),
-                    "count_wins": member.count_wins(season),
-                    "count_loses": member.count_loses(season),
-                    "win_lose_coefficient": member.win_lose_coefficient(season),
-                    "basket_diff": member.basket_diff(season),
-                })
-
-            for member in team_b:
-                team_b_members.append({
-                    "name": member.name,
-                    "games_played": member.games_played(season),
-                    "count_wins": member.count_wins(season),
-                    "count_loses": member.count_loses(season),
-                    "win_lose_coefficient": member.win_lose_coefficient(season),
-                    "basket_diff": member.basket_diff(season),
-                })
-
-
-            payload = {
-                "event": event,
-                "members": [],
-                "teams": {
-                    "Team A": {
-                        "members": team_a_members,
-                        "coef": team_coef(team_a, season),
-                        "diff": sum([m["basket_diff"] for m in team_a_members]),
-                    },
-                    "Team B": {
-                        "members": team_b_members,
-                        "coef": team_coef(team_b, season),
-                        "diff": sum([m["basket_diff"] for m in team_b_members]),
-                    }
-                },
-                "calculated": True,
-                "next_event": next_event,
-            }
-        except Exception, e:
-            logger.warning("%s, %s" % (DeprecationWarning, e))
-
-            payload = {
-                "calculated": False,
-                "next_event": next_event
-            }
-
+        payload = prepare_payload_for_team_generator()
         return render(request, self.template_name, payload)
+
+
+class TeamGeneratorExportView(TemplateView):
+    template_name = "team_generator_export.html"
+
+    def get(self, request, *args, **kwargs):
+        payload = prepare_payload_for_team_generator()
+        return render(request, self.template_name, payload, content_type='text/plain; charset=utf-8')
 
 
 class PaymentsView(TemplateView):

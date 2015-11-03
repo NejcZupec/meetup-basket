@@ -2,6 +2,14 @@
 
 {% block content %}
   <h2>Team generator</h2>
+
+  {% if calculated %}
+    <a class="pull-right btn btn-default btn-sm" href="{% url 'team_generator_export' %}" target="_blank">
+      <i class="fa fa-download"></i>&nbsp;
+      Export teams
+    </a>
+  {% endif %}
+
   <h4>Next event: {{ next_event.name }}</h4>
 
   <br>
