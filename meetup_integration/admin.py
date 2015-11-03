@@ -31,7 +31,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 class RSVPAdmin(admin.ModelAdmin):
     list_display = ["id", "response", "event", "member"]
-    list_filter = ["event__season"]
+    list_filter = ["event__season", "event"]
     search_fields = ["id"]
 
 
