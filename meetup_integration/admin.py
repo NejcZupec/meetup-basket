@@ -32,6 +32,7 @@ class TeamAdmin(admin.ModelAdmin):
 class RSVPAdmin(admin.ModelAdmin):
     list_display = ["id", "response", "event", "member"]
     list_filter = ["event__season"]
+    search_fields = ["id"]
 
 
 class CoefficientAdmin(admin.ModelAdmin):

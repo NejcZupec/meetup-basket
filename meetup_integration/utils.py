@@ -164,19 +164,28 @@ def sync_rsvp_queryset(modeladmin, request, queryset):
         modeladmin.message_user(request, message)
 
 
-def sync_rsvp(event):
+def sync_rsvp(event, force_update=False):
     rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()["results"]
     count = 0
 
     for rsvp in rsvps:
-        obj, created = RSVP.objects.get_or_create(
-            id=rsvp["rsvp_id"],
-            response=rsvp["response"],
-            event=Event.objects.get(id=rsvp["event"]["id"]),
-            member=Member.objects.get(id=rsvp["member"]["member_id"]),
-        )
+        try:
+            obj = RSVP.objects.get(
+                id=rsvp["rsvp_id"],
+            )
 
-        if created:
+            if force_update:
+                obj.response = rsvp["response"]
+                obj.event = Event.objects.get(id=rsvp["event"]["id"])
+                obj.member = Member.objects.get(id=rsvp["member"]["member_id"])
+                obj.save()
+        except RSVP.DoesNotExist:
+            RSVP.objects.create(
+                id=rsvp["rsvp_id"],
+                response=rsvp["response"],
+                event=Event.objects.get(id=rsvp["event"]["id"]),
+                member=Member.objects.get(id=rsvp["member"]["member_id"]),
+            )
             count += 1
 
     return "For event %s, received %d rsvps. Saved %d rsvps." % (event.name, len(rsvps), count)
