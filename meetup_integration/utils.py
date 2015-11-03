@@ -167,6 +167,7 @@ def sync_rsvp_queryset(modeladmin, request, queryset):
 def sync_rsvp(event, force_update=False):
     rsvps = MeetupAPI("2/rsvps", event_id=event.id).get()["results"]
     count = 0
+    updated = 0
 
     for rsvp in rsvps:
         try:
@@ -179,6 +180,7 @@ def sync_rsvp(event, force_update=False):
                 obj.event = Event.objects.get(id=rsvp["event"]["id"])
                 obj.member = Member.objects.get(id=rsvp["member"]["member_id"])
                 obj.save()
+                updated += 1
         except RSVP.DoesNotExist:
             RSVP.objects.create(
                 id=rsvp["rsvp_id"],
@@ -188,7 +190,8 @@ def sync_rsvp(event, force_update=False):
             )
             count += 1
 
-    return "For event %s, received %d rsvps. Saved %d rsvps." % (event.name, len(rsvps), count)
+    return "For event %s, received %d rsvps. Saved %d rsvps. Updated %d rsvps." % \
+           (event.name, len(rsvps), count, updated)
 
 
 def team_coef(members, season):

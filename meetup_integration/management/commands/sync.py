@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
             for event in Event.objects.filter(season=current_season):
                 logger.info("Syncing RSVPs for event: %s" % event.name)
-                message = sync_rsvp(event)
+                message = sync_rsvp(event, force_update=options["force"])
                 logger.info(message)
 
         # STEP 3: sync attendance
