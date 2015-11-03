@@ -12,3 +12,12 @@ Meetup Basket
 Setup
 -----
 You have to set three environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
+
+Deploy
+------
+
+Run the following command to deploy everything to basket.zupec.net.
+
+```
+ansible-playbook deploy/deploy.yml -i deploy/hosts --vault-password-file .vault_pass.txt
+```
