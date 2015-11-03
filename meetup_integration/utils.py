@@ -203,7 +203,16 @@ def team_coef(members, season):
         return 0.0
 
 
-def generate_teams(event, season, no_of_iterations=30):
+def team_diff(members, season):
+    coefs = [member.basket_diff(season) for member in members]
+
+    if len(coefs) > 0:
+        return float(sum(coefs))/len(coefs)
+    else:
+        return 0.0
+
+
+def generate_teams(event, season, no_of_iterations=30, use_diff=True):
     coefficients = []
     teams_generated = []
     members = event.get_members_with_rsvp()
@@ -215,8 +224,12 @@ def generate_teams(event, season, no_of_iterations=30):
         team_a = members[len(members)/2:]
         team_b = members[:len(members)/2]
 
-        team_a_coef = team_coef(team_a, season)
-        team_b_coef = team_coef(team_b, season)
+        if use_diff:
+            team_a_coef = team_diff(team_a, season)
+            team_b_coef = team_diff(team_b, season)
+        else:
+            team_a_coef = team_coef(team_a, season)
+            team_b_coef = team_coef(team_b, season)
 
         coef = abs(team_a_coef - team_b_coef)
 
