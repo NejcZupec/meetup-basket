@@ -98,6 +98,12 @@ class Member(models.Model):
         ).latest("start_date")
         return self.basket_diff_after_event(event, season)
 
+    def basket_diff_avg(self, season):
+        if self.games_played(season) > 0:
+            return self.basket_diff(season)/self.games_played(season)
+        else:
+            return 0.0
+
     def basket_diff_for_events(self, events):
         diff = 0
         for event in events:

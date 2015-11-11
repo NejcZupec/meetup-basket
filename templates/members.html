@@ -35,6 +35,7 @@
               <th>Loses</th>
               <th>Coefficient</th>
               <th>+/-</th>
+              <th>+/- [avg]</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +49,7 @@
                 <td>{{ member.count_loses }}</td>
                 <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
                 <td>{{ member.basket_diff }}</td>
+                <td>{{ member.basket_diff_avg|floatformat:2 }}</td>
               </tr>
             {% endfor %}
           </tbody>
