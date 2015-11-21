@@ -2,6 +2,7 @@
 python-api-client/
 .idea/
 components/
+staticfiles/
 
 # files
 db.sqlite3
