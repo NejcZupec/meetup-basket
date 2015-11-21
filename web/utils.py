@@ -88,6 +88,7 @@ def prepare_payload_for_team_generator():
                 "count_loses": member.count_loses(season),
                 "win_lose_coefficient": member.win_lose_coefficient(season),
                 "basket_diff": member.basket_diff(season),
+                "basket_diff_avg": member.basket_diff_avg(season),
             })
 
         for member in team_b:
@@ -98,10 +99,14 @@ def prepare_payload_for_team_generator():
                 "count_loses": member.count_loses(season),
                 "win_lose_coefficient": member.win_lose_coefficient(season),
                 "basket_diff": member.basket_diff(season),
+                "basket_diff_avg": member.basket_diff_avg(season),
             })
 
         team_a_diff = int(sum([m["basket_diff"] for m in team_a_members]))
         team_b_diff = int(sum([m["basket_diff"] for m in team_b_members]))
+
+        team_a_diff_avg = sum([m["basket_diff_avg"] for m in team_a_members])/len(team_a_members)
+        team_b_diff_avg = sum([m["basket_diff_avg"] for m in team_b_members])/len(team_b_members)
 
         payload = {
             "event": event,
@@ -110,14 +115,16 @@ def prepare_payload_for_team_generator():
                 "Team A": {
                     "members": team_a_members,
                     "coef": team_coef(team_a, season),
-                    "diff": "+%d" % team_a_diff if team_a_diff > 0 else team_a_diff,
-                    "color": "bela majica"
+                    "diff": team_a_diff,
+                    "avg_diff": team_a_diff_avg,
+                    "color": "bela majica",
                 },
                 "Team B": {
                     "members": team_b_members,
                     "coef": team_coef(team_b, season),
-                    "diff": "+%d" % team_b_diff if team_a_diff > 0 else team_b_diff,
-                    "color": "barvna majica"
+                    "diff": team_b_diff,
+                    "avg_diff": team_b_diff_avg,
+                    "color": "barvna majica",
                 }
             },
             "calculated": True,

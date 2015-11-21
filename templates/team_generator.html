@@ -18,7 +18,7 @@
     {% for team, team_data in teams.items %}
       <div class="content-panel">
         <div class="panel-heading">
-          <h3>{{ team }} <small>{{ team_data.coef|floatformat:3 }}, {{ team_data.diff }}</small></h3>
+          <h3>{{ team }} <small>coef: {{ team_data.coef|floatformat:3 }}, diff: {{ team_data.diff }}, avg. diff: {{ team_data.avg_diff|floatformat:2 }}</small></h3>
         </div>
 
         <div class="panel-body">
@@ -31,6 +31,7 @@
                 <th>Loses</th>
                 <th>Coefficient</th>
                 <th>+/-</th>
+                <th>+/- [avg]</th>
               </tr>
             </thead>
             <tbody>
@@ -41,7 +42,8 @@
                   <td>{{ member.count_wins }}</td>
                   <td>{{ member.count_loses }}</td>
                   <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>
-                  <td>{{ member.basket_diff }}</td>
+                  <td>{{ member.basket_diff|floatformat:0 }}</td>
+                  <td>{{ member.basket_diff_avg|floatformat:2 }}</td>
                 </tr>
               {% endfor %}
             </tbody>
