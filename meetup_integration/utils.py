@@ -236,7 +236,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     possible_combs = []
 
-    for c in combs:
+    for c in combs[:50]:
         a_team, b_team = seperate_teams(event.get_members_with_rsvp(), c)
 
         a_team_avg_height = sum([m.height for m in a_team])*1.0/len(a_team)
@@ -248,22 +248,38 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     logger.info("Possible height combinations (max height diff: %d cm): %d" % (settings.MAX_HEIGHT_DIFF, len(possible_combs)))
 
+    results = []
+
     # divide into two groups
     for i in range(len(possible_combs)):
         team_a = possible_combs[i]["a"]
         team_b = possible_combs[i]["b"]
 
-        team_a_coef = team_diff(team_a, season)
-        team_b_coef = team_diff(team_b, season)
+        results.append({
+            "coef_avg_diff": abs(team_diff(team_a, season) - team_diff(team_b, season)),
+            "team_a": team_a,
+            "team_b": team_b,
+        })
 
-        coef = abs(team_a_coef - team_b_coef)
+    sorted_results = sorted(results, key=lambda e: e["coef_avg_diff"])
 
-        teams_generated.append((team_a, team_b))
-        coefficients.append(coef)
+    candidates = sorted_results[:10]
+    new_results = []
 
-    index = coefficients.index(min(coefficients))
+    for el in candidates:
+        a = team_coef(el["team_a"], season)
+        b = team_coef(el["team_b"], season)
 
-    team_a, team_b = teams_generated[index]
+        new_results.append({
+            "coef_diff": fabs(a - b),
+            "team_a": el["team_a"],
+            "team_b": el["team_b"],
+        })
+
+    sorted_new_results = sorted(new_results, key=lambda e:e["coef_diff"])
+
+    team_a = sorted_new_results[0]["team_a"]
+    team_b = sorted_new_results[0]["team_b"]
 
     return team_a, team_b
 
