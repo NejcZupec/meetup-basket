@@ -263,7 +263,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     sorted_results = sorted(results, key=lambda e: e["coef_avg_diff"])
 
-    candidates = sorted_results[:10]
+    candidates = sorted_results[:5]
     new_results = []
 
     for el in candidates:
