@@ -225,7 +225,7 @@ def seperate_teams(members, a_team):
 
 
 def generate_teams(event, season, no_of_iterations=30, use_diff=True):
-    no_of_top_results = 5
+    no_of_top_results = 10
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
@@ -236,7 +236,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     possible_combs = []
 
-    for c in combs[:50]:
+    for c in combs:
         a_team, b_team = seperate_teams(event.get_members_with_rsvp(), c)
 
         a_team_avg_height = sum([m.height for m in a_team])*1.0/len(a_team)
