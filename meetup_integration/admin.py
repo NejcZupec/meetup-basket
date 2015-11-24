@@ -11,7 +11,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "link", "status"]
+    list_display = ["id", "name", "link", "status", "height"]
 
 
 class EventAdmin(admin.ModelAdmin):

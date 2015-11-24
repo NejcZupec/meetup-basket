@@ -33,6 +33,7 @@ class Member(models.Model):
     link = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     group = models.ForeignKey("meetup_integration.Group")
+    height = models.PositiveIntegerField(default=0)
 
     def meetups_attended(self, season):
         attendances = Attendance.objects.filter(
