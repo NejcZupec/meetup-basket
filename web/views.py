@@ -30,6 +30,7 @@ class MembersView(TemplateView):
         for m in Member.objects.all():
             members.append({
                 "name": m.name,
+                "height": m.height,
                 "meetups_attended": m.meetups_attended(season),
                 "games_played": m.games_played(season),
                 "count_wins": m.count_wins(season),
