@@ -278,7 +278,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     sorted_new_results = sorted(new_results, key=lambda e:e["coef_diff"])
 
-    team_a = sorted_new_results[random.randint(0, no_of_iterations-1)]["team_a"]
+    team_a = sorted_new_results[random.randint(0, no_of_top_results-1)]["team_a"]
     team_b = sorted_new_results[0]["team_b"]
 
     return team_a, team_b
