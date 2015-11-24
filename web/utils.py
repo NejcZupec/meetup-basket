@@ -83,6 +83,7 @@ def prepare_payload_for_team_generator():
         for member in team_a:
             team_a_members.append({
                 "name": member.name,
+                "height": member.height,
                 "games_played": member.games_played(season),
                 "count_wins": member.count_wins(season),
                 "count_loses": member.count_loses(season),
@@ -94,6 +95,7 @@ def prepare_payload_for_team_generator():
         for member in team_b:
             team_b_members.append({
                 "name": member.name,
+                "height": member.height,
                 "games_played": member.games_played(season),
                 "count_wins": member.count_wins(season),
                 "count_loses": member.count_loses(season),
@@ -114,6 +116,7 @@ def prepare_payload_for_team_generator():
             "teams": {
                 "Team A": {
                     "members": team_a_members,
+                    "height": sum([m["height"] for m in team_a_members])/(len(team_a_members)*1.0),
                     "coef": team_coef(team_a, season),
                     "diff": team_a_diff,
                     "avg_diff": team_a_diff_avg,
@@ -121,6 +124,7 @@ def prepare_payload_for_team_generator():
                 },
                 "Team B": {
                     "members": team_b_members,
+                    "height": sum([m["height"] for m in team_b_members])/(len(team_b_members)*1.0),
                     "coef": team_coef(team_b, season),
                     "diff": team_b_diff,
                     "avg_diff": team_b_diff_avg,
@@ -130,6 +134,8 @@ def prepare_payload_for_team_generator():
             "calculated": True,
             "next_event": next_event,
         }
+
+        print payload
     except Exception, e:
         logger.warning("%s, %s" % (DeprecationWarning, e))
 
