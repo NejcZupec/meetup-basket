@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 import requests
 
 from datetime import datetime
@@ -224,8 +225,7 @@ def seperate_teams(members, a_team):
 
 
 def generate_teams(event, season, no_of_iterations=30, use_diff=True):
-    coefficients = []
-    teams_generated = []
+    no_of_top_results = 5
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
@@ -263,7 +263,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     sorted_results = sorted(results, key=lambda e: e["coef_avg_diff"])
 
-    candidates = sorted_results[:5]
+    candidates = sorted_results[:no_of_top_results]
     new_results = []
 
     for el in candidates:
@@ -278,7 +278,7 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
 
     sorted_new_results = sorted(new_results, key=lambda e:e["coef_diff"])
 
-    team_a = sorted_new_results[0]["team_a"]
+    team_a = sorted_new_results[random.randomint(0,no_of_iterations)]["team_a"]
     team_b = sorted_new_results[0]["team_b"]
 
     return team_a, team_b
