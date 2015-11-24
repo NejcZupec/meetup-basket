@@ -1,10 +1,10 @@
 import json
 import logging
-import random
 import requests
 
 from datetime import datetime
-from itertools import chain
+from itertools import chain, combinations
+from math import fabs, floor
 
 from django.conf import settings
 
@@ -211,18 +211,47 @@ def team_diff(members, season):
     else:
         return 0.0
 
+def seperate_teams(members, a_team):
+    """
+    members = all members
+    a_team = only a_team members
+    b_team = members - a_team
+    """
+    a_team = a_team[:]
+    for m in a_team:
+        members.remove(m)
+    return a_team, members
+
 
 def generate_teams(event, season, no_of_iterations=30, use_diff=True):
     coefficients = []
     teams_generated = []
     members = event.get_members_with_rsvp()
 
-    # divide into two groups
-    for i in range(no_of_iterations):
-        random.shuffle(members)
+    logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
+    members_in_one_group = int(floor(len(members)/2))
+    logger.info("Players in 1 group: %d" % members_in_one_group)
+    combs = list(combinations(members, members_in_one_group))
+    logger.info("All combinations of groups: %d" % len(combs))
 
-        team_a = members[len(members)/2:]
-        team_b = members[:len(members)/2]
+    possible_combs = []
+
+    for c in combs:
+        a_team, b_team = seperate_teams(event.get_members_with_rsvp(), c)
+
+        a_team_avg_height = sum([m.height for m in a_team])*1.0/len(a_team)
+        b_team_avg_height = sum([m.height for m in b_team])*1.0/len(b_team)
+        diff = fabs(a_team_avg_height - b_team_avg_height)
+
+        if diff <= settings.MAX_HEIGHT_DIFF:
+            possible_combs.append({"a": a_team, "b": b_team})
+
+    logger.info("Possible height combinations (max height diff: %d cm): %d" % (settings.MAX_HEIGHT_DIFF, len(possible_combs)))
+
+    # divide into two groups
+    for i in range(len(possible_combs)):
+        team_a = possible_combs[i]["a"]
+        team_b = possible_combs[i]["b"]
 
         if use_diff:
             team_a_coef = team_diff(team_a, season)
@@ -239,10 +268,6 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
     index = coefficients.index(min(coefficients))
 
     team_a, team_b = teams_generated[index]
-
-    # sort by coefficient
-    team_a.sort(key=lambda member: member.win_lose_coefficient(season), reverse=True)
-    team_b.sort(key=lambda member: member.win_lose_coefficient(season), reverse=True)
 
     return team_a, team_b
 

@@ -122,6 +122,7 @@ MEETUP_API_KEY = get_env_variable("MEETUP_API_KEY")
 MEETUP_PRICE = 1.5*17
 PENALTY_WEIGHT = 0.1
 CURRENT_SEASON = "2015/2016"
+MAX_HEIGHT_DIFF = 3  # height diff in centimeters
 
 # Bower settings
 # https://github.com/nvbn/django-bower
