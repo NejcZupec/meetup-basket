@@ -10,12 +10,20 @@
 {% block content %}
   <h2>Members</h2>
 
-  <div class="btn-group">
+  <!-- Season selection -->
+  <div id="filter-season" class="btn-group">
     {% for s in seasons %}
       <a href="{% url 'members' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
         {{ s.name }}
       </a>
     {% endfor %}
+  </div>
+
+  <!-- Attendance filter -->
+  <div id="filter-attendance" class="btn-group">
+    <button class="btn btn-default" value="all">All</button>
+    <button class="btn btn-default" value="0">Attendance > 0%</button>
+    <button class="btn btn-default btn-primary" value="50">Attendance > 50%</button>
   </div>
 
   <br><br>
@@ -103,7 +111,8 @@
         type: "GET",
         url: "{% url 'coefficients_over_meetups_graph' %}",
         data: {
-          season_id: "{{ request.GET.season_id }}"
+          season_id: "{{ request.GET.season_id }}",
+          attendance: "{{ request.GET.attendance }}"
         },
         success: function(data) {
           $('#coefficients-graph-container').highcharts({

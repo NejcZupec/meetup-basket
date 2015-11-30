@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 
-from meetup_integration.models import Payment, Event, Team, Season
+from meetup_integration.models import Payment, Event, Team, Season, Member
 from meetup_integration.utils import team_coef
 
 logger = logging.getLogger("meetup_basket")
@@ -145,3 +145,19 @@ def prepare_payload_for_team_generator():
         }
 
     return payload
+
+
+def filter_members_by_attendance(attendance, season):
+    """
+    attendance = all, [0, 100] %
+    season = [Season object]
+    """
+    count_all_events = Event.objects.filter(status="past", season=season).count() * 1.0
+    members = []
+
+    for m in Member.objects.all():
+        # filter members by attendance
+        if attendance == "all" or m.meetups_attended(season) / count_all_events * 100.0 > attendance:
+            members.append(m)
+
+    return members

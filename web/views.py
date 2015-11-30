@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from meetup_integration.models import Member, Event, Team, Season
-from web.utils import generate_payments_table, prepare_payload_for_team_generator
+from web.utils import generate_payments_table, prepare_payload_for_team_generator, filter_members_by_attendance
 
 logger = logging.getLogger("meetup_basket")
 
@@ -23,11 +23,18 @@ class MembersView(TemplateView):
     template_name = "members.html"
 
     def get(self, request):
-        season_id = request.GET.get("season_id")
+        """
+        GET parameters:
+        - season_id
+        - attendance: interval 0...100 % or [all] == show all players
+        """
+        season_id = request.GET.get("season_id", Season.objects.get(name=settings.CURRENT_SEASON).pk)
+        attendance = request.GET.get("attendance", 50)
+        attendance = int(attendance) if attendance != "all" else attendance
+        season = Season.objects.get(pk=season_id)
         members = []
-        season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
 
-        for m in Member.objects.all():
+        for m in filter_members_by_attendance(attendance, season):
             members.append({
                 "name": m.name,
                 "height": m.height,
@@ -106,6 +113,8 @@ def coefficients_over_meetups_graph(request):
     - season_id
     """
     season_id = request.GET.get("season_id")
+    attendance = request.GET.get("attendance", 50)
+    attendance = int(attendance) if attendance != "all" else attendance
 
     if season_id:
         season = Season.objects.get(pk=season_id)
@@ -120,7 +129,7 @@ def coefficients_over_meetups_graph(request):
     categories = [event.sequence_number() for event in events]
     series = []
 
-    for member in Member.objects.all():
+    for member in filter_members_by_attendance(attendance, season):
         data = [member.coefficient_after_event(events[i], season) for i in range(len(events))]
 
         series.append({
