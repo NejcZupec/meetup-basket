@@ -152,7 +152,8 @@ def filter_members_by_attendance(attendance, season):
     attendance = all, [0, 100] %
     season = [Season object]
     """
-    count_all_events = Event.objects.filter(status="past", season=season).count() * 1.0
+    events = Event.objects.filter(status="past") if season.slug == "all" else Event.objects.filter(status="past", season=season)
+    count_all_events = events.count() * 1.0
     members = []
 
     for m in Member.objects.all():

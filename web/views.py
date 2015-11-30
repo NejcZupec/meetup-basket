@@ -50,7 +50,8 @@ class MembersView(TemplateView):
         return render(request, self.template_name, {
             'members': members,
             'season': season,
-            'seasons': Season.objects.all()
+            'seasons': Season.objects.all(),
+            'attendance': attendance,
         })
 
 

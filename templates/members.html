@@ -13,17 +13,17 @@
   <!-- Season selection -->
   <div id="filter-season" class="btn-group">
     {% for s in seasons %}
-      <a href="{% url 'members' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
+      <button value="{{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
         {{ s.name }}
-      </a>
+      </button>
     {% endfor %}
   </div>
 
   <!-- Attendance filter -->
   <div id="filter-attendance" class="btn-group">
-    <button class="btn btn-default" value="all">All</button>
-    <button class="btn btn-default" value="0">Attendance > 0%</button>
-    <button class="btn btn-default btn-primary" value="50">Attendance > 50%</button>
+    <button class="btn btn-default {% if attendance == 'all' %}btn-primary{% endif %}" value="all">All</button>
+    <button class="btn btn-default {% if attendance == 0 %}btn-primary{% endif %}" value="0">Attendance > 0%</button>
+    <button class="btn btn-default {% if attendance == 50 %}btn-primary{% endif %}" value="50">Attendance > 50%</button>
   </div>
 
   <br><br>
@@ -86,8 +86,8 @@
   <!-- Highcharts -->
   <script src="https://code.highcharts.com/highcharts.js"></script>
 
+  <!-- dataTable -->
   <script>
-    // enable dataTable
     $(document).ready(function () {
       var t = $("#members-table").DataTable({
         "paging": false,
@@ -100,19 +100,19 @@
         t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
         } );
-    } ).draw();
+      }).draw();
     });
   </script>
 
+  <!-- Coefficients graph -->
   <script>
-    // coefficients graph
     $(document).ready(function () {
       $.ajax({
         type: "GET",
         url: "{% url 'coefficients_over_meetups_graph' %}",
         data: {
-          season_id: "{{ request.GET.season_id }}",
-          attendance: "{{ request.GET.attendance }}"
+          season_id: "{{ season_id }}",
+          attendance: "{{ attendance }}"
         },
         success: function(data) {
           $('#coefficients-graph-container').highcharts({
@@ -151,6 +151,21 @@
           });
         }
       });
+    });
+  </script>
+
+  <!-- Filter handlers -->
+  <script>
+    $("#filter-attendance button").on("click", function () {
+      var attendance = $(this).val();
+      var season_id = $("#filter-season button.btn-primary").val();
+      window.location.href = "{% url 'members' %}?attendance=" + attendance + "&season_id=" + season_id;
+    });
+
+    $("#filter-season button").on("click", function () {
+      var attendance = $("#filter-attendance button.btn-primary").val();
+      var season_id = $(this).val();
+      window.location.href = "{% url 'members' %}?attendance=" + attendance + "&season_id=" + season_id;
     });
   </script>
 {% endblock additional-scripts %}
