@@ -232,7 +232,7 @@ def seperate_teams(members, a_team):
     return a_team, members
 
 
-def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON)):
+def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON), selection=None):
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
@@ -240,6 +240,9 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
     logger.info("Players in 1 group: %d" % members_in_one_group)
     combs = list(combinations(members, members_in_one_group))
     logger.info("All combinations of groups: %d" % len(combs))
+
+    if selection:
+        logger.info("Use selection %d." % int(selection))
 
     possible_combs = []
 
@@ -275,10 +278,9 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
 
     sorted_results = sorted(results, key=lambda e: e["diff_sum"])
 
-    """
-    print "coef_avg diff., coef diff."
-    for c in sorted_results[:10]:
-        print "----------------------"
+    print "coef_avg diff.\t coef diff.\t sum"
+    for i, c in enumerate(sorted_results[:5]):
+        print "---------------------- Combination %d -------------------" % i
         print c["diff_avg_diff"], c["diff_coef"], c["diff_sum"]
         print "Team A:",
         for m in c["team_a"]:
@@ -288,9 +290,12 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
         for m in c["team_b"]:
             print m.name[:7] + ";",
         print
-    """
 
-    r = random.randint(0, 5)
+    if selection:
+        r = selection
+    else:
+        r = 0
+    logger.info("Combination selected: %d" % r)
 
     team_a = sorted_results[r]["team_a"]
     team_b = sorted_results[r]["team_b"]
@@ -310,9 +315,9 @@ def generate_teams_admin(modeladmin, request, queryset):
         modeladmin.message_user(request, message)
 
 
-def generate_teams_for_event(event):
+def generate_teams_for_event(event, selection=None):
     season = Season.objects.get(name=settings.CURRENT_SEASON)
-    team_a, team_b = generate_teams(event, season)
+    team_a, team_b = generate_teams(event, season, selection=selection)
 
     # delete old teams for current event
     Team.objects.filter(event=event).delete()
