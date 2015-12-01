@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 
 from meetup_integration.models import Payment, Event, Team, Season, Member
-from meetup_integration.utils import team_coef
+from meetup_integration.utils import team_coef_weighted, team_diff_avg, team_weights
 
 logger = logging.getLogger("meetup_basket")
 
@@ -80,11 +80,15 @@ def prepare_payload_for_team_generator():
         team_a_members = []
         team_b_members = []
 
-        for member in team_a:
+        team_a_weights = team_weights(team_a, season)
+        team_b_weights = team_weights(team_b, season)
+
+        for i, member in enumerate(team_a):
             team_a_members.append({
                 "name": member.name,
                 "height": member.height,
                 "games_played": member.games_played(season),
+                "weight": team_a_weights[i],
                 "count_wins": member.count_wins(season),
                 "count_loses": member.count_loses(season),
                 "win_lose_coefficient": member.win_lose_coefficient(season),
@@ -92,23 +96,18 @@ def prepare_payload_for_team_generator():
                 "basket_diff_avg": member.basket_diff_avg(season),
             })
 
-        for member in team_b:
+        for i, member in enumerate(team_b):
             team_b_members.append({
                 "name": member.name,
                 "height": member.height,
                 "games_played": member.games_played(season),
+                "weight": team_b_weights[i],
                 "count_wins": member.count_wins(season),
                 "count_loses": member.count_loses(season),
                 "win_lose_coefficient": member.win_lose_coefficient(season),
                 "basket_diff": member.basket_diff(season),
                 "basket_diff_avg": member.basket_diff_avg(season),
             })
-
-        team_a_diff = int(sum([m["basket_diff"] for m in team_a_members]))
-        team_b_diff = int(sum([m["basket_diff"] for m in team_b_members]))
-
-        team_a_diff_avg = sum([m["basket_diff_avg"] for m in team_a_members])/len(team_a_members)
-        team_b_diff_avg = sum([m["basket_diff_avg"] for m in team_b_members])/len(team_b_members)
 
         payload = {
             "event": event,
@@ -117,17 +116,17 @@ def prepare_payload_for_team_generator():
                 "Team A": {
                     "members": team_a_members,
                     "height": sum([m["height"] for m in team_a_members])/(len(team_a_members)*1.0),
-                    "coef": team_coef(team_a, season),
-                    "diff": team_a_diff,
-                    "avg_diff": team_a_diff_avg,
+                    "coef": team_coef_weighted(team_a, season),
+                    "diff": int(sum([m["basket_diff"] for m in team_a_members])),
+                    "avg_diff": team_diff_avg(team_a, season),
                     "color": "bela majica",
                 },
                 "Team B": {
                     "members": team_b_members,
                     "height": sum([m["height"] for m in team_b_members])/(len(team_b_members)*1.0),
-                    "coef": team_coef(team_b, season),
-                    "diff": team_b_diff,
-                    "avg_diff": team_b_diff_avg,
+                    "coef": team_coef_weighted(team_b, season),
+                    "diff": int(sum([m["basket_diff"] for m in team_b_members])),
+                    "avg_diff": team_diff_avg(team_b, season),
                     "color": "barvna majica",
                 }
             },

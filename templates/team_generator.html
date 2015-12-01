@@ -18,7 +18,7 @@
     {% for team, team_data in teams.items %}
       <div class="content-panel">
         <div class="panel-heading">
-          <h3>{{ team }} <small>height: {{ team_data.height|floatformat:1 }}, coef: {{ team_data.coef|floatformat:3 }}, diff: {{ team_data.diff }}, avg. diff: {{ team_data.avg_diff|floatformat:2 }}</small></h3>
+          <h3>{{ team }} <small>height: {{ team_data.height|floatformat:1 }}, coef. weighted: {{ team_data.coef|floatformat:3 }}, diff: {{ team_data.diff }}, avg. diff weighted: {{ team_data.avg_diff|floatformat:2 }}</small></h3>
         </div>
 
         <div class="panel-body">
@@ -28,6 +28,7 @@
                 <th>Player</th>
                 <th>Height</th>
                 <th>Games played</th>
+                <th>Weight</th>
                 <th>Wins</th>
                 <th>Loses</th>
                 <th>Coefficient</th>
@@ -41,6 +42,7 @@
                   <td>{{ member.name }}</td>
                   <td>{{ member.height }}</td>
                   <td>{{ member.games_played }}</td>
+                  <td>{{ member.weight|floatformat:2 }}</td>
                   <td>{{ member.count_wins }}</td>
                   <td>{{ member.count_loses }}</td>
                   <td>{{ member.win_lose_coefficient|floatformat:2 }}</td>

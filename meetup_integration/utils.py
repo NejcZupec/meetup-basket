@@ -1,11 +1,12 @@
 import json
 import logging
+import numpy as np
 import random
 import requests
 
 from datetime import datetime
 from itertools import chain, combinations
-from math import fabs, floor
+from math import fabs, ceil
 
 from django.conf import settings
 
@@ -195,22 +196,29 @@ def sync_rsvp(event, force_update=False):
            (event.name, len(rsvps), count, updated)
 
 
-def team_coef(members, season):
+def team_weights(members, season):
+    games_played = [member.games_played(season) for member in members]
+    all_games_played = float(sum(games_played))
+    return [gp/all_games_played for gp in games_played]
+
+
+def team_coef_weighted(members, season):
+    """
+    Team coefficients are weighted by games played.
+    """
+    weights = team_weights(members, season)
     coefs = [member.win_lose_coefficient(season) for member in members]
-
-    if len(coefs) > 0:
-        return float(sum(coefs))/len(coefs)
-    else:
-        return 0.0
+    return float(np.dot(np.array(weights), np.array(coefs)))
 
 
-def team_diff(members, season):
-    coefs = [member.basket_diff_avg(season) for member in members]
+def team_diff_avg(members, season):
+    """
+    Team average diffs are wighted by games played.
+    """
+    weights = team_weights(members, season)
+    avg_diffs = [member.basket_diff_avg(season) for member in members]
+    return float(np.dot(np.array(weights), np.array(avg_diffs)))
 
-    if len(coefs) > 0:
-        return float(sum(coefs))/len(coefs)
-    else:
-        return 0.0
 
 def seperate_teams(members, a_team):
     """
@@ -224,12 +232,11 @@ def seperate_teams(members, a_team):
     return a_team, members
 
 
-def generate_teams(event, season, no_of_iterations=30, use_diff=True):
-    no_of_top_results = 10
+def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON)):
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
-    members_in_one_group = int(floor(len(members)/2))
+    members_in_one_group = int(ceil(len(members)/2.0))
     logger.info("Players in 1 group: %d" % members_in_one_group)
     combs = list(combinations(members, members_in_one_group))
     logger.info("All combinations of groups: %d" % len(combs))
@@ -255,31 +262,44 @@ def generate_teams(event, season, no_of_iterations=30, use_diff=True):
         team_a = possible_combs[i]["a"]
         team_b = possible_combs[i]["b"]
 
+        diff_avg_diff = abs(team_diff_avg(team_a, season) - team_diff_avg(team_b, season))
+        diff_coef = abs(team_coef_weighted(team_a, season) - team_coef_weighted(team_b, season))
+
         results.append({
-            "coef_avg_diff": abs(team_diff(team_a, season) - team_diff(team_b, season)),
+            "diff_avg_diff": diff_avg_diff,
+            "diff_coef": diff_coef,
             "team_a": team_a,
             "team_b": team_b,
+            "diff_sum": diff_avg_diff + diff_coef
         })
 
-    sorted_results = sorted(results, key=lambda e: e["coef_avg_diff"])
+    sorted_results = sorted(results, key=lambda e: e["diff_sum"])
 
-    candidates = sorted_results[:no_of_top_results]
-    new_results = []
+    """
+    print "coef_avg diff., coef diff."
+    for c in sorted_results[:10]:
+        print "----------------------"
+        print c["diff_avg_diff"], c["diff_coef"], c["diff_sum"]
+        print "Team A:",
+        for m in c["team_a"]:
+            print m.name[:7] + ";",
+        print
+        print "Team B:",
+        for m in c["team_b"]:
+            print m.name[:7] + ";",
+        print
+    """
 
-    for el in candidates:
-        a = team_coef(el["team_a"], season)
-        b = team_coef(el["team_b"], season)
+    r = random.randint(0, 5)
 
-        new_results.append({
-            "coef_diff": fabs(a - b),
-            "team_a": el["team_a"],
-            "team_b": el["team_b"],
-        })
+    team_a = sorted_results[r]["team_a"]
+    team_b = sorted_results[r]["team_b"]
 
-    sorted_new_results = sorted(new_results, key=lambda e:e["coef_diff"])
-
-    team_a = sorted_new_results[random.randint(0, no_of_top_results-1)]["team_a"]
-    team_b = sorted_new_results[0]["team_b"]
+    """
+    print "Selected:"
+    print "coef diff", abs(team_coef_weighted(c["team_a"], season) - team_coef_weighted(c["team_b"], season))
+    print "avg_coef diff", abs(team_diff_avg(c["team_a"], season) - team_diff_avg(c["team_b"], season))
+    """
 
     return team_a, team_b
 
@@ -292,7 +312,7 @@ def generate_teams_admin(modeladmin, request, queryset):
 
 def generate_teams_for_event(event):
     season = Season.objects.get(name=settings.CURRENT_SEASON)
-    team_a, team_b = generate_teams(event, season, 100)
+    team_a, team_b = generate_teams(event, season)
 
     # delete old teams for current event
     Team.objects.filter(event=event).delete()
@@ -311,7 +331,4 @@ def generate_teams_for_event(event):
         b.members.add(member)
     b.save()
 
-    team_a_names = [m.name for m in team_a]
-    team_b_names = [m.name for m in team_b]
-
-    return "Team A: %s, Team B: %s" % (team_a_names, team_b_names)
+    return "Team A: %s, Team B: %s" % ([m.name for m in team_a], [m.name for m in team_b])
