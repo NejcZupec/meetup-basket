@@ -83,6 +83,11 @@ class Command(BaseCommand):
 
             for season in seasons:
 
+                # if force, delete old payments
+                if options["force"]:
+                    Payment.objects.filter(season=season).delete()
+                    logger.info("Payments for season %s have been deleted." % season.name)
+
                 events = Event.objects.filter(status="past", season=season).order_by("-start_date")
 
                 for event in events:
