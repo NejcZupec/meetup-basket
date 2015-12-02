@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from meetup_integration.models import Group, Event, Member, Attendance, Team, RSVP, Coefficient, Season, Match
+from meetup_integration.models import Group, Event, Member, Attendance, Team, RSVP, Coefficient, Season, Match, Payment
 from meetup_integration.utils import sync_events_queryset, sync_members, sync_attendance_queryset, sync_rsvp_queryset, \
     generate_teams_admin
 
@@ -48,6 +48,10 @@ class MatchAdmin(admin.ModelAdmin):
     list_display = ["id", "team_a", "team_b", "points_a", "points_b"]
 
 
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ["id", "member", "event", "price"]
+
+
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(Event, EventAdmin)
@@ -57,3 +61,4 @@ admin.site.register(RSVP, RSVPAdmin)
 admin.site.register(Coefficient, CoefficientAdmin)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(Match, MatchAdmin)
+admin.site.register(Payment, PaymentAdmin)
