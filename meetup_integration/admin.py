@@ -50,6 +50,7 @@ class MatchAdmin(admin.ModelAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ["id", "member", "event", "price"]
+    list_filter = ["member", "event"]
 
 
 admin.site.register(Group, GroupAdmin)
