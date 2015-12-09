@@ -20,5 +20,5 @@ Run the following command to deploy everything to basket.zupec.net.
 
 ```
 cd deploy
-ansible-playbook deploy.yml -i hosts --vault-password-file .vault_pass.txt
+ansible-playbook deploy.yml
 ```
