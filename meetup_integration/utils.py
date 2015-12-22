@@ -279,7 +279,7 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
     sorted_results = sorted(results, key=lambda e: e["diff_sum"])
 
     print "coef_avg diff.\t coef diff.\t sum"
-    for i, c in enumerate(sorted_results[:5]):
+    for i, c in enumerate(sorted_results[:10]):
         print "---------------------- Combination %d -------------------" % i
         print c["diff_avg_diff"], c["diff_coef"], c["diff_sum"]
         print "Team A:",
