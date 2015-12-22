@@ -1,9 +1,25 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from meetup_integration.models import Season
+
 
 class WebViewsTestCase(TestCase):
-    fixtures = ['meetup_integration_test_data.json']
+    def setUp(self):
+        Season.objects.create(
+            name="2014/2015",
+            slug=""
+        )
+
+        Season.objects.create(
+            name="2015/2016",
+            slug="15/16"
+        )
+
+        Season.objects.create(
+            name="All",
+            slug="all",
+        )
 
     def test_meetups_view(self):
         """
