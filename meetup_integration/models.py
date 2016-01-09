@@ -253,7 +253,7 @@ class Transaction(models.Model):
         ('hall_rent', 'Hall Rent'),
     )
 
-    date = models.DateTimeField(help_text="When a transaction has been executed.")
+    date = models.DateField(help_text="When a transaction has been executed.")
     description = models.CharField(max_length=255, null=True, blank=True)
     amount = models.FloatField()
     member = models.ForeignKey(Member, null=True, blank=True)

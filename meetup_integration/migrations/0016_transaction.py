@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Transaction',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateTimeField(help_text=b'When a transaction has been executed.')),
+                ('date', models.DateField(help_text=b'When a transaction has been executed.')),
                 ('description', models.CharField(max_length=255, null=True, blank=True)),
                 ('amount', models.FloatField()),
                 ('type', models.CharField(max_length=20, choices=[(b'membership_fee', b'Membership Fee'), (b'meetup_fee', b'Meetup Fee'), (b'hall_rent', b'Hall Rent')])),
