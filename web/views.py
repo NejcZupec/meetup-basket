@@ -130,6 +130,17 @@ class BalanceView(TemplateView):
     def get(self, request):
         season_id = request.GET.get("season_id")
         season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+        members = []
+
+        for m in Member.objects.all():
+            members.append({
+                "name": m.name,
+                "meetup_fee": m.meetup_fee_for_season(season),
+                "hall_rent": m.hall_rent_for_season(season),
+                "costs": m.costs_for_season(season),
+                "contribution": m.contribution_for_season(season),
+                "balance": m.balance_for_season(season),
+            })
 
         payload = {
             "seasons": Season.objects.filter(~Q(slug="all")),
@@ -138,6 +149,7 @@ class BalanceView(TemplateView):
             "hall_rent": Transaction.objects.filter(season=season, type="hall_rent").aggregate(hall_rent=Sum("amount")).get("hall_rent", 0.0),
             "meetup_fee": Transaction.objects.filter(season=season, type="meetup_fee").aggregate(meetup_fee=Sum("amount")).get("meetup_fee", 0.0),
             "membership_fee": Transaction.objects.filter(season=season, type="membership_fee").aggregate(membership_fee=Sum("amount")).get("membership_fee", 0.0),
+            "members": members,
         }
 
         return render(request, self.template_name, payload)

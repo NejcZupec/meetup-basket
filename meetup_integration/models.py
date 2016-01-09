@@ -118,6 +118,29 @@ class Member(models.Model):
             logger.error("Coefficient doesn't exist.")
             return 0.0
 
+    def hall_rent_for_season(self, season):
+        return Payment.objects.filter(member=self, event__season=season).\
+            aggregate(costs=models.Sum("price")).get("costs", 0.0)
+
+    def costs_for_season(self, season):
+        return self.meetup_fee_for_season(season) + self.hall_rent_for_season(season)
+
+    def contribution_for_season(self, season):
+        c = Transaction.objects.filter(season=season, type="membership_fee", member=self).\
+            aggregate(membership_fee=models.Sum("amount")).get("membership_fee", 0.0)
+        return c if c else 0.0
+
+    def balance_for_season(self, season):
+        return self.contribution_for_season(season) - self.costs_for_season(season)
+
+    @staticmethod
+    def meetup_fee_for_season(season):
+        members_count = float(Member.objects.all().count())
+        meetup_fee = Transaction.objects.filter(season=season, type="meetup_fee").\
+            aggregate(meetup_fee=models.Sum("amount")).get("meetup_fee", 0.0)
+        meetup_fee = meetup_fee if meetup_fee else 0.0
+        return meetup_fee/members_count * -1 if members_count > 0 else 0.0
+
     def __unicode__(self):
         return "Member <%s> (status=%s)" % (self.name, self.status)
 

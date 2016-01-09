@@ -64,49 +64,48 @@
     <!-- --/col-md-3 ---->
   </div>
 
-  <!--
   <div class="content-panel">
-    <div class="panel-heading">
-
-    </div>
+    <div class="panel-heading"></div>
     <div class="panel-body">
-      <table id="transactions-table" class="table">
+      <table id="members-table" class="table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Transaction Description</th>
-            <th>Amount</th>
-            <th>Transaction Type</th>
+            <th>Member</th>
+            <th>Meetup Fee</th>
+            <th>Hall Rent</th>
+            <th>Costs</th>
+            <th>Contribution</th>
+            <th>Balance</th>
           </tr>
         </thead>
         <tbody>
-          {% for t in transactions %}
+          {% for m in members %}
             <tr>
-              <td>{{ forloop.counter }}</td>
-              <td><span style="display: none;">{{ t.date|date:"Y-m-d" }}</span>{{ t.date }}</td>
-              <td>{{ t.description }}</td>
-              <td>{{ t.amount }}</td>
-              <td>{{ t.get_type_display }}</td>
+              <td>{{ m.name }}</td>
+              <td>{{ m.meetup_fee|default:0.0|floatformat:2 }}</td>
+              <td>{{ m.hall_rent|default:0.0 }}</td>
+              <td>{{ m.costs|default:0.0|floatformat:2 }}</td>
+              <td>{{ m.contribution|default:0.0 }}</td>
+              <td>{{ m.balance|default:0.0|floatformat:2 }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
-  -->
 {% endblock content %}
 
 {% block additional-scripts %}
-  <!--<script src="{% static "data-tables/js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+  <script src="{% static "data-tables/js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
 
   <script>
     $(document).ready(function () {
-      $("#transactions-table").DataTable({
+      $("#members-table").DataTable({
         "paging": false,
         "info": false,
         "filter": false,
+        "order": [[ 5, "desc" ]]
       });
     });
-  </script>-->
+  </script>
 {% endblock additional-scripts %}

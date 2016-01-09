@@ -93,14 +93,14 @@
                           <span>Money</span>
                       <span class="dcjq-icon"></span></a>
                       <ul class="sub">
+                        <li class="{% add_active request 'balance' %}">
+                          <a href="{% url 'balance' %}">Balance</a>
+                        </li>
                         <li class="{% add_active request 'costs' %}">
                           <a href="{% url 'costs' %}">Costs</a>
                         </li>
                         <li class="{% add_active request 'transactions' %}">
                           <a href="{% url 'transactions' %}">Transactions</a>
-                        </li>
-                        <li class="{% add_active request 'balance' %}">
-                          <a href="{% url 'balance' %}">Balance</a>
                         </li>
                       </ul>
                   </li>
