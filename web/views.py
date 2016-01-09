@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from meetup_integration.models import Member, Event, Team, Season
+from meetup_integration.models import Member, Event, Team, Season, Transaction
 from web.utils import generate_payments_table, prepare_payload_for_team_generator, filter_members_by_attendance
 
 logger = logging.getLogger("meetup_basket")
@@ -109,7 +109,19 @@ class CostsView(TemplateView):
 
 
 class TransactionsView(TemplateView):
-    template_name = "base.html"
+    template_name = "transactions.html"
+
+    def get(self, request):
+        season_id = request.GET.get("season_id")
+        season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+
+        payload = {
+            "seasons": Season.objects.filter(~Q(slug="all")),
+            "season": season,
+            "transactions": Transaction.objects.filter(season=season),
+        }
+
+        return render(request, self.template_name, payload)
 
 
 class BalanceView(TemplateView):
