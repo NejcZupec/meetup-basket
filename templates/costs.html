@@ -45,6 +45,14 @@
             </tr>
           {% endfor %}
         </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            {% for column in payments_table.0.data %}
+              <td></td>
+            {% endfor %}
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
@@ -67,7 +75,16 @@
         "columnDefs": [
             { "type": "numeric-comma", targets: 1}
         ],
-        "order": [[ {{ events|length }} + 1, "desc" ]]
+        "order": [[ {{ events|length }} + 1, "desc" ]],
+        "footerCallback": function (row, data, start, end, display) {
+          var api = this.api();
+
+          $(api.column(-1).footer()).html(
+            api.column(-1).data().reduce(function (a, b) {
+              return parseFloat(a) + parseFloat(b);
+            }, 0.0)
+          );
+        }
       });
     });
   </script>
