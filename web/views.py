@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -125,7 +125,22 @@ class TransactionsView(TemplateView):
 
 
 class BalanceView(TemplateView):
-    template_name = "base.html"
+    template_name = "balance.html"
+
+    def get(self, request):
+        season_id = request.GET.get("season_id")
+        season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+
+        payload = {
+            "seasons": Season.objects.filter(~Q(slug="all")),
+            "season": season,
+            "balance": Transaction.objects.filter(season=season).aggregate(balance=Sum("amount")).get("balance", 0.0),
+            "hall_rent": Transaction.objects.filter(season=season, type="hall_rent").aggregate(hall_rent=Sum("amount")).get("hall_rent", 0.0),
+            "meetup_fee": Transaction.objects.filter(season=season, type="meetup_fee").aggregate(meetup_fee=Sum("amount")).get("meetup_fee", 0.0),
+            "membership_fee": Transaction.objects.filter(season=season, type="membership_fee").aggregate(membership_fee=Sum("amount")).get("membership_fee", 0.0),
+        }
+
+        return render(request, self.template_name, payload)
 
 
 def coefficients_over_meetups_graph(request):

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block additional_css %}
+  <link href="{% static "data-tables/css/jquery.dataTables.min.css" %}" rel="stylesheet">
+  <link href="{% static "data-tables/css/jquery.dataTables_themeroller.css" %}" rel="stylesheet">
+{% endblock additional_css %}
+
+{% block content %}
+  <h2>Balance</h2>
+
+  <div class="btn-group">
+    {% for s in seasons %}
+      <a href="{% url 'balance' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
+        {{ s.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <br><br>
+
+  <div class="row">
+    <div class="col-md-3 col-sm-3 mb">
+      <div class="white-panel pn balance-box">
+        <div class="white-header">
+          <h5>CURRENT BALANCE</h5>
+        </div>
+        <h3>{{ balance|default:0.0 }} &euro;</h3>
+      </div>
+      <!-- --/grey-panel ---->
+    </div>
+    <!-- /col-md-3-->
+
+    <div class="col-md-3 col-sm-3 mb">
+      <div class="white-panel pn balance-box">
+        <div class="white-header">
+          <h5>HALL RENT</h5>
+        </div>
+        <h3>{{ hall_rent|default:0.0 }} &euro;</h3>
+      </div>
+      <!-- -- /darkblue panel ---->
+    </div>
+    <!-- /col-md-3 -->
+
+    <div class="col-md-3 col-sm-3 mb">
+      <div class="white-panel pn balance-box">
+        <div class="white-header">
+          <h5>MEETUP FEE</h5>
+        </div>
+        <h3>{{ meetup_fee|default:0.0 }} &euro;</h3>
+      </div>
+    </div>
+    <!-- --/col-md-3 ---->
+
+    <div class="col-md-3 col-sm-3 mb">
+      <div class="white-panel pn balance-box">
+        <div class="white-header">
+          <h5>MEMBERSHIP FEE</h5>
+        </div>
+        <h3>{{ membership_fee|default:0.0 }} &euro;</h3>
+      </div>
+    </div>
+    <!-- --/col-md-3 ---->
+  </div>
+
+  <!--
+  <div class="content-panel">
+    <div class="panel-heading">
+
+    </div>
+    <div class="panel-body">
+      <table id="transactions-table" class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Transaction Description</th>
+            <th>Amount</th>
+            <th>Transaction Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in transactions %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td><span style="display: none;">{{ t.date|date:"Y-m-d" }}</span>{{ t.date }}</td>
+              <td>{{ t.description }}</td>
+              <td>{{ t.amount }}</td>
+              <td>{{ t.get_type_display }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  -->
+{% endblock content %}
+
+{% block additional-scripts %}
+  <!--<script src="{% static "data-tables/js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#transactions-table").DataTable({
+        "paging": false,
+        "info": false,
+        "filter": false,
+      });
+    });
+  </script>-->
+{% endblock additional-scripts %}

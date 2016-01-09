@@ -51,6 +51,12 @@ a, a:hover, a:focus {
 	color: white;
 }
 
+.btn-primary,
+.btn-primary:hover {
+    background-color: #68dff0;
+    border-color: #ccc;
+}
+
 .btn-round {
 	border-radius: 20px;
 	-webkit-border-radius: 20px;
@@ -2238,4 +2244,17 @@ label {
     min-height: 900px;
 }
 
+/*balance boxes*/
+.balance-box {
+    height: 105px;
+}
+
+.balance-box .white-header {
+    background-color: #424a5d;
+    color: #fff;
+}
+
+.balance-box h3 {
+    color: #333;
+}
 
