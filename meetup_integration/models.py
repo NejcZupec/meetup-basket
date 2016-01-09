@@ -258,6 +258,7 @@ class Transaction(models.Model):
     amount = models.FloatField()
     member = models.ForeignKey(Member, null=True, blank=True)
     type = models.CharField(max_length=20, choices=TRANSACTION_TYPE)
+    season = models.ForeignKey(Season)
 
     def __unicode__(self):
         return "Transaction (%f)" % self.amount
