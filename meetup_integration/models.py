@@ -246,6 +246,23 @@ class Payment(models.Model):
         unique_together = ("member", "event")
 
 
+class Transaction(models.Model):
+    TRANSACTION_TYPE = (
+        ('membership_fee', 'Membership Fee'),
+        ('meetup_fee', 'Meetup Fee'),
+        ('hall_rent', 'Hall Rent'),
+    )
+
+    date = models.DateTimeField(help_text="When a transaction has been executed.")
+    description = models.CharField(max_length=255, null=True, blank=True)
+    amount = models.FloatField()
+    member = models.ForeignKey(Member, null=True, blank=True)
+    type = models.CharField(max_length=20, choices=TRANSACTION_TYPE)
+
+    def __unicode__(self):
+        return "Transaction (%f)" % self.amount
+
+
 class Match(models.Model):
     team_a = models.ForeignKey("meetup_integration.Team", related_name="team_a")
     team_b = models.ForeignKey("meetup_integration.Team", related_name="team_b")
