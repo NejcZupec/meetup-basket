@@ -88,10 +88,21 @@
                   </li>
 
                   <li class="sub-menu dcjq-parent-li">
-                      <a class="{% add_active request 'payments' %}" href="{% url 'payments' %}" class="dcjq-parent">
+                      <a class="dcjq-parent {% add_active request 'costs' %}{% add_active request 'transactions' %}{% add_active request 'balance' %}">
                           <i class="fa fa-credit-card"></i>
-                          <span>Payments</span>
+                          <span>Money</span>
                       <span class="dcjq-icon"></span></a>
+                      <ul class="sub">
+                        <li class="{% add_active request 'costs' %}">
+                          <a href="{% url 'costs' %}">Costs</a>
+                        </li>
+                        <li class="{% add_active request 'transactions' %}">
+                          <a href="{% url 'transactions' %}">Transactions</a>
+                        </li>
+                        <li class="{% add_active request 'balance' %}">
+                          <a href="{% url 'balance' %}">Balance</a>
+                        </li>
+                      </ul>
                   </li>
 
                   <li class="sub-menu dcjq-parent-li">

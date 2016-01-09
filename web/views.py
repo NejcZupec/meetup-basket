@@ -88,8 +88,8 @@ class TeamGeneratorExportView(TemplateView):
         return render(request, self.template_name, payload, content_type='text/plain; charset=utf-8')
 
 
-class PaymentsView(TemplateView):
-    template_name = "payments.html"
+class CostsView(TemplateView):
+    template_name = "costs.html"
 
     def get(self, request):
         season_id = request.GET.get("season_id")
@@ -106,6 +106,14 @@ class PaymentsView(TemplateView):
         }
 
         return render(request, self.template_name, payload)
+
+
+class TransactionsView(TemplateView):
+    template_name = "base.html"
+
+
+class BalanceView(TemplateView):
+    template_name = "base.html"
 
 
 def coefficients_over_meetups_graph(request):
