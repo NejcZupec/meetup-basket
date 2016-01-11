@@ -284,7 +284,7 @@ class Transaction(models.Model):
     season = models.ForeignKey(Season)
 
     def __unicode__(self):
-        return "Transaction (%f)" % self.amount
+        return "Transaction (amount: %f, date: %s)" % (self.amount, self.date)
 
 
 class Match(models.Model):

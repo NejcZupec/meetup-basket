@@ -2267,3 +2267,8 @@ table#payments-table td {
     padding: 4px 6px;
 }
 
+/* panels */
+.content-panel .panel-heading h3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

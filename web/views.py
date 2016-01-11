@@ -1,3 +1,4 @@
+import calendar
 import json
 import logging
 
@@ -164,15 +165,9 @@ def coefficients_over_meetups_graph(request):
     attendance = request.GET.get("attendance", 50)
     attendance = int(attendance) if attendance != "all" else attendance
 
-    if season_id:
-        season = Season.objects.get(pk=season_id)
-    else:
-        season = Season.objects.get(name=settings.CURRENT_SEASON)
-
-    if season.slug == "all":
-        events = Event.objects.filter(status="past").order_by("start_date")
-    else:
-        events = Event.objects.filter(status="past", season=season).order_by("start_date")
+    season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+    events = Event.objects.filter(status="past").order_by("start_date") if season.slug == "all" else \
+        Event.objects.filter(status="past", season=season).order_by("start_date")
 
     categories = [event.sequence_number() for event in events]
     series = []
@@ -191,3 +186,21 @@ def coefficients_over_meetups_graph(request):
     }
 
     return HttpResponse(json.dumps(payload), content_type="application/json")
+
+
+def cash_flow_graph(request):
+    """
+    GET parameters
+    - season_id
+    """
+    season_id = request.GET.get("season_id")
+    season = Season.objects.get(pk=season_id) if season_id else Season.objects.get(name=settings.CURRENT_SEASON)
+
+    data = []
+    transactions = Transaction.objects.filter(season=season).order_by("date")
+    cash_flow = [t.amount for t in transactions]
+
+    for i, t in enumerate(transactions):
+        data.append([calendar.timegm(t.date.timetuple())*1000, sum(cash_flow[:i+1])])
+
+    return HttpResponse(json.dumps(data), content_type="application/json")

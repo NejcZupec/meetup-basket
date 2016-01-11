@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from web.views import DashboardView, MembersView, MeetupsView, TeamGeneratorView, HallRentView, \
-    coefficients_over_meetups_graph, TeamGeneratorExportView, TransactionsView, CostsView
+    coefficients_over_meetups_graph, TeamGeneratorExportView, TransactionsView, CostsView, cash_flow_graph
 
 
 admin.autodiscover()
@@ -25,6 +25,7 @@ urlpatterns = patterns('',
 
     # AJAX
     url(r'coefficients_over_meetups_graph/$', coefficients_over_meetups_graph, name='coefficients_over_meetups_graph'),
+    url(r'^money/cash-flow-graph/$', cash_flow_graph, name='cash_flow_graph'),
 )
 
 
