@@ -148,7 +148,7 @@
         type: "GET",
         url: "{% url 'cash_flow_graph' %}",
         data: {
-          season_id: "{{ season_id }}",
+          season_id: "{{ season.pk }}",
         },
         success: function (data) {
           $("#cash-flow-container").highcharts({
