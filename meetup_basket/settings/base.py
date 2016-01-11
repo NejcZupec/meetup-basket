@@ -119,7 +119,7 @@ MEETUP_API_URL = "https://api.meetup.com/"
 MEETUP_API_KEY = get_env_variable("MEETUP_API_KEY")
 
 # Global parameters
-MEETUP_PRICE = 1.5*17
+MEETUP_PRICE = 1.5*17.1477
 PENALTY_WEIGHT = 0.1
 CURRENT_SEASON = "2015/2016"
 MAX_HEIGHT_DIFF = 3  # height diff in centimeters
