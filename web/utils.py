@@ -40,7 +40,7 @@ def calculate_price(member, event):
     try:
         return Payment.objects.get(member=member, event=event).price
     except Payment.DoesNotExist:
-        return round(member.weight(event)/event.weight() * settings.MEETUP_PRICE, 2)
+        return member.weight(event)/event.weight() * settings.MEETUP_PRICE
 
 
 def generate_payments_table(members, events):
