@@ -47,6 +47,15 @@
             </tr>
           {% endfor %}
         </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
@@ -61,6 +70,16 @@
         "paging": false,
         "info": false,
         "filter": false,
+        "footerCallback": function () {
+          var api = this.api();
+
+          $(api.column(3).footer()).html(
+            Math.ceil(api.column(3).data().reduce(function (a, b) {
+              return parseFloat(a) + parseFloat(b);
+            }, 0.0) * 1000) / 1000  // round up to 3 decimal places
+          );
+
+        }
       });
     });
   </script>
