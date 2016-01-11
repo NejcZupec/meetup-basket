@@ -118,35 +118,13 @@
         "footerCallback": function (row, data, start, end, display) {
           var api = this.api();
 
-          $(api.column(1).footer()).html(
-            api.column(1).data().reduce(function (a, b) {
-              return parseFloat(a) + parseFloat(b);
-            }, 0.0)
-          );
-
-          $(api.column(2).footer()).html(
-            api.column(2).data().reduce(function (a, b) {
-              return parseFloat(a) + parseFloat(b);
-            }, 0.0)
-          );
-
-          $(api.column(3).footer()).html(
-            api.column(3).data().reduce(function (a, b) {
-              return parseFloat(a) + parseFloat(b);
-            }, 0.0)
-          );
-
-          $(api.column(4).footer()).html(
-            api.column(4).data().reduce(function (a, b) {
-              return parseFloat(a) + parseFloat(b);
-            }, 0.0)
-          );
-
-          $(api.column(5).footer()).html(
-            api.column(5).data().reduce(function (a, b) {
-              return parseFloat(a) + parseFloat(b);
-            }, 0.0)
-          );
+          for (var i = 1; i <= 5; i++ ) {
+            $(api.column(i).footer()).html(
+              Math.ceil(api.column(i).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+              }, 0.0) * 100) / 100
+            );
+          }
         }
       });
     });
