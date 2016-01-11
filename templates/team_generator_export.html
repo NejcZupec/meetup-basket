@@ -7,6 +7,12 @@ Pošiljam ekipe za {{ event.name }}.
 {% endfor %}
 {% endfor %}
 Statistične podrobnosti obeh ekip: http://basket.zupec.net/team-generator/
+
+Finančno stanje:
+{% for m in members_fee %}
+{{ m.name }} - {{ m.fee }}
+{% endfor %}
+
 Se vidmo!
 Lp,
 Nejc

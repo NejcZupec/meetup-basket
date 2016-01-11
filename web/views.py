@@ -86,6 +86,14 @@ class TeamGeneratorExportView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         payload = prepare_payload_for_team_generator()
+        payload["members_fee"] = []
+
+        for m in Member.objects.all():
+            payload["members_fee"].append({
+                "name": m.name,
+                "fee": m.membership_fee_for_season(Season.objects.get(name=settings.CURRENT_SEASON))
+            })
+
         return render(request, self.template_name, payload, content_type='text/plain; charset=utf-8')
 
 
