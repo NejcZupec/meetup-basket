@@ -8,11 +8,11 @@
 {% endblock additional_css %}
 
 {% block content %}
-  <h2>Balance per Member</h2>
+  <h2>Costs per Member</h2>
 
   <div class="btn-group">
     {% for s in seasons %}
-      <a href="{% url 'balance' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
+      <a href="{% url 'costs' %}?season_id={{ s.pk }}" class="btn btn-default {% if s.pk == season.pk %}btn-primary{% endif %}">
         {{ s.name }}
       </a>
     {% endfor %}

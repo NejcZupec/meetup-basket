@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from web.views import DashboardView, MembersView, MeetupsView, TeamGeneratorView, HallRentView, \
-    coefficients_over_meetups_graph, TeamGeneratorExportView, TransactionsView, BalanceView
+    coefficients_over_meetups_graph, TeamGeneratorExportView, TransactionsView, CostsView
 
 
 admin.autodiscover()
@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^meetups/$', MeetupsView.as_view(), name='meetups'),
     url(r'^money/hall-rent/$', HallRentView.as_view(), name='hall-rent'),
     url(r'^money/transactions/$', TransactionsView.as_view(), name='transactions'),
-    url(r'^money/balance/$', BalanceView.as_view(), name='balance'),
+    url(r'^money/costs/$', CostsView.as_view(), name='costs'),
     url(r'^team-generator/$', TeamGeneratorView.as_view(), name='team_generator'),
     url(r'^team-generator/export$', TeamGeneratorExportView.as_view(), name='team_generator_export'),
 

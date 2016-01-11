@@ -128,8 +128,8 @@ class TransactionsView(TemplateView):
         return render(request, self.template_name, payload)
 
 
-class BalanceView(TemplateView):
-    template_name = "balance.html"
+class CostsView(TemplateView):
+    template_name = "costs.html"
 
     def get(self, request):
         season_id = request.GET.get("season_id")
