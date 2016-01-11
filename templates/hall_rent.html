@@ -83,7 +83,7 @@
             $(api.column(i).footer()).html(
               Math.ceil(api.column(i).data().reduce(function (a, b) {
                 return parseFloat(a) + parseFloat(b);
-              }, 0.0) * 1000) / 1000  // round up to 3 decimal places
+              }, 0.0) * 100) / 100  // round up to 3 decimal places
             );
           }
         }

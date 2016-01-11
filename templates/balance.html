@@ -85,7 +85,7 @@
               <td>{{ m.meetup_fee|default:0.0|floatformat:3 }}</td>
               <td>{{ m.hall_rent|default:0.0|floatformat:3 }}</td>
               <td>{{ m.costs|default:0.0|floatformat:3 }}</td>
-              <td>{{ m.contribution|default:0.0 }}</td>
+              <td>{{ m.contribution|default:0.0|floatformat:3 }}</td>
               <td>{{ m.balance|default:0.0|floatformat:3 }}</td>
             </tr>
           {% endfor %}
