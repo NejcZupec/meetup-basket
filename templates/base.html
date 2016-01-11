@@ -93,14 +93,14 @@
                           <span>Money</span>
                       <span class="dcjq-icon"></span></a>
                       <ul class="sub">
-                        <li class="{% add_active request 'balance' %}">
-                          <a href="{% url 'balance' %}">Balance</a>
-                        </li>
-                        <li class="{% add_active request 'hall-rent' %}">
-                          <a href="{% url 'hall-rent' %}">Hall Rent</a>
-                        </li>
                         <li class="{% add_active request 'transactions' %}">
                           <a href="{% url 'transactions' %}">Transactions</a>
+                        </li>
+                        <li class="{% add_active request 'balance' %}">
+                          <a href="{% url 'balance' %}">Balance per Member</a>
+                        </li>
+                        <li class="{% add_active request 'hall-rent' %}">
+                          <a href="{% url 'hall-rent' %}">Hall Rent per Member</a>
                         </li>
                       </ul>
                   </li>

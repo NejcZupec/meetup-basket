@@ -119,6 +119,10 @@ class TransactionsView(TemplateView):
             "seasons": Season.objects.filter(~Q(slug="all")),
             "season": season,
             "transactions": Transaction.objects.filter(season=season),
+            "balance": Transaction.objects.filter(season=season).aggregate(balance=Sum("amount")).get("balance", 0.0),
+            "hall_rent": Transaction.objects.filter(season=season, type="hall_rent").aggregate(hall_rent=Sum("amount")).get("hall_rent", 0.0),
+            "meetup_fee": Transaction.objects.filter(season=season, type="meetup_fee").aggregate(meetup_fee=Sum("amount")).get("meetup_fee", 0.0),
+            "membership_fee": Transaction.objects.filter(season=season, type="membership_fee").aggregate(membership_fee=Sum("amount")).get("membership_fee", 0.0),
         }
 
         return render(request, self.template_name, payload)
@@ -145,10 +149,6 @@ class BalanceView(TemplateView):
         payload = {
             "seasons": Season.objects.filter(~Q(slug="all")),
             "season": season,
-            "balance": Transaction.objects.filter(season=season).aggregate(balance=Sum("amount")).get("balance", 0.0),
-            "hall_rent": Transaction.objects.filter(season=season, type="hall_rent").aggregate(hall_rent=Sum("amount")).get("hall_rent", 0.0),
-            "meetup_fee": Transaction.objects.filter(season=season, type="meetup_fee").aggregate(meetup_fee=Sum("amount")).get("meetup_fee", 0.0),
-            "membership_fee": Transaction.objects.filter(season=season, type="membership_fee").aggregate(membership_fee=Sum("amount")).get("membership_fee", 0.0),
             "members": members,
         }
 

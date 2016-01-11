@@ -8,7 +8,7 @@
 {% endblock additional_css %}
 
 {% block content %}
-  <h2>Balance</h2>
+  <h2>Balance per Member</h2>
 
   <div class="btn-group">
     {% for s in seasons %}
@@ -19,50 +19,6 @@
   </div>
 
   <br><br>
-
-  <div class="row">
-    <div class="col-md-3 col-sm-3 mb">
-      <div class="white-panel pn balance-box">
-        <div class="white-header">
-          <h5>CURRENT BALANCE</h5>
-        </div>
-        <h3>{{ balance|default:0.0 }} &euro;</h3>
-      </div>
-      <!-- --/grey-panel ---->
-    </div>
-    <!-- /col-md-3-->
-
-    <div class="col-md-3 col-sm-3 mb">
-      <div class="white-panel pn balance-box">
-        <div class="white-header">
-          <h5>HALL RENT</h5>
-        </div>
-        <h3>{{ hall_rent|default:0.0 }} &euro;</h3>
-      </div>
-      <!-- -- /darkblue panel ---->
-    </div>
-    <!-- /col-md-3 -->
-
-    <div class="col-md-3 col-sm-3 mb">
-      <div class="white-panel pn balance-box">
-        <div class="white-header">
-          <h5>MEETUP FEE</h5>
-        </div>
-        <h3>{{ meetup_fee|default:0.0 }} &euro;</h3>
-      </div>
-    </div>
-    <!-- --/col-md-3 ---->
-
-    <div class="col-md-3 col-sm-3 mb">
-      <div class="white-panel pn balance-box">
-        <div class="white-header">
-          <h5>MEMBERSHIP FEE</h5>
-        </div>
-        <h3>{{ membership_fee|default:0.0 }} &euro;</h3>
-      </div>
-    </div>
-    <!-- --/col-md-3 ---->
-  </div>
 
   <div class="content-panel">
     <div class="panel-heading"></div>
