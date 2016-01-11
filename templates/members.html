@@ -111,7 +111,7 @@
         type: "GET",
         url: "{% url 'coefficients_over_meetups_graph' %}",
         data: {
-          season_id: "{{ season_id }}",
+          season_id: "{{ season.pk }}",
           attendance: "{{ attendance }}"
         },
         success: function (data) {
