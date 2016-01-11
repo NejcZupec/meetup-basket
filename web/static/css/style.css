@@ -2258,3 +2258,12 @@ label {
     color: #333;
 }
 
+/*hall rent per member */
+table#payments-table {
+    font-size: 10px;
+}
+
+table#payments-table td {
+    padding: 4px 6px;
+}
+
