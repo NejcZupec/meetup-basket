@@ -88,8 +88,8 @@ class TeamGeneratorExportView(TemplateView):
         return render(request, self.template_name, payload, content_type='text/plain; charset=utf-8')
 
 
-class CostsView(TemplateView):
-    template_name = "costs.html"
+class HallRentView(TemplateView):
+    template_name = "hall_rent.html"
 
     def get(self, request):
         season_id = request.GET.get("season_id")

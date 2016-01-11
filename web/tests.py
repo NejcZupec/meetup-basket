@@ -42,9 +42,9 @@ class WebViewsTestCase(TestCase):
         response = self.client.get(reverse("team_generator")).status_code
         self.assertEqual(response, 200)
 
-    def test_costs_view(self):
+    def test_hall_rent_view(self):
         """
-        Test costs view.
+        Test hall rent view.
         """
-        response = self.client.get(reverse("costs")).status_code
+        response = self.client.get(reverse("hall-rent")).status_code
         self.assertEqual(response, 200)
