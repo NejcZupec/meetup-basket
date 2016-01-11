@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
   <h2>Team generator</h2>
 
@@ -51,6 +53,11 @@
                 </tr>
               {% endfor %}
             </tbody>
+            <tfoot>
+              <tr>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -62,3 +69,40 @@
     <div class="alert alert-info">Teams haven't been calculated yet.</div>
   {% endif %}
 {% endblock content %}
+
+{% block additional-scripts %}
+  <script src="{% static "data-tables/js/jquery.dataTables.min.js" %}" type="text/javascript"></script>
+
+  <script>
+    $(document).ready(function () {
+      $(".table").DataTable({
+        "paging": false,
+        "info": false,
+        "filter": false,
+        "order": [[ 6, "desc" ]],
+        "footerCallback": function (row, data, start, end, display) {
+          var api = this.api();
+
+          var avgs = [1, 6, 8];
+          var sums =  [2, 4, 5, 7];
+
+          avgs.forEach(function(i) {
+            $(api.column(i).footer()).html(
+              Math.ceil(api.column(i).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+              }, 0.0) / end * 100) / 100
+            );
+          });
+
+          sums.forEach(function(i) {
+            $(api.column(i).footer()).html(
+              Math.ceil(api.column(i).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+              }, 0.0) * 100) / 100
+            );
+          })
+        }
+      })
+    });
+  </script>
+{% endblock %}
