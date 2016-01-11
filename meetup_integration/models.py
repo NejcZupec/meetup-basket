@@ -133,6 +133,11 @@ class Member(models.Model):
     def balance_for_season(self, season):
         return self.contribution_for_season(season) - self.costs_for_season(season)
 
+    def membership_fee_for_season(self, season):
+        balance = self.balance_for_season(season)
+        fee = round(balance + balance*0.3)
+        return int(5 * round(float(fee)/5)) * -1.0 if fee < 0 else 0.0  # round fee to 5 EUR
+
     @staticmethod
     def meetup_fee_for_season(season):
         members_count = float(Member.objects.all().count())

@@ -32,6 +32,7 @@
             <th>Costs</th>
             <th>Contribution</th>
             <th>Balance</th>
+            <th data-toggle="tooltip" data-placements="top" title="130 % balance rounded to 5">Membership Fee &nbsp;<i class="fa fa-info"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -43,11 +44,13 @@
               <td>{{ m.costs|default:0.0|floatformat:3 }}</td>
               <td>{{ m.contribution|default:0.0|floatformat:3 }}</td>
               <td>{{ m.balance|default:0.0|floatformat:3 }}</td>
+              <td class="bold">{{ m.membership_fee|default:0.0|floatformat:0 }}</td>
             </tr>
           {% endfor %}
         </tbody>
         <tfoot>
           <tr>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -74,7 +77,7 @@
         "footerCallback": function (row, data, start, end, display) {
           var api = this.api();
 
-          for (var i = 1; i <= 5; i++ ) {
+          for (var i = 1; i <= 6; i++ ) {
             $(api.column(i).footer()).html(
               Math.ceil(api.column(i).data().reduce(function (a, b) {
                 return parseFloat(a) + parseFloat(b);

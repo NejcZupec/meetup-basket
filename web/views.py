@@ -145,6 +145,7 @@ class CostsView(TemplateView):
                 "costs": m.costs_for_season(season),
                 "contribution": m.contribution_for_season(season),
                 "balance": m.balance_for_season(season),
+                "membership_fee": m.membership_fee_for_season(season),
             })
 
         payload = {
