@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # first - sync everything
-        call_command("sync", "-f")
+        call_command("sync", "--force")
 
         # generate teams
         next_event = Event.objects.filter(status="upcoming").earliest("start_date")
