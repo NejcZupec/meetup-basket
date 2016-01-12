@@ -41,7 +41,7 @@
       minute="5"
       hour="18"
       day="2"
-      job="{{virtualenv_dir}}/bin/python {{project_root}}/manage.py generate_teamy >/dev/null 2>&1"
+      job="{{virtualenv_dir}}/bin/python {{project_root}}/manage.py generate_teams >/dev/null 2>&1"
     notify:
      - Restart Crontab
 
