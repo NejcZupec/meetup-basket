@@ -1,5 +1,6 @@
 from optparse import make_option
 
+from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from meetup_integration.models import Event
@@ -14,8 +15,10 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        # first - sync everything
+        call_command("sync", "-f")
+
+        # generate teams
         next_event = Event.objects.filter(status="upcoming").earliest("start_date")
-
         selection = options.get("selection", None)
-
         generate_teams_for_event(next_event, selection=selection)
