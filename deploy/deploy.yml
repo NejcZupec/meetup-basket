@@ -25,6 +25,26 @@
       virtualenv={{ virtualenv_dir }}
     environment: django_environment
 
+  - name: Add sync to cron
+    cron: >
+      name="Sync everything"
+      minute="1"
+      hour="18"
+      day="2"
+      job="{{virtualenv_dir}}/bin/python {{project_root}}/manage.py sync -f >/dev/null 2>&1"
+    notify:
+     - Restart Crontab
+
+  - name: Generate teams
+    cron: >
+      name="Generate teams"
+      minute="5"
+      hour="18"
+      day="2"
+      job="{{virtualenv_dir}}/bin/python {{project_root}}/manage.py generate_teamy >/dev/null 2>&1"
+    notify:
+     - Restart Crontab
+
   - name: Run bower update.
     django_manage: >
       command='bower update'
@@ -46,3 +66,9 @@
   - name: Restart NGINX.
     service: name=nginx state=restarted
     sudo_user: root
+
+  handlers:
+  - name: Restart Crontab
+    service: name=cron state=restarted
+    sudo: yes
+
