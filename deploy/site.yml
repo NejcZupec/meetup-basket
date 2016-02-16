@@ -1,0 +1,9 @@
+---
+
+- name: Deploy code
+  hosts: all
+  remote_user: ubuntu
+  roles:
+    - deploy
+  tags:
+    - deploy

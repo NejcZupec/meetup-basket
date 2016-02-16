@@ -1,0 +1,3 @@
+- name: Restart Crontab
+  service: name=cron state=restarted
+  sudo: yes
