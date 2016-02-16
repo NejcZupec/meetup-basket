@@ -1,0 +1,40 @@
+---
+
+- name: Create /postgresql_backup folder
+  file: >
+    path={{postgresql_backup_dir}}
+    state=directory
+    owner={{ansible_ssh_user}}
+    group={{ansible_ssh_user}}
+  sudo: yes
+
+- name: Create scripts folder
+  file: >
+    path={{postgresql_backup_dir}}/scripts
+    state=directory
+    owner={{ansible_ssh_user}}
+    group={{ansible_ssh_user}}
+
+- name: Create pg_backup.config
+  template: >
+    src=pg_backup.config.j2
+    dest={{postgresql_backup_dir}}/scripts/pg_backup.config
+
+- name: Create pg_backup.sh
+  template: >
+    src=pg_backup.sh.j2
+    dest={{postgresql_backup_dir}}/scripts/pg_backup.sh
+    mode=744
+
+- name: Create pg_backup_rotated.sh
+  template: >
+    src=pg_backup_rotated.sh.j2
+    dest={{postgresql_backup_dir}}/scripts/pg_backup_rotated.sh
+    mode=744
+
+- name: Cron - run backup command everyday
+  cron: >
+    name="Backup database every day."
+    minute="0"
+    hour="22"
+    job="/bin/bash {{postgresql_backup_dir}}/scripts/pg_backup_rotated.sh >/dev/null 2>&1"

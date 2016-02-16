@@ -3,3 +3,4 @@ project_name: meetup-basket
 project_root: /opt/meetup-basket
 project_repo: git@github.com:NejcZupec/meetup-basket.git
 virtualenv_dir: /opt/envs/meetup_basket
+postgresql_backup_dir: /opt/db_backups

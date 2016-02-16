@@ -7,3 +7,11 @@
     - deploy
   tags:
     - deploy
+
+- name: Setup PostgreSQL backup
+  hosts: all
+  remote_user: ubuntu
+  roles:
+    - db_backup
+  tags:
+    - db_backup
