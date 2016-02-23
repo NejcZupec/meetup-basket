@@ -273,7 +273,7 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
             "diff_coef": diff_coef,
             "team_a": team_a,
             "team_b": team_b,
-            "diff_sum": diff_avg_diff + diff_coef
+            "diff_sum": diff_avg_diff + 10*diff_coef
         })
 
     sorted_results = sorted(results, key=lambda e: e["diff_sum"])
