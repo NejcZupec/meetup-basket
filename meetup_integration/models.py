@@ -242,7 +242,7 @@ class RSVP(models.Model):
     member = models.ForeignKey("meetup_integration.Member")
 
     def __unicode__(self):
-        return "RSVP <%s> (event=%d, member=%d)" % (self.response, self.event_id, self.member_id)
+        return "RSVP <%s> (event=%s, member=%s)" % (self.response, self.event.name, self.member.name)
 
 
 class Coefficient(models.Model):
