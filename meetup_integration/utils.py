@@ -231,7 +231,7 @@ def seperate_teams(members, a_team):
     return a_team, members
 
 
-def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON), selection=None):
+def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON), combination=None):
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
@@ -240,8 +240,8 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
     combs = list(combinations(members, members_in_one_group))
     logger.info("All combinations of groups: %d" % len(combs))
 
-    if selection:
-        logger.info("Use selection %d." % int(selection))
+    if combination:
+        logger.info("Use combination %d." % int(combination))
 
     possible_combs = []
 
@@ -256,6 +256,10 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
             possible_combs.append({"a": a_team, "b": b_team})
 
     logger.info("Possible height combinations (max height diff: %d cm): %d" % (settings.MAX_HEIGHT_DIFF, len(possible_combs)))
+
+    if len(possible_combs) == 0:
+        logger.warning("No possible combinations. Check if you have already synced RSVPs.")
+        return [], []
 
     results = []
 
@@ -291,7 +295,7 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
             print m.name[:7] + ";",
         print
 
-    r = selection if selection else 0
+    r = combination if combination else 0
 
     logger.info("Combination selected: %d" % r)
 
@@ -307,9 +311,9 @@ def generate_teams_admin(modeladmin, request, queryset):
         modeladmin.message_user(request, message)
 
 
-def generate_teams_for_event(event, selection=None):
+def generate_teams_for_event(event, combination=None):
     season = Season.objects.get(name=settings.CURRENT_SEASON)
-    team_a, team_b = generate_teams(event, season, selection=selection)
+    team_a, team_b = generate_teams(event, season, combination=combination)
 
     # delete old teams for current event
     Team.objects.filter(event=event).delete()
