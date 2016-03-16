@@ -22,3 +22,18 @@ Run the following command to deploy everything to basket.zupec.net.
 cd deploy
 ansible-playbook deploy.yml
 ```
+
+Sync development and production databases
+-----------------------------------------
+
+If you want to get the production's data, go to the `deploy` folder and run the following commands:
+
+```
+ansible production -m fetch -a "src=/opt/db_backups/<year>-<month>-<day>-daily/meetupbasket.custom dest=meetupbasket.custom flat=yes"
+dropdb meetupbasket;
+createdb meetupbasket;
+pg_restore -d meetupbasket meetupbasket.custom
+```
+
+The server generates daily database snapshots. You have to specify `year`, `month`and `day` to determine which snapshot do you want to restore to your local database.
+
