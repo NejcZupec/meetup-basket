@@ -1,7 +1,6 @@
 import json
 import logging
 import numpy as np
-import random
 import requests
 
 from datetime import datetime
@@ -279,6 +278,7 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
     sorted_results = sorted(results, key=lambda e: e["diff_sum"])
 
     print "coef_avg diff.\t coef diff.\t sum"
+
     for i, c in enumerate(sorted_results[:15]):
         print "---------------------- Combination %d -------------------" % i
         print c["diff_avg_diff"], c["diff_coef"], c["diff_sum"]
@@ -291,20 +291,12 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
             print m.name[:7] + ";",
         print
 
-    if selection:
-        r = selection
-    else:
-        r = 0
+    r = selection if selection else 0
+
     logger.info("Combination selected: %d" % r)
 
     team_a = sorted_results[r]["team_a"]
     team_b = sorted_results[r]["team_b"]
-
-    """
-    print "Selected:"
-    print "coef diff", abs(team_coef_weighted(c["team_a"], season) - team_coef_weighted(c["team_b"], season))
-    print "avg_coef diff", abs(team_diff_avg(c["team_a"], season) - team_diff_avg(c["team_b"], season))
-    """
 
     return team_a, team_b
 
