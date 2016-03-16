@@ -5,7 +5,7 @@ from base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'meetupbasket2',
+        'NAME': 'meetupbasket',
         'USER': 'nzupec',
     }
 }
