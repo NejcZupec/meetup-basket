@@ -2,8 +2,6 @@ import logging
 
 from django.db import models
 
-from meetup_basket.utils import do_line_profiler
-
 logger = logging.getLogger("meetup_basket")
 
 
