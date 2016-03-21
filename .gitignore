@@ -11,4 +11,4 @@ db.sqlite3
 .coverage
 meetup_basket.log
 latest.dump
-.vault_password.txt
+deploy/.vault_pass.txt
