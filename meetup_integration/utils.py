@@ -231,7 +231,7 @@ def seperate_teams(members, a_team):
     return a_team, members
 
 
-def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON), combination=None):
+def generate_teams(event, season, combination=None):
     members = event.get_members_with_rsvp()
 
     logger.info("%d players RSVPed with yes for event %s." % (len(members), event))
@@ -307,7 +307,7 @@ def generate_teams(event, season=Season.objects.get(name=settings.CURRENT_SEASON
 
 def generate_teams_admin(modeladmin, request, queryset):
     for event in queryset:
-        message = generate_teams_for_event(event)
+        message = generate_teams_for_event(event, season=event.season)
         modeladmin.message_user(request, message)
 
 
