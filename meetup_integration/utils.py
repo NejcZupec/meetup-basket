@@ -307,7 +307,7 @@ def generate_teams(event, season, combination=None):
 
 def generate_teams_admin(modeladmin, request, queryset):
     for event in queryset:
-        message = generate_teams_for_event(event, season=event.season)
+        message = generate_teams_for_event(event)
         modeladmin.message_user(request, message)
 
 
