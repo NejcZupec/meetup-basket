@@ -26,8 +26,7 @@ If you want to get the production's data, go to the `deploy` folder and run the 
 
 ```
 ansible production -m fetch -a "src=/opt/db_backups/<year>-<month>-<day>-daily/meetupbasket.custom dest=meetupbasket.custom flat=yes"
-dropdb meetupbasket;
-createdb meetupbasket;
+dropdb meetupbasket; createdb meetupbasket
 pg_restore -d meetupbasket meetupbasket.custom
 ```
 
