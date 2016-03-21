@@ -16,7 +16,7 @@ Run the following command to deploy everything to basket.zupec.net.
 
 ```
 cd deploy
-ansible-playbook deploy.yml
+ansible-playbook deploy.yml --tags deploy
 ```
 
 Sync development and production databases
