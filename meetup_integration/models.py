@@ -2,6 +2,8 @@ import logging
 
 from django.db import models
 
+from meetup_basket.utils import do_line_profiler
+
 logger = logging.getLogger("meetup_basket")
 
 
@@ -36,15 +38,17 @@ class Member(models.Model):
     height = models.PositiveIntegerField(default=0)
 
     def meetups_attended(self, season):
-        attendances = Attendance.objects.filter(
-            member=self,
-            attendance=True,
-        )
-
         if season.slug == "all":
-            return attendances.count()
+            return Attendance.objects.filter(
+                member=self,
+                attendance=True,
+            ).count()
         else:
-            return len([a for a in attendances if a.event.season == season])
+            return Attendance.objects.filter(
+                member=self,
+                attendance=True,
+                event__season=season,
+            ).count()
 
     def count_wins(self, season):
         events = Event.objects.all() if season.slug == "all" else Event.objects.filter(season=season)
