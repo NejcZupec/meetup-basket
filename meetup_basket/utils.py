@@ -1,7 +1,5 @@
-import line_profiler
-
-
 def do_line_profiler(view=None, extra_view=None):
+    import line_profiler
 
     def wrapper(view):
         def wrapped(*args, **kwargs):
