@@ -32,6 +32,11 @@
     path={{project_root}}/components/components
     state=directory
 
+- name: Create log folder if it doesn't exist
+  file: >
+    path={{log_dir}}
+    state=directory
+
 - name: Create a symbolic link in home directory to project_root
   file: >
     src={{project_root}}

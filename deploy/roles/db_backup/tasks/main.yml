@@ -37,4 +37,4 @@
     name="Backup database every day."
     minute="0"
     hour="22"
-    job="/bin/bash {{postgresql_backup_dir}}/scripts/pg_backup_rotated.sh >/dev/null 2>&1"
+    job="/bin/bash {{postgresql_backup_dir}}/scripts/pg_backup_rotated.sh >> {{log_dir}}/db_backup.log 2>&1"
