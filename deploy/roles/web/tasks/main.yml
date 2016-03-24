@@ -1,0 +1,10 @@
+---
+
+- include: install_web_packages.yml
+- include: setup_env_variables.yml
+- include: config_ssh_keys.yml
+- include: config_nginx.yml
+- include: config_db.yml
+- include: config_web_app.yml
+- include: config_gunicorn.yml
+- include: config_cron.yml

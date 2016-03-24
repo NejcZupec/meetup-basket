@@ -1,0 +1,34 @@
+---
+
+ - name: Ensure apt cache is up to date
+   apt: update_cache=yes
+   sudo: yes
+
+ - name: Ensure web server packages are installed
+   apt: name={{ item }}
+   sudo: yes
+   with_items:
+     - build-essential
+     - git
+     - htop
+     - libatlas-dev
+     - libfreetype6
+     - libfreetype6-dev
+     - libjpeg-dev
+     - liblapack-dev
+     - libpq-dev
+     - libsasl2-dev
+     - libxft-dev
+     - nginx
+     - nodejs-legacy
+     - npm
+     - python-dev
+     - python-psycopg2
+     - python-virtualenv
+
+ - name: Install bower
+   npm:
+     name=bower
+     global=yes
+     version=1.7.7
+   sudo: yes

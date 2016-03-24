@@ -1,0 +1,13 @@
+---
+
+ - name: Ensure private key is present
+   template:
+     src=keys/id_rsa.j2
+     dest={{ssh_dir}}/id_rsa
+     mode=0600
+
+ - name: Ensure public key is present
+   template:
+    src=keys/id_rsa.pub.j2
+    dest={{ssh_dir}}/id_rsa.pub
+    mode=0600

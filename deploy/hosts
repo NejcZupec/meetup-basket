@@ -1,2 +1,5 @@
 [production]
 basket.zupec.net branch=master
+
+[development]
+zupec.net branch=master

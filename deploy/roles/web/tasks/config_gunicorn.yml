@@ -1,0 +1,16 @@
+---
+
+- name: Check if /var/log/gunicorn folder exists
+  file:
+    path=/var/log/gunicorn
+    owner={{ansible_user_id}}
+    group={{ansible_user_id}}
+    mode=755
+    state=directory
+  sudo: yes
+
+- name: Write upstart script for gunicorn
+  template: src=gunicorn.conf.j2 dest=/etc/init/gunicorn.conf
+  sudo: yes
+  notify:
+    - Restart Gunicorn

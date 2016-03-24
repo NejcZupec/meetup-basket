@@ -1,0 +1,17 @@
+---
+
+- name: Ensure database is created
+  postgresql_db: >
+    name={{db_name}}
+    login_host={{db_host}}
+    login_password={{postgres_role_password}}
+    login_user=postgres
+
+- name: Ensure user exists and has access to database
+  postgresql_user: >
+    db={{db_name}}
+    name={{db_user}}
+    password={{db_password}}
+    login_host={{db_host}}
+    login_password={{postgres_role_password}}
+    login_user=postgres

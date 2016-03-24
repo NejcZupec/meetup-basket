@@ -1,0 +1,83 @@
+---
+
+- name: Set ownership of /opt to ubuntu user
+  file: >
+    path=/opt
+    owner={{ansible_user_id}}
+    group={{ansible_user_id}}
+    mode=755
+  sudo: true
+
+- name: Check if virtualenv already exists
+  stat: path={{virtualenv_dir}}
+  register: venv_dir
+
+- name: Create virtualenv for Django web application if it doesn't exist
+  shell: virtualenv {{virtualenv_dir}}
+  when: venv_dir.stat.isdir is not defined
+
+- name: Checkout latest web app code from Github
+  git: >
+    repo={{project_repo}}
+    dest={{project_root}}
+    accept_hostkey=True
+    version={{branch}}
+  register: github_pull
+  notify:
+    - Restart Gunicorn
+    - Restart Crontab
+
+- name: Create components folder if it doesn't exist
+  file:
+    path={{project_root}}/components/components
+    state=directory
+
+- name: Create a symbolic link in home directory to project_root
+  file: >
+    src={{project_root}}
+    dest=/home/{{ansible_user_id}}/{{project_name}}
+    state=link
+
+- name: Install web application dependencies listed in requirements.txt
+  pip: >
+    requirements={{requirements_file}}
+    virtualenv={{virtualenv_dir}}
+
+- name: Check if app/static directory exists
+  stat: path={{project_root}}/static
+  register: static_dir
+
+- name: Create static directory for Django app if it does not exist
+  file: path='{{project_root}}/static' state=directory
+  when: static_dir.stat.isdir is not defined
+
+- name: Migrate database schema
+  django_manage:
+    command=migrate
+    app_path={{project_root}}
+    virtualenv={{virtualenv_dir}}
+  environment: django_environment
+  when: github_pull.changed
+
+- name: Run bower update.
+  django_manage: >
+    command="bower install"
+    app_path={{project_root}}
+    virtualenv={{virtualenv_dir}}
+  environment: django_environment
+  when: github_pull.changed
+  notify:
+    - Restart Gunicorn
+
+- name: Django collectstatic
+  django_manage: >
+    command="collectstatic"
+    app_path={{project_root}}
+    virtualenv={{virtualenv_dir}}
+  environment: django_environment
+  when: github_pull.changed
+  notify:
+    - Restart Gunicorn
+    - Restart NGINX
+
+

@@ -4,3 +4,5 @@ project_root: /opt/meetup-basket
 project_repo: git@github.com:NejcZupec/meetup-basket.git
 virtualenv_dir: /opt/envs/meetup_basket
 postgresql_backup_dir: /opt/db_backups
+ssh_dir: /home/{{ansible_user_id}}/.ssh
+requirements_file: "{{project_root}}/requirements.txt"

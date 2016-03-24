@@ -1,5 +1,19 @@
 ---
 
+- name: Setub PostgreSQL
+  hosts: all
+  roles:
+    - db
+  tags:
+    - db
+
+- name: Setup web environment
+  hosts: all
+  roles:
+    - web
+  tags:
+    - web
+
 - name: Deploy code
   hosts: all
   roles:

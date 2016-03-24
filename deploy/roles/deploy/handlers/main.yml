@@ -1,3 +1,7 @@
 - name: Restart Crontab
   service: name=cron state=restarted
   sudo: yes
+
+- name: Restart Gunicorn
+  service: name=gunicorn state=restarted
+  sudo: yes

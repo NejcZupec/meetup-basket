@@ -1,0 +1,26 @@
+---
+
+- name: Write NGINX configuration
+  template:
+    src=nginx_meetup_basket.j2
+    dest=/etc/nginx/sites-available/{{project_name}}
+  sudo: yes
+  notify:
+    - Restart NGINX
+
+- name: Delete default symlink from sites-enabled
+  file:
+    path=/etc/nginx/sites-enabled/default
+    state=absent
+  sudo: yes
+  notify:
+    - Restart NGINX
+
+- name: Add symbolic link to sites-enabled
+  file:
+    src=/etc/nginx/sites-available/{{project_name}}
+    dest=/etc/nginx/sites-enabled/{{project_name}}
+    state=link
+  sudo: yes
+  notify:
+    - Restart NGINX

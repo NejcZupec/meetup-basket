@@ -1,0 +1,34 @@
+---
+
+- name: Set ENV variable for DJANGO_SETTINGS_MODULE
+  lineinfile:
+    dest: /etc/environment
+    line: DJANGO_SETTINGS_MODULE="{{django_settings_module}}"
+    state: present
+  sudo: yes
+
+- name: Set ENV variable for SECRET_KEY
+  lineinfile:
+    dest: /etc/environment
+    line: SECRET_KEY="{{secret_key}}"
+    state: present
+  sudo: yes
+
+- name: Set ENV variable for MEETUP_API_KEY
+  lineinfile:
+    dest: /etc/environment
+    line: MEETUP_API_KEY="{{secret_key}}"
+    state: present
+  sudo: yes
+
+- name: Set ENV variable for DB_PASSWORD
+  lineinfile:
+    dest: /etc/environment
+    line: DB_PASSWORD="{{db_password}}"
+    state: present
+  sudo: yes
+
+- name: Enable virtual environment when a user logs in
+  lineinfile:
+    dest: /home/{{ansible_user_id}}/.bashrc
+    line: source {{virtualenv_dir}}/bin/activate
