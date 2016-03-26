@@ -96,7 +96,7 @@ def sync_events(group, force_update=False):
                     event.group = group
                     event.status = e["status"]
                     event.season = season
-                    event.start_date = datetime.utcfromtimestamp(float(e["time"])/1000)
+                    event.start_date = datetime.utcfromtimestamp(float(e["time"] + e["utc_offset"])/1000)
                     event.save()
 
             except Event.DoesNotExist:
