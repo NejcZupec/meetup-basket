@@ -17,7 +17,7 @@
 - name: Set ENV variable for MEETUP_API_KEY
   lineinfile:
     dest: /etc/environment
-    line: MEETUP_API_KEY="{{secret_key}}"
+    line: MEETUP_API_KEY="{{meetup_api_key}}"
     state: present
   sudo: yes
 
