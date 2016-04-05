@@ -5,7 +5,7 @@
     name="Generate teams"
     minute="5"
     hour="18"
-    day="2"
+    weekday="1"
     job="{{virtualenv_dir}}/bin/python {{project_root}}/manage.py generate_teams -s >> {{log_dir}}/team_generator.log 2>&1"
   notify:
    - Restart Crontab
