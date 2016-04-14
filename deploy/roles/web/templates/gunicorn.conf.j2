@@ -1,25 +1,3 @@
-
-
-script
-        exec {{virtualenv_dir}}/bin/gunicorn \
-                --name=meetup_basket \
-                --bind=0.0.0.0:8001 \
-                --log-file=/var/log/gunicorn/gunicorn.log \
-                --access-logfile=/var/log/gunicorn/access.log \
-                --error-logfile=/var/log/gunicorn/error.log \
-                --log-level=debug \
-                --timeout=300 \
-                --workers=3 \
-                --env DJANGO_SETTINGS_MODULE="{{django_settings_module}}" \
-                --env MEETUP_API_KEY="{{meetup_api_key}}" \
-                --env SECRET_KEY="{{secret_key}}" \
-                --env DB_PASSWORD="{{db_password}}" \
-                meetup_basket.wsgi
-end script
-
-
-
-
 description "Gunicorn daemon for Django project"
 
 start on (local-filesystems and net-device-up IFACE=eth0)
