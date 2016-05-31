@@ -1,3 +1,10 @@
+from datetime import datetime
+
+from pytz import utc
+
+from meetup_integration.models import Event
+
+
 def do_line_profiler(view=None, extra_view=None):
     import line_profiler
 
@@ -18,3 +25,9 @@ def do_line_profiler(view=None, extra_view=None):
         return wrapper(view)
 
     return wrapper
+
+
+def get_first_upcoming_event():
+    current_date = datetime.utcnow().replace(tzinfo=utc)
+    return Event.objects.filter(start_date__gte=current_date).\
+        earliest("start_date")

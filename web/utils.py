@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 
+from meetup_basket.utils import get_first_upcoming_event
 from meetup_integration.models import Payment, Event, Team, Season, Member
 from meetup_integration.utils import team_coef_weighted, team_diff_avg, team_weights
 
@@ -63,7 +64,7 @@ def generate_payments_table(members, events):
 
 def prepare_payload_for_team_generator():
     try:
-        next_event = Event.objects.filter(status="upcoming").earliest("start_date")
+        next_event = get_first_upcoming_event()
     except Event.DoesNotExist:
         logger.error("Upcoming events don't exist. Sync them with meetup.")
         next_event = ""
