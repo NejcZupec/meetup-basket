@@ -12,3 +12,4 @@ db.sqlite3
 meetup_basket.log
 latest.dump
 deploy/.vault_pass.txt
+.pycharmrc
