@@ -5,9 +5,48 @@ Meetup Basket
 [![Coverage Status](https://coveralls.io/repos/NejcZupec/meetup-basket/badge.svg?branch=master&service=github)](https://coveralls.io/github/NejcZupec/meetup-basket?branch=master)
 [![Codacy Badge](https://www.codacy.com/project/badge/f2a0eb5c905a416da4e137ca2bfbed2e)](https://www.codacy.com/public/zupecnejc_3396/meetup-basket_2)
 
-Setup
------
-You have to set three environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
+Development environment
+-----------------------
+The following prerequisities are required:
+ * Python 2.7
+ * Virtualenv
+ * Pip
+ * Git
+
+*Note: we are asuming you are running an UNIX-like operating system.*
+
+Create a new virtual environment and activate it:
+
+  virtualenv meetup_basket_env
+  source meetup_basket_env/bin/activate
+  
+Clone the repository from Github:
+
+  git clone git@github.com:NejcZupec/meetup-basket.git
+  
+Install all development requirements:
+  
+  pip install -r requirements/development.txt
+  
+You have to set the following environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
+
+  export SECRET_KEY='<random_string>'
+  export MEETUP_API_KEY='<ask Nejc>'
+  export DJANGO_SETTINGS_MODULE='meetup_basket.settings.development'
+ 
+Migrate database:
+  
+  python manage.py migrate
+  
+Now you are ready to run application:
+
+  python manage.py runserver
+  
+Open a web browser and go to:
+
+  http://127.0.0.1:8000
+  
+That's it, you have successfully set the environment for meetup-basket app :) 
 
 Deploy
 ------
