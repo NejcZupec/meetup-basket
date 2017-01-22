@@ -17,36 +17,36 @@ The following prerequisities are required:
 
 Create a new virtual environment and activate it:
 
-  virtualenv meetup_basket_env
-  source meetup_basket_env/bin/activate
+    virtualenv meetup_basket_env
+    source meetup_basket_env/bin/activate
   
 Clone the repository from Github:
 
-  git clone git@github.com:NejcZupec/meetup-basket.git
+    git clone git@github.com:NejcZupec/meetup-basket.git
   
 Install all development requirements:
   
-  pip install -r requirements/development.txt
+    pip install -r requirements/development.txt
   
 You have to set the following environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
 
-  export SECRET_KEY='<random_string>'
-  export MEETUP_API_KEY='<ask Nejc>'
-  export DJANGO_SETTINGS_MODULE='meetup_basket.settings.development'
+    export SECRET_KEY='<random_string>'
+    export MEETUP_API_KEY='<ask Nejc>'
+    export DJANGO_SETTINGS_MODULE='meetup_basket.settings.development'
  
 Migrate database:
   
-  python manage.py migrate
+    python manage.py migrate
   
 Now you are ready to run application:
 
-  python manage.py runserver
+    python manage.py runserver
   
 Open a web browser and go to:
 
-  http://127.0.0.1:8000
+    http://127.0.0.1:8000
   
-That's it, you have successfully set the environment for meetup-basket app :) 
+That's it, you have successfully set the environment for *meetup-basket* app :) 
 
 Deploy
 ------
