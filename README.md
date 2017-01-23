@@ -38,13 +38,15 @@ Migrate database:
 
     python manage.py migrate
 
+Create superuser:
+
+    python manage.py createsuperuser
+
 Now you are ready to run application:
 
     python manage.py runserver
-
-Open a web browser and go to:
-
-    http://127.0.0.1:8000
+    
+Go to the control panel (http://127.0.0.1:8000/admin), login with the account you've just created and add new season `2015/2016` with slug `#15/16`. Now you can open the root of application at http://127.0.0.1:8000
 
 That's it, you have successfully set the environment for *meetup-basket* app :)
 
