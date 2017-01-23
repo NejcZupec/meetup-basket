@@ -7,7 +7,7 @@ from base import INSTALLED_APPS as INSTALLED_APPS_BASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'meetupbasket',
+        'NAME': os.path.join(PROJECT_DIR, 'meetupbasket.sqlite'),
     }
 }
 
