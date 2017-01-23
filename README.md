@@ -31,7 +31,7 @@ Install all development requirements:
 You have to set the following environment variables: SECRET_KEY, MEETUP_API_KEY and DJANGO_SETTINGS_MODULE.
 
     export SECRET_KEY='<random_string>'
-    export MEETUP_API_KEY='<ask Nejc>'
+    export MEETUP_API_KEY='<get it from https://secure.meetup.com/meetup_api/key/>'
     export DJANGO_SETTINGS_MODULE='meetup_basket.settings.development'
 
 Migrate database:
